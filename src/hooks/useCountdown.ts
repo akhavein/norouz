@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface CountdownValues {
   days: number;
@@ -16,6 +16,7 @@ export function useCountdown(target: Date | null): CountdownValues {
     seconds: 0,
     isComplete: false,
   });
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (!target) return;
@@ -25,6 +26,10 @@ export function useCountdown(target: Date | null): CountdownValues {
 
       if (diff <= 0) {
         setValues({ days: 0, hours: 0, minutes: 0, seconds: 0, isComplete: true });
+        if (intervalRef.current !== null) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
         return;
       }
 
@@ -38,9 +43,14 @@ export function useCountdown(target: Date | null): CountdownValues {
       });
     }
 
-    tick(); // Initial call
-    const interval = setInterval(tick, 250);
-    return () => clearInterval(interval);
+    tick();
+    intervalRef.current = setInterval(tick, 250);
+    return () => {
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
   }, [target]);
 
   return values;

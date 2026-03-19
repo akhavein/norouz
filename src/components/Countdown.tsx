@@ -31,7 +31,7 @@ function Separator() {
 
 export function Countdown({ days, hours, minutes, seconds }: CountdownProps) {
   return (
-    <div className="flex items-start justify-center gap-3 sm:gap-4 md:gap-6" role="timer" aria-live="polite" aria-atomic="true">
+    <div className="flex items-start justify-center gap-3 sm:gap-4 md:gap-6" role="timer">
       <TimeUnit value={days} label="Days" shortLabel="d" />
       <Separator />
       <TimeUnit value={hours} label="Hours" shortLabel="h" />

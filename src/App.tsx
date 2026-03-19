@@ -60,7 +60,9 @@ function App() {
               <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
             </p>
             <p className="text-xs text-stone-400">
-              {formatLocal(target)} · {formatUTC(target)}
+              <time dateTime={target.toISOString()}>{formatLocal(target)}</time>
+              {' · '}
+              <time dateTime={target.toISOString()}>{formatUTC(target)}</time>
             </p>
           </div>
         )}

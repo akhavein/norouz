@@ -123,7 +123,6 @@ const AUDIO_WINDOW_HOURS = 24;
 function useNorouzAudio(target: Date | null, phase: string) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
   const triggeredRef = useRef(false);
   const prevPhaseRef = useRef(phase);
 
@@ -142,7 +141,6 @@ function useNorouzAudio(target: Date | null, phase: string) {
   }, []);
 
   const toggle = useCallback(() => {
-    setHasInteracted(true);
     if (!audioRef.current) {
       play();
       return;
@@ -155,18 +153,19 @@ function useNorouzAudio(target: Date | null, phase: string) {
     }
   }, [isPlaying, play]);
 
+  // Auto-play when transitioning from counting to celebrating
+  // Browser may block if user hasn't interacted — play() handles that gracefully
   useEffect(() => {
     if (
       phase === 'celebrating' &&
       prevPhaseRef.current === 'counting' &&
-      !triggeredRef.current &&
-      hasInteracted
+      !triggeredRef.current
     ) {
       triggeredRef.current = true;
       play();
     }
     prevPhaseRef.current = phase;
-  }, [phase, hasInteracted, play]);
+  }, [phase, play]);
 
   useEffect(() => {
     return () => {

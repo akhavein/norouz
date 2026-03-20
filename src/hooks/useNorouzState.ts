@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { EQUINOX_UTC, getEquinoxFallback } from '../data/equinox-times';
 
 export type NorouzPhase = 'counting' | 'celebrating' | 'dormant';
@@ -25,6 +25,32 @@ async function resolveEquinox(year: number): Promise<Date> {
   }
 }
 
+async function computeState(): Promise<NorouzState> {
+  const now = Date.now();
+  const currentYear = new Date().getFullYear();
+
+  const thisEquinox = await resolveEquinox(currentYear);
+  const thisMs = thisEquinox.getTime();
+
+  if (now < thisMs) {
+    return { phase: 'counting', target: thisEquinox, year: currentYear, loading: false };
+  }
+
+  const celebrationEnd = thisMs + CELEBRATION_DAYS * MS_PER_DAY;
+  if (now < celebrationEnd) {
+    return { phase: 'celebrating', target: thisEquinox, year: currentYear, loading: false };
+  }
+
+  const dormantEnd = celebrationEnd + DORMANT_DAYS * MS_PER_DAY;
+  if (now < dormantEnd) {
+    const nextEquinox = await resolveEquinox(currentYear + 1);
+    return { phase: 'dormant', target: nextEquinox, year: currentYear + 1, loading: false };
+  }
+
+  const nextEquinox = await resolveEquinox(currentYear + 1);
+  return { phase: 'counting', target: nextEquinox, year: currentYear + 1, loading: false };
+}
+
 export function useNorouzState(): NorouzState {
   const [state, setState] = useState<NorouzState>({
     phase: 'counting',
@@ -33,47 +59,32 @@ export function useNorouzState(): NorouzState {
     loading: true,
   });
 
+  const resolve = useCallback(async () => {
+    setState(await computeState());
+  }, []);
+
   useEffect(() => {
-    async function resolve() {
-      const now = Date.now();
-      const currentYear = new Date().getFullYear();
-
-      // Check this year's equinox first
-      const thisEquinox = await resolveEquinox(currentYear);
-      const thisMs = thisEquinox.getTime();
-
-      if (now < thisMs) {
-        // Equinox hasn't happened yet — counting down
-        setState({ phase: 'counting', target: thisEquinox, year: currentYear, loading: false });
-        return;
-      }
-
-      const celebrationEnd = thisMs + CELEBRATION_DAYS * MS_PER_DAY;
-      if (now < celebrationEnd) {
-        // Within 13-day celebration window
-        setState({ phase: 'celebrating', target: thisEquinox, year: currentYear, loading: false });
-        return;
-      }
-
-      const dormantEnd = celebrationEnd + DORMANT_DAYS * MS_PER_DAY;
-      if (now < dormantEnd) {
-        // Dormant period — "See you next Norouz!"
-        const nextEquinox = await resolveEquinox(currentYear + 1);
-        setState({ phase: 'dormant', target: nextEquinox, year: currentYear + 1, loading: false });
-        return;
-      }
-
-      // Past dormant — count down to next year
-      const nextEquinox = await resolveEquinox(currentYear + 1);
-      setState({ phase: 'counting', target: nextEquinox, year: currentYear + 1, loading: false });
-    }
-
     resolve();
 
-    // Re-check phase every minute to catch transitions
+    // Background poll for dormant/celebration end transitions
     const interval = setInterval(resolve, 60_000);
     return () => clearInterval(interval);
-  }, []);
+  }, [resolve]);
+
+  // Precise transition: schedule re-resolve at exactly the equinox moment
+  useEffect(() => {
+    if (state.phase !== 'counting' || !state.target) return;
+
+    const msUntilTarget = state.target.getTime() - Date.now();
+    if (msUntilTarget <= 0) {
+      resolve();
+      return;
+    }
+
+    // Schedule resolve for the exact equinox moment (+ 100ms buffer)
+    const timeout = setTimeout(resolve, msUntilTarget + 100);
+    return () => clearTimeout(timeout);
+  }, [state.phase, state.target, resolve]);
 
   return state;
 }

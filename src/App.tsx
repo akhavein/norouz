@@ -105,6 +105,54 @@ function SpringBlossom({ className }: { className?: string }) {
   );
 }
 
+/* Boteh Jeghe (بته‌جقه) — Persian paisley motif */
+function BotehJeghe({ className }: { className?: string }) {
+  return (
+    <svg width="40" height="60" viewBox="0 0 40 60" className={className} aria-hidden="true">
+      {/* Outer teardrop */}
+      <path
+        d="M20 4 Q32 16 32 32 Q32 48 20 56 Q8 48 8 32 Q8 16 20 4Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        opacity="0.6"
+      />
+      {/* Inner teardrop */}
+      <path
+        d="M20 10 Q28 20 28 32 Q28 44 20 50 Q12 44 12 32 Q12 20 20 10Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.8"
+        opacity="0.4"
+      />
+      {/* Curved tip */}
+      <path
+        d="M20 4 Q24 2 26 6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+        opacity="0.6"
+      />
+      {/* Central spine */}
+      <path
+        d="M20 14 Q20 32 20 48"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.6"
+        opacity="0.3"
+      />
+      {/* Inner floral details — small leaves */}
+      <path d="M20 20 Q24 24 20 28" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.35" />
+      <path d="M20 20 Q16 24 20 28" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.35" />
+      <path d="M20 30 Q23 34 20 38" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.3" />
+      <path d="M20 30 Q17 34 20 38" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.3" />
+      {/* Dot at center */}
+      <circle cx="20" cy="24" r="1.5" fill="currentColor" opacity="0.3" />
+    </svg>
+  );
+}
+
 function GirihDivider() {
   return (
     <div className="flex items-center justify-center gap-2 w-full max-w-sm mx-auto">
@@ -278,17 +326,24 @@ function App() {
   const shamsiYear = year ? getShamsiYear(year) : null;
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : "font-['Inter',sans-serif]"}`}>
+    <div className={`min-h-screen flex flex-col items-center justify-center px-4 pt-16 pb-8 relative overflow-hidden ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : "font-['Inter',sans-serif]"}`}>
       <JsonLd />
-      {/* Toggles — always pinned top-left */}
-      <div className="absolute top-4 left-4 flex items-center gap-2 z-20" dir="ltr">
+      {/* Toggles — pinned top-right to avoid title overlap */}
+      <div className="fixed top-4 right-4 flex items-center gap-2 z-20" dir="ltr">
         <LanguageToggle />
         <ThemeToggle isDark={theme.isDark} onClick={theme.toggle} />
       </div>
 
-      <SpringBlossom className="absolute top-8 right-8 sm:top-12 sm:right-16 text-blush w-10 h-10 sm:w-14 sm:h-14 opacity-60" />
+      {/* Spring blossoms */}
+      <SpringBlossom className="absolute top-20 right-8 sm:top-12 sm:right-16 text-blush w-10 h-10 sm:w-14 sm:h-14 opacity-60" />
       <SpringBlossom className="absolute bottom-16 left-6 sm:bottom-20 sm:left-14 text-blush w-8 h-8 sm:w-10 sm:h-10 opacity-40 rotate-45" />
-      <SpringBlossom className="absolute top-1/3 left-4 sm:left-10 text-sage w-6 h-6 sm:w-8 sm:h-8 opacity-30 -rotate-12" />
+      <SpringBlossom className="absolute top-2/3 left-4 sm:left-10 text-sage w-6 h-6 sm:w-8 sm:h-8 opacity-30 -rotate-12" />
+
+      {/* Boteh Jeghe (Persian paisley) decorations */}
+      <BotehJeghe className="absolute top-16 left-6 sm:top-20 sm:left-16 text-persian-gold w-8 h-12 sm:w-10 sm:h-[60px] opacity-20 rotate-12" />
+      <BotehJeghe className="absolute bottom-24 right-4 sm:bottom-32 sm:right-12 text-persian-gold w-10 h-[60px] sm:w-12 sm:h-[72px] opacity-15 -rotate-[20deg]" />
+      <BotehJeghe className="absolute top-1/2 right-2 sm:right-8 text-persian-teal w-6 h-9 sm:w-8 sm:h-12 opacity-15 rotate-[30deg]" />
+      <BotehJeghe className="absolute top-1/4 left-1/2 -translate-x-[200px] sm:-translate-x-[300px] text-blush w-7 h-[42px] sm:w-9 sm:h-[54px] opacity-10 -rotate-[15deg]" />
 
       <main className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10 max-w-2xl w-full relative z-10">
         <Header />

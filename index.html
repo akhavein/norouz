@@ -30,7 +30,8 @@
     <!-- Additional SEO -->
     <meta name="keywords" content="Norouz, Nowruz, نوروز, Persian New Year, Spring Equinox, countdown, Tahvil, سال تحویل, Iranian New Year, Haft-sin" />
     <meta name="author" content="Mehrzad Akhavein" />
-    <meta name="theme-color" content="#fafaf9" />
+    <meta name="theme-color" content="#fefdf8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1612" media="(prefers-color-scheme: dark)" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -51,6 +52,16 @@
         "url": "https://norouz.akhave.in"
       }
     }
+    </script>
+
+    <!-- Dark mode detection -->
+    <script>
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        document.documentElement.classList.toggle('dark', e.matches);
+      });
     </script>
 
     <!-- Fonts -->

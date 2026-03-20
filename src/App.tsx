@@ -2,6 +2,7 @@ import { useRef, useEffect, useState, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Countdown } from './components/Countdown';
 import { Footer } from './components/Footer';
+import { LanguageToggle } from './components/LanguageToggle';
 import { useNorouzState } from './hooks/useNorouzState';
 import { useCountdown } from './hooks/useCountdown';
 import { useConfetti } from './hooks/useConfetti';
@@ -29,6 +30,57 @@ function usePrefersReducedMotion(): boolean {
   }, []);
 
   return prefersReduced;
+}
+
+function useTheme() {
+  const [isDark, setIsDark] = useState(() =>
+    document.documentElement.classList.contains('dark')
+  );
+
+  const toggle = useCallback(() => {
+    const next = !isDark;
+    document.documentElement.classList.toggle('dark', next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
+    setIsDark(next);
+  }, [isDark]);
+
+  return { isDark, toggle };
+}
+
+function ThemeToggle({ isDark, onClick }: { isDark: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="p-2 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-warm-charcoal/20 hover:bg-persian-gold/10 transition-all duration-200"
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {isDark ? (
+        <svg width="16" height="16" viewBox="0 0 16 16" className="text-persian-gold" aria-hidden="true">
+          <circle cx="8" cy="8" r="3.5" fill="currentColor" />
+          {[0, 45, 90, 135, 180, 225, 270, 315].map(angle => (
+            <line
+              key={angle}
+              x1="8"
+              y1="1.5"
+              x2="8"
+              y2="3"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              transform={`rotate(${angle} 8 8)`}
+            />
+          ))}
+        </svg>
+      ) : (
+        <svg width="16" height="16" viewBox="0 0 16 16" className="text-persian-gold" aria-hidden="true">
+          <path
+            d="M13.5 9.5A5.5 5.5 0 016.5 2.5a6 6 0 107 7z"
+            fill="currentColor"
+          />
+        </svg>
+      )}
+    </button>
+  );
 }
 
 function SpringBlossom({ className }: { className?: string }) {
@@ -212,6 +264,7 @@ function App() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const audio = useNorouzAudio(target, phase);
   const { t, locale } = useLanguage();
+  const theme = useTheme();
 
   useConfetti(phase, prefersReducedMotion);
 
@@ -227,6 +280,12 @@ function App() {
 
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : "font-['Inter',sans-serif]"}`}>
+      {/* Toggles — always pinned top-left */}
+      <div className="absolute top-4 left-4 flex items-center gap-2 z-20" dir="ltr">
+        <LanguageToggle />
+        <ThemeToggle isDark={theme.isDark} onClick={theme.toggle} />
+      </div>
+
       <SpringBlossom className="absolute top-8 right-8 sm:top-12 sm:right-16 text-blush w-10 h-10 sm:w-14 sm:h-14 opacity-60" />
       <SpringBlossom className="absolute bottom-16 left-6 sm:bottom-20 sm:left-14 text-blush w-8 h-8 sm:w-10 sm:h-10 opacity-40 rotate-45" />
       <SpringBlossom className="absolute top-1/3 left-4 sm:left-10 text-sage w-6 h-6 sm:w-8 sm:h-8 opacity-30 -rotate-12" />

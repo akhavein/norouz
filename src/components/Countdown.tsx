@@ -17,14 +17,31 @@ interface CountdownProps {
   seconds: number;
 }
 
-function TimeUnit({ value, label, shortLabel, locale }: { value: number; label: string; shortLabel: string; locale: 'en' | 'fa' }) {
-  const display = locale === 'fa' ? toPersianNumeral(value) : padTwo(value);
+function FlipCard({ value, locale }: { value: number; locale: 'en' | 'fa' }) {
+  const formatted = locale === 'fa' ? toPersianNumeral(value) : padTwo(value);
+  const fontClass = locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : '';
+  const digitClass = `text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tabular-nums leading-none text-warm-charcoal dark:text-cream ${fontClass}`;
+
   return (
-    <div className="flex flex-col items-center">
-      <span className={`text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold text-warm-charcoal dark:text-cream tabular-nums leading-none ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
-        {display}
-      </span>
-      <span className={`mt-2 text-xs sm:text-sm font-medium text-warm-charcoal/40 dark:text-cream/40 uppercase tracking-widest ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+    <div className="flip-card rounded-lg px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4">
+      <span className={`${digitClass} flip-enter`} key={value}>{formatted}</span>
+    </div>
+  );
+}
+
+function Separator() {
+  return (
+    <span className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-persian-gold/40 mt-3 sm:mt-4 md:mt-5" aria-hidden="true">
+      :
+    </span>
+  );
+}
+
+function TimeUnit({ value, label, shortLabel, locale }: { value: number; label: string; shortLabel: string; locale: 'en' | 'fa' }) {
+  return (
+    <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+      <FlipCard value={value} locale={locale} />
+      <span className={`text-[10px] sm:text-xs font-medium text-warm-charcoal/40 dark:text-cream/40 uppercase tracking-widest ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
         <span className="hidden min-[375px]:inline">{label}</span>
         <span className="inline min-[375px]:hidden">{shortLabel}</span>
       </span>
@@ -32,19 +49,11 @@ function TimeUnit({ value, label, shortLabel, locale }: { value: number; label: 
   );
 }
 
-function Separator() {
-  return (
-    <span className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-persian-gold/40 self-start mt-1 sm:mt-2 md:mt-3">
-      :
-    </span>
-  );
-}
-
 export function Countdown({ days, hours, minutes, seconds }: CountdownProps) {
   const { t, locale } = useLanguage();
 
   return (
-    <div className="flex items-start justify-center gap-2 sm:gap-4 md:gap-6" role="timer" dir="ltr">
+    <div className="flex items-start justify-center gap-1 sm:gap-3 md:gap-4" role="timer" dir="ltr">
       <TimeUnit value={days} label={t('days')} shortLabel={t('days_short')} locale={locale} />
       <Separator />
       <TimeUnit value={hours} label={t('hours')} shortLabel={t('hours_short')} locale={locale} />

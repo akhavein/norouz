@@ -1,0 +1,17 @@
+{
+  "name": "Norouz Countdown",
+  "short_name": "Norouz",
+  "description": "Live countdown to the exact moment of Norouz — the Persian New Year and Spring Equinox.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fefdf8",
+  "theme_color": "#fefdf8",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

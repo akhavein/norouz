@@ -3,6 +3,8 @@ import { Header } from './components/Header';
 import { Countdown } from './components/Countdown';
 import { Footer } from './components/Footer';
 import { LanguageToggle } from './components/LanguageToggle';
+import { JsonLd } from './components/JsonLd';
+import { HaftSin } from './components/HaftSin';
 import { useNorouzState } from './hooks/useNorouzState';
 import { useCountdown } from './hooks/useCountdown';
 import { useConfetti } from './hooks/useConfetti';
@@ -276,6 +278,7 @@ function App() {
 
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : "font-['Inter',sans-serif]"}`}>
+      <JsonLd />
       {/* Toggles — always pinned top-left */}
       <div className="absolute top-4 left-4 flex items-center gap-2 z-20" dir="ltr">
         <LanguageToggle />
@@ -316,6 +319,8 @@ function App() {
         {phase === 'dormant' && target && shamsiYear && (
           <DormantView target={target} shamsiYear={shamsiYear} />
         )}
+
+        {phase === 'celebrating' && <HaftSin />}
 
         {audio.isInAudioWindow && (
           <PlayButton isPlaying={audio.isPlaying} onClick={audio.toggle} />

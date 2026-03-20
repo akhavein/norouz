@@ -2,14 +2,32 @@ import { useRef, useEffect, useState, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Countdown } from './components/Countdown';
 import { Footer } from './components/Footer';
-import { useEquinox } from './hooks/useEquinox';
+import { useNorouzState } from './hooks/useNorouzState';
 import { useCountdown } from './hooks/useCountdown';
+import { useConfetti } from './hooks/useConfetti';
 import { getShamsiYear } from './utils/persianYear';
 import { formatIRST, formatLocal, formatUTC } from './utils/dateHelpers';
 
 function toPersianNumerals(n: number): string {
   const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
   return n.toString().split('').map(d => persianDigits[parseInt(d)] || d).join('');
+}
+
+function usePrefersReducedMotion(): boolean {
+  const [prefersReduced, setPrefersReduced] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  return prefersReduced;
 }
 
 function SpringBlossom({ className }: { className?: string }) {
@@ -39,13 +57,9 @@ function GirihDivider() {
     <div className="flex items-center justify-center gap-2 w-full max-w-sm mx-auto">
       <div className="flex-1 h-px bg-persian-gold/20" />
       <svg width="80" height="20" viewBox="0 0 80 20" className="text-persian-gold/50" aria-hidden="true">
-        {/* Central 8-pointed star */}
         <polygon points="40,2 44,8 52,8 46,12 48,20 40,16 32,20 34,12 28,8 36,8" fill="none" stroke="currentColor" strokeWidth="0.8" />
-        {/* Left diamond */}
         <polygon points="16,10 22,6 28,10 22,14" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.6" />
-        {/* Right diamond */}
         <polygon points="52,10 58,6 64,10 58,14" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.6" />
-        {/* Connecting lines */}
         <line x1="0" y1="10" x2="16" y2="10" stroke="currentColor" strokeWidth="0.5" opacity="0.3" />
         <line x1="64" y1="10" x2="80" y2="10" stroke="currentColor" strokeWidth="0.5" opacity="0.3" />
       </svg>
@@ -54,18 +68,18 @@ function GirihDivider() {
   );
 }
 
-const CELEBRATION_HOURS = 24;
+const AUDIO_WINDOW_HOURS = 24;
 
-function useNorouzAudio(target: Date | null, isComplete: boolean) {
+function useNorouzAudio(target: Date | null, phase: string) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const triggeredRef = useRef(false);
+  const prevPhaseRef = useRef(phase);
 
-  // Check if we're within the 24-hour celebration window
-  const isInCelebrationWindow = target
+  const isInAudioWindow = target
     ? Date.now() >= target.getTime() &&
-      Date.now() < target.getTime() + CELEBRATION_HOURS * 60 * 60 * 1000
+      Date.now() < target.getTime() + AUDIO_WINDOW_HOURS * 60 * 60 * 1000
     : false;
 
   const play = useCallback(() => {
@@ -91,15 +105,20 @@ function useNorouzAudio(target: Date | null, isComplete: boolean) {
     }
   }, [isPlaying, play]);
 
-  // Auto-play at the exact moment of equinox (if user has interacted)
+  // Auto-play when transitioning to celebrating (if user has interacted)
   useEffect(() => {
-    if (isComplete && !triggeredRef.current && hasInteracted) {
+    if (
+      phase === 'celebrating' &&
+      prevPhaseRef.current === 'counting' &&
+      !triggeredRef.current &&
+      hasInteracted
+    ) {
       triggeredRef.current = true;
       play();
     }
-  }, [isComplete, hasInteracted, play]);
+    prevPhaseRef.current = phase;
+  }, [phase, hasInteracted, play]);
 
-  // Cleanup
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -109,7 +128,7 @@ function useNorouzAudio(target: Date | null, isComplete: boolean) {
     };
   }, []);
 
-  return { isPlaying, isInCelebrationWindow, toggle, isComplete };
+  return { isPlaying, isInAudioWindow, toggle };
 }
 
 function PlayButton({ isPlaying, onClick }: { isPlaying: boolean; onClick: () => void }) {
@@ -136,10 +155,54 @@ function PlayButton({ isPlaying, onClick }: { isPlaying: boolean; onClick: () =>
   );
 }
 
+function CelebrationView({ shamsiYear }: { shamsiYear: number }) {
+  return (
+    <div className="text-center space-y-4">
+      <p className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-warm-charcoal">
+        Norouz Mobarak!
+      </p>
+      <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-persian-gold font-['Vazirmatn',sans-serif]" dir="rtl" lang="fa">
+        !نوروز مبارک
+      </p>
+      <div className="pt-4">
+        <p className="text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide">
+          {shamsiYear}
+        </p>
+        <p className="text-lg sm:text-xl font-bold text-persian-gold/70 font-['Vazirmatn',sans-serif]" dir="rtl" lang="fa">
+          {toPersianNumerals(shamsiYear)}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function DormantView({ target, shamsiYear }: { target: Date; shamsiYear: number }) {
+  return (
+    <div className="text-center space-y-4">
+      <p className="text-2xl sm:text-3xl font-bold text-warm-charcoal">
+        See you next Norouz!
+      </p>
+      <p className="text-xl sm:text-2xl font-bold text-persian-gold font-['Vazirmatn',sans-serif]" dir="rtl" lang="fa">
+        !سال دیگر می‌بینمتون
+      </p>
+      <div className="pt-4 text-sm text-warm-charcoal/50">
+        <p>Norouz {shamsiYear} · {toPersianNumerals(shamsiYear)}</p>
+        <p className="text-xs text-warm-charcoal/30 mt-1">
+          <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function App() {
-  const { target, year, loading } = useEquinox();
-  const countdown = useCountdown(target);
-  const audio = useNorouzAudio(target, countdown.isComplete);
+  const { phase, target, year, loading } = useNorouzState();
+  const countdown = useCountdown(phase === 'counting' ? target : null);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const audio = useNorouzAudio(target, phase);
+
+  // Fire confetti when entering celebration phase
+  useConfetti(phase, prefersReducedMotion);
 
   if (loading) {
     return (
@@ -153,15 +216,15 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 font-['Inter',sans-serif] relative overflow-hidden">
-      {/* Decorative spring blossoms */}
-      <SpringBlossom className="absolute top-8 right-8 sm:top-12 sm:right-16 text-blush w-10 h-10 sm:w-14 sm:h-14 opacity-60" />
+      {/* Decorative spring blossoms — skip animation class if reduced motion */}
+      <SpringBlossom className={`absolute top-8 right-8 sm:top-12 sm:right-16 text-blush w-10 h-10 sm:w-14 sm:h-14 opacity-60 ${prefersReducedMotion ? '' : ''}`} />
       <SpringBlossom className="absolute bottom-16 left-6 sm:bottom-20 sm:left-14 text-blush w-8 h-8 sm:w-10 sm:h-10 opacity-40 rotate-45" />
       <SpringBlossom className="absolute top-1/3 left-4 sm:left-10 text-sage w-6 h-6 sm:w-8 sm:h-8 opacity-30 -rotate-12" />
 
       <main className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10 max-w-2xl w-full relative z-10">
         <Header />
 
-        {shamsiYear && (
+        {phase === 'counting' && shamsiYear && (
           <div className="text-center space-y-0.5">
             <p className="text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide">
               {shamsiYear}
@@ -172,14 +235,7 @@ function App() {
           </div>
         )}
 
-        {countdown.isComplete ? (
-          <div className="text-center space-y-2">
-            <p className="text-3xl sm:text-4xl font-bold text-warm-charcoal">Norouz Mobarak!</p>
-            <p className="text-2xl sm:text-3xl font-bold text-persian-gold font-['Vazirmatn',sans-serif]" dir="rtl" lang="fa">
-              !نوروز مبارک
-            </p>
-          </div>
-        ) : (
+        {phase === 'counting' && (
           <Countdown
             days={countdown.days}
             hours={countdown.hours}
@@ -188,11 +244,19 @@ function App() {
           />
         )}
 
-        {audio.isInCelebrationWindow && (
+        {phase === 'celebrating' && shamsiYear && (
+          <CelebrationView shamsiYear={shamsiYear} />
+        )}
+
+        {phase === 'dormant' && target && shamsiYear && (
+          <DormantView target={target} shamsiYear={shamsiYear} />
+        )}
+
+        {audio.isInAudioWindow && (
           <PlayButton isPlaying={audio.isPlaying} onClick={audio.toggle} />
         )}
 
-        {target && (
+        {phase === 'counting' && target && (
           <div className="text-center space-y-1">
             <p className="text-sm text-persian-teal font-medium">
               <time dateTime={target.toISOString()}>{formatIRST(target)}</time>

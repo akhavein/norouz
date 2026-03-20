@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { useNorouzState } from './hooks/useNorouzState';
 import { useCountdown } from './hooks/useCountdown';
 import { useConfetti } from './hooks/useConfetti';
+import { useLanguage } from './i18n/LanguageContext';
 import { getShamsiYear } from './utils/persianYear';
 import { formatIRST, formatLocal, formatUTC } from './utils/dateHelpers';
 
@@ -105,7 +106,6 @@ function useNorouzAudio(target: Date | null, phase: string) {
     }
   }, [isPlaying, play]);
 
-  // Auto-play when transitioning to celebrating (if user has interacted)
   useEffect(() => {
     if (
       phase === 'celebrating' &&
@@ -132,11 +132,13 @@ function useNorouzAudio(target: Date | null, phase: string) {
 }
 
 function PlayButton({ isPlaying, onClick }: { isPlaying: boolean; onClick: () => void }) {
+  const { t } = useLanguage();
+
   return (
     <button
       onClick={onClick}
-      className="group flex items-center gap-2 px-4 py-2 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 hover:bg-persian-gold/10 transition-all duration-200"
-      aria-label={isPlaying ? 'Pause celebration music' : 'Play celebration music'}
+      className="group flex items-center gap-2 px-4 py-2 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-dark-surface/80 hover:bg-persian-gold/10 transition-all duration-200"
+      aria-label={isPlaying ? t('pause') : t('play')}
     >
       <svg width="16" height="16" viewBox="0 0 16 16" className="text-persian-gold" aria-hidden="true">
         {isPlaying ? (
@@ -149,27 +151,29 @@ function PlayButton({ isPlaying, onClick }: { isPlaying: boolean; onClick: () =>
         )}
       </svg>
       <span className="text-xs font-medium text-persian-gold/80 group-hover:text-persian-gold transition-colors">
-        {isPlaying ? 'Pause' : 'Tahvil Music'}
+        {isPlaying ? t('pause') : t('play')}
       </span>
     </button>
   );
 }
 
 function CelebrationView({ shamsiYear }: { shamsiYear: number }) {
+  const { t, locale } = useLanguage();
+
   return (
     <div className="text-center space-y-4">
-      <p className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-warm-charcoal">
-        Norouz Mobarak!
+      <p className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-warm-charcoal dark:text-cream ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+        {t('norouz_mobarak')}
       </p>
-      <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-persian-gold font-['Vazirmatn',sans-serif]" dir="rtl" lang="fa">
-        !نوروز مبارک
+      <p className={`text-3xl sm:text-4xl md:text-5xl font-bold text-persian-gold ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`} dir={locale === 'fa' ? 'ltr' : 'rtl'} lang={locale === 'fa' ? 'en' : 'fa'}>
+        {t('norouz_mobarak_fa')}
       </p>
       <div className="pt-4">
         <p className="text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide">
-          {shamsiYear}
+          {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
         </p>
-        <p className="text-lg sm:text-xl font-bold text-persian-gold/70 font-['Vazirmatn',sans-serif]" dir="rtl" lang="fa">
-          {toPersianNumerals(shamsiYear)}
+        <p className={`text-lg sm:text-xl font-bold text-persian-gold/70 ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`}>
+          {locale === 'fa' ? shamsiYear : toPersianNumerals(shamsiYear)}
         </p>
       </div>
     </div>
@@ -177,17 +181,24 @@ function CelebrationView({ shamsiYear }: { shamsiYear: number }) {
 }
 
 function DormantView({ target, shamsiYear }: { target: Date; shamsiYear: number }) {
+  const { t, locale } = useLanguage();
+
   return (
     <div className="text-center space-y-4">
-      <p className="text-2xl sm:text-3xl font-bold text-warm-charcoal">
-        See you next Norouz!
+      <p className={`text-2xl sm:text-3xl font-bold text-warm-charcoal dark:text-cream ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+        {t('see_you')}
       </p>
-      <p className="text-xl sm:text-2xl font-bold text-persian-gold font-['Vazirmatn',sans-serif]" dir="rtl" lang="fa">
-        !سال دیگر می‌بینمتون
+      <p className={`text-xl sm:text-2xl font-bold text-persian-gold ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`} dir={locale === 'fa' ? 'ltr' : 'rtl'} lang={locale === 'fa' ? 'en' : 'fa'}>
+        {t('see_you_fa')}
       </p>
-      <div className="pt-4 text-sm text-warm-charcoal/50">
-        <p>Norouz {shamsiYear} · {toPersianNumerals(shamsiYear)}</p>
-        <p className="text-xs text-warm-charcoal/30 mt-1">
+      <div className="pt-4 text-sm text-warm-charcoal/50 dark:text-cream/50">
+        <p>
+          {locale === 'fa'
+            ? `نوروز ${toPersianNumerals(shamsiYear)}`
+            : `Norouz ${shamsiYear} · ${toPersianNumerals(shamsiYear)}`
+          }
+        </p>
+        <p className="text-xs text-warm-charcoal/30 dark:text-cream/30 mt-1">
           <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
         </p>
       </div>
@@ -200,14 +211,14 @@ function App() {
   const countdown = useCountdown(phase === 'counting' ? target : null);
   const prefersReducedMotion = usePrefersReducedMotion();
   const audio = useNorouzAudio(target, phase);
+  const { t, locale } = useLanguage();
 
-  // Fire confetti when entering celebration phase
   useConfetti(phase, prefersReducedMotion);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center font-['Inter',sans-serif]">
-        <p className="text-warm-charcoal/40 text-sm">Loading…</p>
+        <p className="text-warm-charcoal/40 dark:text-cream/40 text-sm">{t('loading')}</p>
       </div>
     );
   }
@@ -215,9 +226,8 @@ function App() {
   const shamsiYear = year ? getShamsiYear(year) : null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 font-['Inter',sans-serif] relative overflow-hidden">
-      {/* Decorative spring blossoms — skip animation class if reduced motion */}
-      <SpringBlossom className={`absolute top-8 right-8 sm:top-12 sm:right-16 text-blush w-10 h-10 sm:w-14 sm:h-14 opacity-60 ${prefersReducedMotion ? '' : ''}`} />
+    <div className={`min-h-screen flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : "font-['Inter',sans-serif]"}`}>
+      <SpringBlossom className="absolute top-8 right-8 sm:top-12 sm:right-16 text-blush w-10 h-10 sm:w-14 sm:h-14 opacity-60" />
       <SpringBlossom className="absolute bottom-16 left-6 sm:bottom-20 sm:left-14 text-blush w-8 h-8 sm:w-10 sm:h-10 opacity-40 rotate-45" />
       <SpringBlossom className="absolute top-1/3 left-4 sm:left-10 text-sage w-6 h-6 sm:w-8 sm:h-8 opacity-30 -rotate-12" />
 
@@ -227,10 +237,10 @@ function App() {
         {phase === 'counting' && shamsiYear && (
           <div className="text-center space-y-0.5">
             <p className="text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide">
-              {shamsiYear}
+              {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
             </p>
-            <p className="text-lg sm:text-xl font-bold text-persian-gold/70 font-['Vazirmatn',sans-serif]" dir="rtl" lang="fa">
-              {toPersianNumerals(shamsiYear)}
+            <p className={`text-lg sm:text-xl font-bold text-persian-gold/70 ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`}>
+              {locale === 'fa' ? shamsiYear : toPersianNumerals(shamsiYear)}
             </p>
           </div>
         )}
@@ -261,7 +271,7 @@ function App() {
             <p className="text-sm text-persian-teal font-medium">
               <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
             </p>
-            <p className="text-xs text-warm-charcoal/40">
+            <p className="text-xs text-warm-charcoal/40 dark:text-cream/40">
               <time dateTime={target.toISOString()}>{formatLocal(target)}</time>
               {' · '}
               <time dateTime={target.toISOString()}>{formatUTC(target)}</time>
@@ -271,9 +281,8 @@ function App() {
 
         <GirihDivider />
 
-        <p className="text-sm text-warm-charcoal/50 text-center max-w-sm leading-relaxed">
-          Norouz marks the first day of spring and the beginning of the Persian New Year,
-          celebrated at the exact moment of the vernal equinox.
+        <p className="text-sm text-warm-charcoal/50 dark:text-cream/50 text-center max-w-sm leading-relaxed">
+          {t('blurb')}
         </p>
       </main>
 

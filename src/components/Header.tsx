@@ -1,12 +1,22 @@
+import { useLanguage } from '../i18n/LanguageContext';
+import { LanguageToggle } from './LanguageToggle';
+
 export function Header() {
+  const { t, locale } = useLanguage();
+
   return (
-    <header className="text-center space-y-1">
-      <h1 className="text-lg font-semibold tracking-wide text-warm-charcoal/60 uppercase">
-        Norouz Countdown
-      </h1>
-      <p className="text-2xl font-bold text-persian-gold font-['Vazirmatn',sans-serif]" dir="rtl" lang="fa">
-        نوروز
-      </p>
+    <header className="flex flex-col items-center gap-3 w-full">
+      <div className="w-full flex justify-end">
+        <LanguageToggle />
+      </div>
+      <div className="text-center space-y-1">
+        <h1 className={`text-lg font-semibold tracking-wide text-warm-charcoal/60 dark:text-cream/60 uppercase ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+          {t('title')}
+        </h1>
+        <p className={`text-2xl font-bold text-persian-gold ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`} dir={locale === 'fa' ? 'ltr' : 'rtl'} lang={locale === 'fa' ? 'en' : 'fa'}>
+          {t('subtitle')}
+        </p>
+      </div>
     </header>
   );
 }

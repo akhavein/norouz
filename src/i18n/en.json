@@ -1,0 +1,21 @@
+{
+  "title": "Norouz Countdown",
+  "subtitle": "نوروز",
+  "loading": "Loading…",
+  "days": "Days",
+  "hours": "Hours",
+  "minutes": "Minutes",
+  "seconds": "Seconds",
+  "days_short": "d",
+  "hours_short": "h",
+  "minutes_short": "m",
+  "seconds_short": "s",
+  "norouz_mobarak": "Norouz Mobarak!",
+  "norouz_mobarak_fa": "!نوروز مبارک",
+  "see_you": "See you next Norouz!",
+  "see_you_fa": "!سال دیگر می‌بینمتون",
+  "blurb": "Norouz marks the first day of spring and the beginning of the Persian New Year, celebrated at the exact moment of the vernal equinox.",
+  "footer": "Made with ♡ for Norouz",
+  "play": "Tahvil Music",
+  "pause": "Pause"
+}

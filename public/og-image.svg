@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <!-- Girih pattern tile -->
+    <pattern id="girih" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <!-- 10-pointed star outlines -->
+      <polygon points="40,4 44,16 56,10 48,22 60,24 48,30 56,40 44,36 40,48 36,36 24,40 32,30 20,24 32,22 24,10 36,16" fill="none" stroke="#c8973e" stroke-width="0.6" opacity="0.12"/>
+      <!-- Connecting lines -->
+      <line x1="0" y1="0" x2="20" y2="24" stroke="#c8973e" stroke-width="0.4" opacity="0.08"/>
+      <line x1="80" y1="0" x2="60" y2="24" stroke="#c8973e" stroke-width="0.4" opacity="0.08"/>
+      <line x1="0" y1="80" x2="20" y2="56" stroke="#c8973e" stroke-width="0.4" opacity="0.08"/>
+      <line x1="80" y1="80" x2="60" y2="56" stroke="#c8973e" stroke-width="0.4" opacity="0.08"/>
+      <!-- Small diamond accents -->
+      <polygon points="0,40 8,36 16,40 8,44" fill="none" stroke="#c8973e" stroke-width="0.4" opacity="0.08"/>
+      <polygon points="64,40 72,36 80,40 72,44" fill="none" stroke="#c8973e" stroke-width="0.4" opacity="0.08"/>
+      <polygon points="40,64 44,72 40,80 36,72" fill="none" stroke="#c8973e" stroke-width="0.4" opacity="0.08"/>
+      <polygon points="40,0 44,8 40,16 36,8" fill="none" stroke="#c8973e" stroke-width="0.4" opacity="0.08"/>
+    </pattern>
+
+    <!-- Blossom shape -->
+    <g id="blossom">
+      <ellipse cx="0" cy="-8" rx="5" ry="9" fill="#e8b4b8" opacity="0.7"/>
+      <ellipse cx="7.6" cy="-2.5" rx="5" ry="9" fill="#e8b4b8" opacity="0.6" transform="rotate(72, 7.6, -2.5)"/>
+      <ellipse cx="4.7" cy="6.5" rx="5" ry="9" fill="#e8b4b8" opacity="0.65" transform="rotate(144, 4.7, 6.5)"/>
+      <ellipse cx="-4.7" cy="6.5" rx="5" ry="9" fill="#e8b4b8" opacity="0.6" transform="rotate(216, -4.7, 6.5)"/>
+      <ellipse cx="-7.6" cy="-2.5" rx="5" ry="9" fill="#e8b4b8" opacity="0.65" transform="rotate(288, -7.6, -2.5)"/>
+      <circle cx="0" cy="0" r="3" fill="#c8973e" opacity="0.5"/>
+    </g>
+
+    <!-- Small leaf -->
+    <g id="leaf">
+      <path d="M0,0 Q6,-14 0,-28 Q-6,-14 0,0Z" fill="#7dad8a" opacity="0.5"/>
+      <line x1="0" y1="0" x2="0" y2="-26" stroke="#7dad8a" stroke-width="0.5" opacity="0.4"/>
+    </g>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#fefdf8"/>
+
+  <!-- Girih pattern overlay -->
+  <rect width="1200" height="630" fill="url(#girih)"/>
+
+  <!-- Decorative border frame -->
+  <!-- Outer border -->
+  <rect x="32" y="32" width="1136" height="566" rx="4" fill="none" stroke="#c8973e" stroke-width="1.2" opacity="0.25"/>
+  <!-- Inner border -->
+  <rect x="44" y="44" width="1112" height="542" rx="3" fill="none" stroke="#c8973e" stroke-width="0.6" opacity="0.18"/>
+
+  <!-- Corner ornaments (girih-inspired) -->
+  <!-- Top-left -->
+  <g transform="translate(38,38)" opacity="0.3">
+    <line x1="0" y1="0" x2="24" y2="0" stroke="#c8973e" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="0" y2="24" stroke="#c8973e" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="16" y2="16" stroke="#c8973e" stroke-width="0.8"/>
+    <circle cx="0" cy="0" r="2.5" fill="#c8973e"/>
+  </g>
+  <!-- Top-right -->
+  <g transform="translate(1162,38)" opacity="0.3">
+    <line x1="0" y1="0" x2="-24" y2="0" stroke="#c8973e" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="0" y2="24" stroke="#c8973e" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="-16" y2="16" stroke="#c8973e" stroke-width="0.8"/>
+    <circle cx="0" cy="0" r="2.5" fill="#c8973e"/>
+  </g>
+  <!-- Bottom-left -->
+  <g transform="translate(38,592)" opacity="0.3">
+    <line x1="0" y1="0" x2="24" y2="0" stroke="#c8973e" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="0" y2="-24" stroke="#c8973e" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="16" y2="-16" stroke="#c8973e" stroke-width="0.8"/>
+    <circle cx="0" cy="0" r="2.5" fill="#c8973e"/>
+  </g>
+  <!-- Bottom-right -->
+  <g transform="translate(1162,592)" opacity="0.3">
+    <line x1="0" y1="0" x2="-24" y2="0" stroke="#c8973e" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="0" y2="-24" stroke="#c8973e" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="-16" y2="-16" stroke="#c8973e" stroke-width="0.8"/>
+    <circle cx="0" cy="0" r="2.5" fill="#c8973e"/>
+  </g>
+
+  <!-- Top edge decorative diamonds -->
+  <g opacity="0.2">
+    <polygon points="400,32 406,26 412,32 406,38" fill="#c8973e"/>
+    <polygon points="600,32 606,26 612,32 606,38" fill="#c8973e"/>
+    <polygon points="800,32 806,26 812,32 806,38" fill="#c8973e"/>
+  </g>
+  <!-- Bottom edge decorative diamonds -->
+  <g opacity="0.2">
+    <polygon points="400,598 406,592 412,598 406,604" fill="#c8973e"/>
+    <polygon points="600,598 606,592 612,598 606,604" fill="#c8973e"/>
+    <polygon points="800,598 806,592 812,598 806,604" fill="#c8973e"/>
+  </g>
+
+  <!-- Decorative blossoms -->
+  <use href="#blossom" transform="translate(160, 140) scale(1.8)"/>
+  <use href="#blossom" transform="translate(1040, 160) scale(1.4)"/>
+  <use href="#blossom" transform="translate(120, 480) scale(1.2)"/>
+  <use href="#blossom" transform="translate(1060, 490) scale(1.6)"/>
+  <use href="#blossom" transform="translate(200, 310) scale(1.0)"/>
+  <use href="#blossom" transform="translate(1000, 340) scale(1.0)"/>
+
+  <!-- Decorative leaves -->
+  <use href="#leaf" transform="translate(175, 170) rotate(20) scale(1.2)"/>
+  <use href="#leaf" transform="translate(1050, 185) rotate(-15) scale(1.0)"/>
+  <use href="#leaf" transform="translate(135, 500) rotate(30) scale(0.9)"/>
+  <use href="#leaf" transform="translate(1075, 510) rotate(-25) scale(1.1)"/>
+  <use href="#leaf" transform="translate(210, 330) rotate(-10) scale(0.8)"/>
+  <use href="#leaf" transform="translate(990, 360) rotate(15) scale(0.8)"/>
+
+  <!-- Small scattered blossom buds -->
+  <circle cx="250" cy="200" r="3" fill="#e8b4b8" opacity="0.4"/>
+  <circle cx="940" cy="220" r="2.5" fill="#e8b4b8" opacity="0.35"/>
+  <circle cx="280" cy="430" r="2" fill="#e8b4b8" opacity="0.3"/>
+  <circle cx="920" cy="440" r="3" fill="#e8b4b8" opacity="0.35"/>
+
+  <!-- Horizontal decorative line above title -->
+  <line x1="440" y1="185" x2="760" y2="185" stroke="#c8973e" stroke-width="0.8" opacity="0.3"/>
+  <polygon points="600,180 604,185 600,190 596,185" fill="#c8973e" opacity="0.3"/>
+
+  <!-- Main title: Norouz Countdown -->
+  <text x="600" y="250" text-anchor="middle" font-family="'Georgia', 'Times New Roman', serif" font-size="56" font-weight="700" fill="#2c2417" letter-spacing="3">Norouz Countdown</text>
+
+  <!-- Persian text -->
+  <text x="600" y="320" text-anchor="middle" font-family="'Vazirmatn', 'Arial', sans-serif" font-size="48" font-weight="700" fill="#c8973e" letter-spacing="2">&#x0646;&#x0648;&#x0631;&#x0648;&#x0632;</text>
+
+  <!-- Decorative separator -->
+  <g opacity="0.35">
+    <line x1="460" y1="355" x2="560" y2="355" stroke="#c8973e" stroke-width="0.8"/>
+    <polygon points="600,350 604,355 600,360 596,355" fill="#c8973e"/>
+    <line x1="640" y1="355" x2="740" y2="355" stroke="#c8973e" stroke-width="0.8"/>
+  </g>
+
+  <!-- Year badge -->
+  <rect x="490" y="385" width="220" height="52" rx="26" fill="none" stroke="#c8973e" stroke-width="1.2" opacity="0.35"/>
+  <text x="600" y="420" text-anchor="middle" font-family="'Georgia', 'Times New Roman', serif" font-size="26" fill="#2c2417" opacity="0.75" letter-spacing="4">1405 &#x00B7; &#x06F1;&#x06F4;&#x06F0;&#x06F5;</text>
+
+  <!-- Bottom decorative line -->
+  <line x1="440" y1="475" x2="760" y2="475" stroke="#c8973e" stroke-width="0.8" opacity="0.2"/>
+
+  <!-- URL at bottom -->
+  <text x="600" y="555" text-anchor="middle" font-family="'Georgia', 'Times New Roman', serif" font-size="18" fill="#2c2417" opacity="0.35" letter-spacing="3">norouz.akhave.in</text>
+</svg>

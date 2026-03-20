@@ -17,5 +17,8 @@
   "blurb": "Norouz marks the first day of spring and the beginning of the Persian New Year, celebrated at the exact moment of the vernal equinox.",
   "footer": "Made with ♡ for Norouz",
   "play": "Tahvil Music",
-  "pause": "Pause"
+  "pause": "Pause",
+  "countdown_label": "Countdown to Norouz",
+  "switch_to_light": "Switch to light mode",
+  "switch_to_dark": "Switch to dark mode"
 }

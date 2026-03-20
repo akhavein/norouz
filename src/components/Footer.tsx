@@ -4,7 +4,7 @@ export function Footer() {
   const { t } = useLanguage();
 
   return (
-    <footer className="text-center text-xs text-warm-charcoal/30 dark:text-cream/30">
+    <footer className="text-center text-xs text-warm-charcoal/50 dark:text-cream/45">
       {t('footer')}
     </footer>
   );

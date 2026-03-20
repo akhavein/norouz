@@ -9,11 +9,7 @@ import { useConfetti } from './hooks/useConfetti';
 import { useLanguage } from './i18n/LanguageContext';
 import { getShamsiYear } from './utils/persianYear';
 import { formatIRST, formatLocal, formatUTC } from './utils/dateHelpers';
-
-function toPersianNumerals(n: number): string {
-  const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-  return n.toString().split('').map(d => persianDigits[parseInt(d)] || d).join('');
-}
+import { toPersianNumerals } from './utils/persian';
 
 function usePrefersReducedMotion(): boolean {
   const [prefersReduced, setPrefersReduced] = useState(() =>
@@ -48,11 +44,12 @@ function useTheme() {
 }
 
 function ThemeToggle({ isDark, onClick }: { isDark: boolean; onClick: () => void }) {
+  const { t } = useLanguage();
   return (
     <button
       onClick={onClick}
-      className="p-2 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-warm-charcoal/20 hover:bg-persian-gold/10 transition-all duration-200"
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      className="p-2 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-warm-charcoal/20 hover:bg-persian-gold/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-persian-gold"
+      aria-label={isDark ? t('switch_to_light') : t('switch_to_dark')}
     >
       {isDark ? (
         <svg width="16" height="16" viewBox="0 0 16 16" className="text-persian-gold" aria-hidden="true">
@@ -99,7 +96,7 @@ function SpringBlossom({ className }: { className?: string }) {
             opacity="0.7"
           />
         ))}
-        <circle cx="0" cy="0" r="3.5" fill="#c8973e" opacity="0.8" />
+        <circle cx="0" cy="0" r="3.5" fill="#b08530" opacity="0.8" />
       </g>
     </svg>
   );
@@ -189,7 +186,7 @@ function PlayButton({ isPlaying, onClick }: { isPlaying: boolean; onClick: () =>
   return (
     <button
       onClick={onClick}
-      className="group flex items-center gap-2 px-4 py-2 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-dark-surface/80 hover:bg-persian-gold/10 transition-all duration-200"
+      className="group flex items-center gap-2 px-4 py-2 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-dark-surface/80 hover:bg-persian-gold/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-persian-gold"
       aria-label={isPlaying ? t('pause') : t('play')}
     >
       <svg width="16" height="16" viewBox="0 0 16 16" className="text-persian-gold" aria-hidden="true">
@@ -243,14 +240,14 @@ function DormantView({ target, shamsiYear }: { target: Date; shamsiYear: number 
       <p className={`text-xl sm:text-2xl font-bold text-persian-gold ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`} dir={locale === 'fa' ? 'ltr' : 'rtl'} lang={locale === 'fa' ? 'en' : 'fa'}>
         {t('see_you_fa')}
       </p>
-      <div className="pt-4 text-sm text-warm-charcoal/50 dark:text-cream/50">
+      <div className="pt-4 text-sm text-warm-charcoal/60 dark:text-cream/55">
         <p>
           {locale === 'fa'
             ? `نوروز ${toPersianNumerals(shamsiYear)}`
             : `Norouz ${shamsiYear} · ${toPersianNumerals(shamsiYear)}`
           }
         </p>
-        <p className="text-xs text-warm-charcoal/30 dark:text-cream/30 mt-1">
+        <p className="text-xs text-warm-charcoal/50 dark:text-cream/45 mt-1">
           <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
         </p>
       </div>
@@ -271,7 +268,7 @@ function App() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center font-['Inter',sans-serif]">
-        <p className="text-warm-charcoal/40 dark:text-cream/40 text-sm">{t('loading')}</p>
+        <p className="text-warm-charcoal/55 dark:text-cream/50 text-sm">{t('loading')}</p>
       </div>
     );
   }
@@ -330,7 +327,7 @@ function App() {
             <p className="text-sm text-persian-teal font-medium">
               <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
             </p>
-            <p className="text-xs text-warm-charcoal/40 dark:text-cream/40">
+            <p className="text-xs text-warm-charcoal/55 dark:text-cream/50">
               <time dateTime={target.toISOString()}>{formatLocal(target)}</time>
               {' · '}
               <time dateTime={target.toISOString()}>{formatUTC(target)}</time>
@@ -340,7 +337,7 @@ function App() {
 
         <GirihDivider />
 
-        <p className="text-sm text-warm-charcoal/50 dark:text-cream/50 text-center max-w-sm leading-relaxed">
+        <p className="text-sm text-warm-charcoal/60 dark:text-cream/55 text-center max-w-sm leading-relaxed">
           {t('blurb')}
         </p>
       </main>

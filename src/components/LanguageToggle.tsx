@@ -6,7 +6,7 @@ export function LanguageToggle() {
   return (
     <button
       onClick={toggleLocale}
-      className="px-3 py-1.5 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-warm-charcoal/20 hover:bg-persian-gold/10 transition-all duration-200 text-sm font-medium"
+      className="px-3 py-1.5 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-warm-charcoal/20 hover:bg-persian-gold/10 transition-all duration-200 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-persian-gold"
       aria-label={locale === 'en' ? 'Switch to Farsi' : 'Switch to English'}
     >
       <span className={locale === 'en' ? 'text-persian-gold' : 'text-warm-charcoal/40 dark:text-cream/40'}>

@@ -1,24 +1,36 @@
 import { useEffect } from 'react';
 import { EQUINOX_UTC } from '../data/equinox-times';
 import { getShamsiYear } from '../utils/persianYear';
+import { toPersianNumerals } from '../utils/persian';
 
-function getNextEquinox(): { date: Date; year: number } | null {
+const CELEBRATION_DAYS = 13;
+const MS_PER_DAY = 86_400_000;
+
+function getRelevantEquinox(): { date: Date; year: number } | null {
   const now = Date.now();
   const currentYear = new Date().getFullYear();
 
-  // Check this year and next
-  for (const y of [currentYear, currentYear + 1]) {
-    const ts = EQUINOX_UTC[y];
-    if (ts !== undefined && ts > now) {
-      return { date: new Date(ts), year: y };
+  // During celebration period (13 days after equinox), show the current year's equinox
+  const thisTs = EQUINOX_UTC[currentYear];
+  if (thisTs !== undefined) {
+    const celebrationEnd = thisTs + CELEBRATION_DAYS * MS_PER_DAY;
+    if (now < celebrationEnd) {
+      return { date: new Date(thisTs), year: currentYear };
     }
   }
+
+  // After celebration, show next year's equinox
+  const nextTs = EQUINOX_UTC[currentYear + 1];
+  if (nextTs !== undefined) {
+    return { date: new Date(nextTs), year: currentYear + 1 };
+  }
+
   return null;
 }
 
 export function JsonLd() {
   useEffect(() => {
-    const equinox = getNextEquinox();
+    const equinox = getRelevantEquinox();
     if (!equinox) return;
 
     const shamsiYear = getShamsiYear(equinox.year);
@@ -26,7 +38,7 @@ export function JsonLd() {
       '@context': 'https://schema.org',
       '@type': 'Event',
       name: `Norouz ${shamsiYear} — Persian New Year`,
-      alternateName: `نوروز ${shamsiYear}`,
+      alternateName: `نوروز ${toPersianNumerals(shamsiYear)}`,
       startDate: equinox.date.toISOString(),
       description: `The exact astronomical moment of the Vernal Equinox, marking the beginning of the Persian New Year (Norouz) ${shamsiYear}.`,
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',

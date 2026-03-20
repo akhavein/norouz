@@ -1,16 +1,25 @@
 const CACHE_NAME = 'norouz-v1';
 
-const PRECACHE_URLS = [
+// Essential assets — SW install fails if these can't be cached
+const ESSENTIAL_URLS = [
   '/',
-  '/tahvil.mp3',
   '/favicon.svg',
   '/manifest.json',
+];
+
+// Optional assets — cached best-effort, won't block SW install
+const OPTIONAL_URLS = [
+  '/tahvil.mp3',
   '/og-image.png',
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS))
+    caches.open(CACHE_NAME).then((cache) =>
+      cache.addAll(ESSENTIAL_URLS).then(() =>
+        Promise.allSettled(OPTIONAL_URLS.map((url) => cache.add(url)))
+      )
+    )
   );
   self.skipWaiting();
 });

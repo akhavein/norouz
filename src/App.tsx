@@ -1,3 +1,4 @@
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Countdown } from './components/Countdown';
 import { Footer } from './components/Footer';
@@ -53,9 +54,92 @@ function GirihDivider() {
   );
 }
 
+const CELEBRATION_HOURS = 24;
+
+function useNorouzAudio(target: Date | null, isComplete: boolean) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const triggeredRef = useRef(false);
+
+  // Check if we're within the 24-hour celebration window
+  const isInCelebrationWindow = target
+    ? Date.now() >= target.getTime() &&
+      Date.now() < target.getTime() + CELEBRATION_HOURS * 60 * 60 * 1000
+    : false;
+
+  const play = useCallback(() => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio('/tahvil.mp3');
+      audioRef.current.addEventListener('ended', () => setIsPlaying(false));
+    }
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+  }, []);
+
+  const toggle = useCallback(() => {
+    setHasInteracted(true);
+    if (!audioRef.current) {
+      play();
+      return;
+    }
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      play();
+    }
+  }, [isPlaying, play]);
+
+  // Auto-play at the exact moment of equinox (if user has interacted)
+  useEffect(() => {
+    if (isComplete && !triggeredRef.current && hasInteracted) {
+      triggeredRef.current = true;
+      play();
+    }
+  }, [isComplete, hasInteracted, play]);
+
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  return { isPlaying, isInCelebrationWindow, toggle, isComplete };
+}
+
+function PlayButton({ isPlaying, onClick }: { isPlaying: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="group flex items-center gap-2 px-4 py-2 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 hover:bg-persian-gold/10 transition-all duration-200"
+      aria-label={isPlaying ? 'Pause celebration music' : 'Play celebration music'}
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" className="text-persian-gold" aria-hidden="true">
+        {isPlaying ? (
+          <>
+            <rect x="3" y="2" width="3.5" height="12" rx="1" fill="currentColor" />
+            <rect x="9.5" y="2" width="3.5" height="12" rx="1" fill="currentColor" />
+          </>
+        ) : (
+          <path d="M4 2.5v11l9-5.5-9-5.5z" fill="currentColor" />
+        )}
+      </svg>
+      <span className="text-xs font-medium text-persian-gold/80 group-hover:text-persian-gold transition-colors">
+        {isPlaying ? 'Pause' : 'Tahvil Music'}
+      </span>
+    </button>
+  );
+}
+
 function App() {
   const { target, year, loading } = useEquinox();
   const countdown = useCountdown(target);
+  const audio = useNorouzAudio(target, countdown.isComplete);
 
   if (loading) {
     return (
@@ -102,6 +186,10 @@ function App() {
             minutes={countdown.minutes}
             seconds={countdown.seconds}
           />
+        )}
+
+        {audio.isInCelebrationWindow && (
+          <PlayButton isPlaying={audio.isPlaying} onClick={audio.toggle} />
         )}
 
         {target && (

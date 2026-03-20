@@ -86,3 +86,62 @@ body {
     transform: translateY(0);
   }
 }
+
+/* ── Zodiac animal walk ── */
+
+.zodiac-walk {
+  animation: zodiac-walk-across 18s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes zodiac-walk-across {
+  from {
+    left: -80px;
+  }
+  to {
+    left: calc(100vw + 80px);
+  }
+}
+
+/* Leg walk cycle — front and back alternate */
+.zodiac-leg-front {
+  animation: zodiac-leg-stride-front 0.6s ease-in-out infinite alternate;
+  transform-origin: center top;
+}
+
+.zodiac-leg-back {
+  animation: zodiac-leg-stride-back 0.6s ease-in-out infinite alternate;
+  transform-origin: center top;
+}
+
+@keyframes zodiac-leg-stride-front {
+  from { transform: rotate(-8deg); }
+  to   { transform: rotate(8deg); }
+}
+
+@keyframes zodiac-leg-stride-back {
+  from { transform: rotate(8deg); }
+  to   { transform: rotate(-8deg); }
+}
+
+/* Subtle body bob */
+.zodiac-walk svg {
+  animation: zodiac-bob 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes zodiac-bob {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-1.5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zodiac-walk,
+  .zodiac-leg-front,
+  .zodiac-leg-back,
+  .zodiac-walk svg {
+    animation: none;
+  }
+  .zodiac-walk {
+    display: none;
+  }
+}

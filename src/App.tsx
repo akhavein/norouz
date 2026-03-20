@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { LanguageToggle } from './components/LanguageToggle';
 import { JsonLd } from './components/JsonLd';
 import { HaftSin } from './components/HaftSin';
+import { ZodiacAnimal } from './components/ZodiacAnimal';
 import { useNorouzState } from './hooks/useNorouzState';
 import { useCountdown } from './hooks/useCountdown';
 import { useConfetti } from './hooks/useConfetti';
@@ -345,6 +346,10 @@ function App() {
           {t('blurb')}
         </p>
       </main>
+
+      {phase === 'celebrating' && shamsiYear && !prefersReducedMotion && (
+        <ZodiacAnimal shamsiYear={shamsiYear} />
+      )}
 
       <div className="mt-auto pt-12 relative z-10">
         <Footer />

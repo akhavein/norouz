@@ -6,7 +6,10 @@ export type NorouzPhase = 'counting' | 'celebrating' | 'dormant';
 const CELEBRATION_DAYS = 13; // Through Sizdah Bedar
 const DORMANT_DAYS = 7;     // Brief pause before next countdown
 const MS_PER_DAY = 86_400_000;
-const IRST_OFFSET_MS = 3.5 * 60 * 60 * 1000; // UTC+3:30
+// Use local timezone offset so the day counter matches the user's calendar day
+function getLocalDayOffset(): number {
+  return new Date().getTimezoneOffset() * -60 * 1000;
+}
 
 interface NorouzState {
   phase: NorouzPhase;
@@ -40,10 +43,11 @@ async function computeState(): Promise<NorouzState> {
 
   const celebrationEnd = thisMs + CELEBRATION_DAYS * MS_PER_DAY;
   if (now < celebrationEnd) {
-    // Count IRST calendar days from the equinox date (1 Farvardin = Day 1)
-    const equinoxIRSTDay = Math.floor((thisMs + IRST_OFFSET_MS) / MS_PER_DAY);
-    const nowIRSTDay = Math.floor((now + IRST_OFFSET_MS) / MS_PER_DAY);
-    const norouzDay = nowIRSTDay - equinoxIRSTDay + 1;
+    // Count local calendar days from the equinox date (1 Farvardin = Day 1)
+    const localOffset = getLocalDayOffset();
+    const equinoxLocalDay = Math.floor((thisMs + localOffset) / MS_PER_DAY);
+    const nowLocalDay = Math.floor((now + localOffset) / MS_PER_DAY);
+    const norouzDay = nowLocalDay - equinoxLocalDay + 1;
     return { phase: 'celebrating', target: thisEquinox, year: currentYear, loading: false, norouzDay };
   }
 

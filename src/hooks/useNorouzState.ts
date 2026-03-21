@@ -6,6 +6,7 @@ export type NorouzPhase = 'counting' | 'celebrating' | 'dormant';
 const CELEBRATION_DAYS = 13; // Through Sizdah Bedar
 const DORMANT_DAYS = 7;     // Brief pause before next countdown
 const MS_PER_DAY = 86_400_000;
+const IRST_OFFSET_MS = 3.5 * 60 * 60 * 1000; // UTC+3:30
 
 interface NorouzState {
   phase: NorouzPhase;
@@ -39,7 +40,10 @@ async function computeState(): Promise<NorouzState> {
 
   const celebrationEnd = thisMs + CELEBRATION_DAYS * MS_PER_DAY;
   if (now < celebrationEnd) {
-    const norouzDay = Math.floor((now - thisMs) / MS_PER_DAY) + 1;
+    // Count IRST calendar days from the equinox date (1 Farvardin = Day 1)
+    const equinoxIRSTDay = Math.floor((thisMs + IRST_OFFSET_MS) / MS_PER_DAY);
+    const nowIRSTDay = Math.floor((now + IRST_OFFSET_MS) / MS_PER_DAY);
+    const norouzDay = nowIRSTDay - equinoxIRSTDay + 1;
     return { phase: 'celebrating', target: thisEquinox, year: currentYear, loading: false, norouzDay };
   }
 

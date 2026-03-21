@@ -268,7 +268,7 @@ function ItemCard({
     <button
       type="button"
       onClick={onToggle}
-      className={`group flex flex-col items-center gap-1.5 p-4 rounded-xl border transition-all duration-200 text-left w-full cursor-pointer ${
+      className={`group flex flex-col items-center gap-1.5 p-4 rounded-xl border transition-all duration-200 w-full cursor-pointer ${
         expanded
           ? 'border-persian-gold/40 shadow-md bg-cream/80 dark:bg-dark-surface/80'
           : 'border-persian-gold/15 bg-cream/60 dark:bg-dark-surface/60 hover:border-persian-gold/40 hover:shadow-md hover:-translate-y-0.5'
@@ -282,13 +282,13 @@ function ItemCard({
       <span className="w-12 h-12 shrink-0" aria-hidden="true">
         {item.icon}
       </span>
-      <span className={`text-sm font-bold text-warm-charcoal dark:text-cream ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+      <span className={`text-sm font-bold text-warm-charcoal dark:text-cream leading-tight text-center ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
         {locale === 'fa' ? item.persian : item.english}
       </span>
       {/* Chevron indicator */}
       <svg
-        width="12" height="12" viewBox="0 0 12 12"
-        className={`text-persian-gold/40 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+        width="14" height="14" viewBox="0 0 12 12"
+        className={`text-persian-gold/50 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
         aria-hidden="true"
       >
         <path d="M2 4 L6 8 L10 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -296,10 +296,10 @@ function ItemCard({
       {/* Expandable description */}
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out w-full ${
-          expanded ? 'max-h-64 opacity-100 mt-1' : 'max-h-0 opacity-0'
+          expanded ? 'max-h-72 opacity-100 mt-2' : 'max-h-0 opacity-0'
         }`}
       >
-        <p className={`text-xs leading-relaxed text-warm-charcoal/70 dark:text-cream/65 text-center ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+        <p className={`text-[11px] sm:text-xs leading-relaxed text-warm-charcoal/70 dark:text-cream/65 text-center ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
           {t(item.meaningKey)}
         </p>
       </div>
@@ -321,18 +321,19 @@ export function HaftSin() {
       <h2 className={`text-center text-xl sm:text-2xl font-bold text-persian-gold mb-6 ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
         {t('haftsin_title')}
       </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="flex flex-wrap justify-center items-start gap-3 sm:gap-4" role="list">
         {ITEMS.map((item, i) => (
-          <ItemCard
-            key={item.meaningKey}
-            item={item}
-            index={i}
-            expanded={expandedKey === item.meaningKey}
-            onToggle={() => toggleExpand(item.meaningKey)}
-            reducedMotion={reducedMotion}
-            locale={locale}
-            t={t}
-          />
+          <div key={item.meaningKey} className="w-[140px] sm:w-[155px]" role="listitem">
+            <ItemCard
+              item={item}
+              index={i}
+              expanded={expandedKey === item.meaningKey}
+              onToggle={() => toggleExpand(item.meaningKey)}
+              reducedMotion={reducedMotion}
+              locale={locale}
+              t={t}
+            />
+          </div>
         ))}
       </div>
 
@@ -344,18 +345,19 @@ export function HaftSin() {
         </h3>
         <div className="flex-1 h-px bg-persian-gold/15" />
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+      <div className="flex flex-wrap justify-center items-start gap-3 sm:gap-4" role="list">
         {EXTRA_ITEMS.map((item, i) => (
-          <ItemCard
-            key={item.meaningKey}
-            item={item}
-            index={ITEMS.length + i}
-            expanded={expandedKey === item.meaningKey}
-            onToggle={() => toggleExpand(item.meaningKey)}
-            reducedMotion={reducedMotion}
-            locale={locale}
-            t={t}
-          />
+          <div key={item.meaningKey} className="w-[120px] sm:w-[120px]" role="listitem">
+            <ItemCard
+              item={item}
+              index={ITEMS.length + i}
+              expanded={expandedKey === item.meaningKey}
+              onToggle={() => toggleExpand(item.meaningKey)}
+              reducedMotion={reducedMotion}
+              locale={locale}
+              t={t}
+            />
+          </div>
         ))}
       </div>
     </section>

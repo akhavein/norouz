@@ -9,7 +9,7 @@ export function Header() {
         <h1 className={`text-lg font-semibold tracking-wide text-warm-charcoal/60 dark:text-cream/60 uppercase ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
           {t('title')}
         </h1>
-        <p className={`text-2xl font-bold text-persian-gold ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`} dir={locale === 'fa' ? 'ltr' : 'rtl'} lang={locale === 'fa' ? 'en' : 'fa'}>
+        <p className={`text-2xl font-bold text-persian-gold ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
           {t('subtitle')}
         </p>
       </div>

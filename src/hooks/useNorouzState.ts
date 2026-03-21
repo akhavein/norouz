@@ -12,6 +12,7 @@ interface NorouzState {
   target: Date | null;
   year: number | null;
   loading: boolean;
+  norouzDay: number | null;
 }
 
 async function resolveEquinox(year: number): Promise<Date> {
@@ -33,22 +34,23 @@ async function computeState(): Promise<NorouzState> {
   const thisMs = thisEquinox.getTime();
 
   if (now < thisMs) {
-    return { phase: 'counting', target: thisEquinox, year: currentYear, loading: false };
+    return { phase: 'counting', target: thisEquinox, year: currentYear, loading: false, norouzDay: null };
   }
 
   const celebrationEnd = thisMs + CELEBRATION_DAYS * MS_PER_DAY;
   if (now < celebrationEnd) {
-    return { phase: 'celebrating', target: thisEquinox, year: currentYear, loading: false };
+    const norouzDay = Math.floor((now - thisMs) / MS_PER_DAY) + 1;
+    return { phase: 'celebrating', target: thisEquinox, year: currentYear, loading: false, norouzDay };
   }
 
   const dormantEnd = celebrationEnd + DORMANT_DAYS * MS_PER_DAY;
   if (now < dormantEnd) {
     const nextEquinox = await resolveEquinox(currentYear + 1);
-    return { phase: 'dormant', target: nextEquinox, year: currentYear + 1, loading: false };
+    return { phase: 'dormant', target: nextEquinox, year: currentYear + 1, loading: false, norouzDay: null };
   }
 
   const nextEquinox = await resolveEquinox(currentYear + 1);
-  return { phase: 'counting', target: nextEquinox, year: currentYear + 1, loading: false };
+  return { phase: 'counting', target: nextEquinox, year: currentYear + 1, loading: false, norouzDay: null };
 }
 
 export function useNorouzState(): NorouzState {
@@ -57,6 +59,7 @@ export function useNorouzState(): NorouzState {
     target: null,
     year: null,
     loading: true,
+    norouzDay: null,
   });
 
   const resolve = useCallback(async () => {

@@ -256,7 +256,7 @@ function PlayButton({ isPlaying, onClick }: { isPlaying: boolean; onClick: () =>
   );
 }
 
-function CelebrationView({ shamsiYear }: { shamsiYear: number }) {
+function CelebrationView({ shamsiYear, norouzDay }: { shamsiYear: number; norouzDay: number | null }) {
   const { t, locale } = useLanguage();
 
   return (
@@ -264,15 +264,19 @@ function CelebrationView({ shamsiYear }: { shamsiYear: number }) {
       <p className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-warm-charcoal dark:text-cream ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
         {t('norouz_mobarak')}
       </p>
-      <p className={`text-3xl sm:text-4xl md:text-5xl font-bold text-persian-gold ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`} dir={locale === 'fa' ? 'ltr' : 'rtl'} lang={locale === 'fa' ? 'en' : 'fa'}>
-        {t('norouz_mobarak_fa')}
-      </p>
-      <div className="pt-4">
-        <p className="text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide">
-          {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
+      {norouzDay && (
+        <p className={`text-lg sm:text-xl font-semibold ${norouzDay === 13 ? 'text-sage' : 'text-persian-teal'} ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+          {norouzDay === 13
+            ? (locale === 'fa' ? 'سیزده‌بدر — روز طبیعت!' : 'Sizdah Bedar — Nature Day!')
+            : locale === 'fa'
+              ? `روز ${toPersianNumerals(norouzDay)} نوروز`
+              : `Day ${norouzDay} of Norouz`
+          }
         </p>
-        <p className={`text-lg sm:text-xl font-bold text-persian-gold/70 ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`}>
-          {locale === 'fa' ? shamsiYear : toPersianNumerals(shamsiYear)}
+      )}
+      <div className="pt-2">
+        <p className={`text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+          {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
         </p>
       </div>
     </div>
@@ -283,22 +287,24 @@ function DormantView({ target, shamsiYear }: { target: Date; shamsiYear: number 
   const { t, locale } = useLanguage();
 
   return (
-    <div className="text-center space-y-4">
+    <div className="text-center space-y-6 max-w-md mx-auto">
       <p className={`text-2xl sm:text-3xl font-bold text-warm-charcoal dark:text-cream ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
         {t('see_you')}
       </p>
-      <p className={`text-xl sm:text-2xl font-bold text-persian-gold ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`} dir={locale === 'fa' ? 'ltr' : 'rtl'} lang={locale === 'fa' ? 'en' : 'fa'}>
-        {t('see_you_fa')}
-      </p>
-      <div className="pt-4 text-sm text-warm-charcoal/60 dark:text-cream/55">
-        <p>
-          {locale === 'fa'
-            ? `نوروز ${toPersianNumerals(shamsiYear)}`
-            : `Norouz ${shamsiYear} · ${toPersianNumerals(shamsiYear)}`
-          }
+      <div className="p-4 rounded-xl border border-sage/20 bg-sage/5">
+        <p className={`text-sm text-warm-charcoal/70 dark:text-cream/65 leading-relaxed ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+          {t('dormant_sizdah_bedar')}
         </p>
-        <p className="text-xs text-warm-charcoal/50 dark:text-cream/45 mt-1">
+      </div>
+      <div className="space-y-2">
+        <p className={`text-sm font-medium text-persian-gold ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+          {t('dormant_next_norouz')} {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
+        </p>
+        <p className="text-xs text-warm-charcoal/50 dark:text-cream/45">
           <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
+        </p>
+        <p className={`text-xs text-warm-charcoal/50 dark:text-cream/45 ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+          {t('dormant_next_countdown')}
         </p>
       </div>
     </div>
@@ -306,7 +312,7 @@ function DormantView({ target, shamsiYear }: { target: Date; shamsiYear: number 
 }
 
 function App() {
-  const { phase, target, year, loading } = useNorouzState();
+  const { phase, target, year, loading, norouzDay } = useNorouzState();
   const countdown = useCountdown(phase === 'counting' ? target : null);
   const prefersReducedMotion = usePrefersReducedMotion();
   const audio = useNorouzAudio(target, phase);
@@ -348,52 +354,51 @@ function App() {
       <main className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10 max-w-2xl w-full relative z-10">
         <Header />
 
-        {phase === 'counting' && shamsiYear && (
-          <div className="text-center space-y-0.5">
-            <p className="text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide">
-              {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
-            </p>
-            <p className={`text-lg sm:text-xl font-bold text-persian-gold/70 ${locale === 'fa' ? '' : "font-['Vazirmatn',sans-serif]"}`}>
-              {locale === 'fa' ? shamsiYear : toPersianNumerals(shamsiYear)}
-            </p>
-          </div>
-        )}
+        <div key={phase} className="phase-enter flex flex-col items-center gap-6 sm:gap-8 md:gap-10 w-full">
+          {phase === 'counting' && shamsiYear && (
+            <div className="text-center">
+              <p className={`text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+                {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
+              </p>
+            </div>
+          )}
 
-        {phase === 'counting' && (
-          <Countdown
-            days={countdown.days}
-            hours={countdown.hours}
-            minutes={countdown.minutes}
-            seconds={countdown.seconds}
-          />
-        )}
+          {phase === 'counting' && (
+            <Countdown
+              days={countdown.days}
+              hours={countdown.hours}
+              minutes={countdown.minutes}
+              seconds={countdown.seconds}
+            />
+          )}
 
-        {phase === 'celebrating' && shamsiYear && (
-          <CelebrationView shamsiYear={shamsiYear} />
-        )}
+          {phase === 'celebrating' && shamsiYear && (
+            <CelebrationView shamsiYear={shamsiYear} norouzDay={norouzDay} />
+          )}
 
-        {phase === 'dormant' && target && shamsiYear && (
-          <DormantView target={target} shamsiYear={shamsiYear} />
-        )}
+          {phase === 'dormant' && target && shamsiYear && (
+            <DormantView target={target} shamsiYear={shamsiYear} />
+          )}
 
-        {phase === 'celebrating' && <HaftSin />}
+          {(phase === 'celebrating' || phase === 'counting') && <HaftSin />}
 
-        {audio.isInAudioWindow && (
-          <PlayButton isPlaying={audio.isPlaying} onClick={audio.toggle} />
-        )}
+          {audio.isInAudioWindow && (
+            <PlayButton isPlaying={audio.isPlaying} onClick={audio.toggle} />
+          )}
 
-        {phase === 'counting' && target && (
-          <div className="text-center space-y-1">
-            <p className="text-sm text-persian-teal font-medium">
-              <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
-            </p>
-            <p className="text-xs text-warm-charcoal/55 dark:text-cream/50">
-              <time dateTime={target.toISOString()}>{formatLocal(target)}</time>
-              {' · '}
-              <time dateTime={target.toISOString()}>{formatUTC(target)}</time>
-            </p>
-          </div>
-        )}
+          {phase === 'counting' && target && (
+            <div className="text-center space-y-1">
+              <p className="text-sm text-persian-teal font-medium">
+                <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
+              </p>
+              <p className="text-xs text-warm-charcoal/55 dark:text-cream/50">
+                <time dateTime={target.toISOString()}>{formatLocal(target)}</time>
+                {' · '}
+                <time dateTime={target.toISOString()}>{formatUTC(target)}</time>
+              </p>
+            </div>
+          )}
+        </div>
 
         <GirihDivider />
 

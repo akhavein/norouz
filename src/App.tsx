@@ -264,7 +264,7 @@ function CelebrationView({ shamsiYear, norouzDay }: { shamsiYear: number; norouz
       <p className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-warm-charcoal dark:text-cream ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
         {t('norouz_mobarak')}
       </p>
-      {norouzDay !== null && (
+      {norouzDay !== null && norouzDay > 0 && (
         <p className={`text-lg sm:text-xl font-semibold ${norouzDay === 13 ? 'text-sage' : 'text-persian-teal'} ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
           {norouzDay === 13
             ? (locale === 'fa' ? 'سیزده‌بدر — روز طبیعت!' : 'Sizdah Bedar — Nature Day!')

@@ -43,11 +43,11 @@ async function computeState(): Promise<NorouzState> {
 
   const celebrationEnd = thisMs + CELEBRATION_DAYS * MS_PER_DAY;
   if (now < celebrationEnd) {
-    // Count local calendar days from the equinox date (1 Farvardin = Day 1)
+    // Count local calendar days: equinox day = Day 0 (Tahvil), next day = Day 1 (1 Farvardin)
     const localOffset = getLocalDayOffset();
     const equinoxLocalDay = Math.floor((thisMs + localOffset) / MS_PER_DAY);
     const nowLocalDay = Math.floor((now + localOffset) / MS_PER_DAY);
-    const norouzDay = nowLocalDay - equinoxLocalDay + 1;
+    const norouzDay = nowLocalDay - equinoxLocalDay;
     return { phase: 'celebrating', target: thisEquinox, year: currentYear, loading: false, norouzDay };
   }
 

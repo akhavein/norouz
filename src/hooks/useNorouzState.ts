@@ -6,9 +6,24 @@ export type NorouzPhase = 'counting' | 'celebrating' | 'dormant';
 const CELEBRATION_DAYS = 13; // Through Sizdah Bedar
 const DORMANT_DAYS = 7;     // Brief pause before next countdown
 const MS_PER_DAY = 86_400_000;
-// Use local timezone offset so the day counter matches the user's calendar day
-function getLocalDayOffset(): number {
-  return new Date().getTimezoneOffset() * -60 * 1000;
+const IRST_OFFSET_MS = 3.5 * 60 * 60 * 1000; // UTC+3:30
+// Solar noon in Tehran ≈ 12:14 IRST = 08:44 UTC (in ms from midnight UTC)
+const SOLAR_NOON_UTC_MS = (8 * 60 + 44) * 60 * 1000;
+
+// Get the Gregorian date of 1 Farvardin using the solar noon rule.
+// If equinox is before solar noon in Tehran → that IRST date is 1 Farvardin.
+// If after → the next IRST date is 1 Farvardin.
+// Returns a local Date at midnight for day-counting.
+function getFarvardinOneDate(equinoxMs: number): Date {
+  const isAfterSolarNoon = (equinoxMs % MS_PER_DAY) >= SOLAR_NOON_UTC_MS;
+  // Get equinox date in IRST
+  const eqIRST = new Date(equinoxMs + IRST_OFFSET_MS);
+  let day = eqIRST.getUTCDate();
+  const month = eqIRST.getUTCMonth();
+  const year = eqIRST.getUTCFullYear();
+  if (isAfterSolarNoon) day += 1;
+  // Return as a local-timezone midnight Date for clean day comparison
+  return new Date(year, month, day);
 }
 
 interface NorouzState {
@@ -43,11 +58,11 @@ async function computeState(): Promise<NorouzState> {
 
   const celebrationEnd = thisMs + CELEBRATION_DAYS * MS_PER_DAY;
   if (now < celebrationEnd) {
-    // Count local calendar days: equinox day = Day 0 (Tahvil), next day = Day 1 (1 Farvardin)
-    const localOffset = getLocalDayOffset();
-    const equinoxLocalDay = Math.floor((thisMs + localOffset) / MS_PER_DAY);
-    const nowLocalDay = Math.floor((now + localOffset) / MS_PER_DAY);
-    const norouzDay = nowLocalDay - equinoxLocalDay;
+    // Count days from 1 Farvardin (solar noon rule)
+    const farvardinOne = getFarvardinOneDate(thisMs);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const norouzDay = Math.round((today.getTime() - farvardinOne.getTime()) / MS_PER_DAY) + 1;
     return { phase: 'celebrating', target: thisEquinox, year: currentYear, loading: false, norouzDay };
   }
 

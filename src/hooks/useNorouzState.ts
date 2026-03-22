@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { EQUINOX_UTC, getEquinoxFallback } from '../data/equinox-times';
+import { EQUINOX_UTC, getEquinoxFallback, getCelebrationEndMs } from '../data/equinox-times';
 
 export type NorouzPhase = 'counting' | 'celebrating' | 'dormant';
 
@@ -56,13 +56,15 @@ async function computeState(): Promise<NorouzState> {
     return { phase: 'counting', target: thisEquinox, year: currentYear, loading: false, norouzDay: null };
   }
 
-  const celebrationEnd = thisMs + CELEBRATION_DAYS * MS_PER_DAY;
+  // End of celebrations = midnight IRST on Farvardin 14 (day after Sizdah Bedar)
+  const celebrationEnd = getCelebrationEndMs(thisMs, CELEBRATION_DAYS);
   if (now < celebrationEnd) {
     // Count days from 1 Farvardin (solar noon rule)
     const farvardinOne = getFarvardinOneDate(thisMs);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const norouzDay = Math.round((today.getTime() - farvardinOne.getTime()) / MS_PER_DAY) + 1;
+    const rawDay = Math.round((today.getTime() - farvardinOne.getTime()) / MS_PER_DAY) + 1;
+    const norouzDay = Math.max(1, Math.min(CELEBRATION_DAYS, rawDay));
     return { phase: 'celebrating', target: thisEquinox, year: currentYear, loading: false, norouzDay };
   }
 

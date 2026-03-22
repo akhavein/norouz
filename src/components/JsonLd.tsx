@@ -1,19 +1,18 @@
 import { useEffect } from 'react';
-import { EQUINOX_UTC } from '../data/equinox-times';
+import { EQUINOX_UTC, getCelebrationEndMs } from '../data/equinox-times';
 import { getShamsiYear } from '../utils/persianYear';
 import { toPersianNumerals } from '../utils/persian';
 
 const CELEBRATION_DAYS = 13;
-const MS_PER_DAY = 86_400_000;
 
 function getRelevantEquinox(): { date: Date; year: number } | null {
   const now = Date.now();
   const currentYear = new Date().getFullYear();
 
-  // During celebration period (13 days after equinox), show the current year's equinox
+  // During celebration period (through Sizdah Bedar), show the current year's equinox
   const thisTs = EQUINOX_UTC[currentYear];
   if (thisTs !== undefined) {
-    const celebrationEnd = thisTs + CELEBRATION_DAYS * MS_PER_DAY;
+    const celebrationEnd = getCelebrationEndMs(thisTs, CELEBRATION_DAYS);
     if (now < celebrationEnd) {
       return { date: new Date(thisTs), year: currentYear };
     }

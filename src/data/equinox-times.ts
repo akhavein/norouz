@@ -24,3 +24,22 @@ export async function getEquinoxFallback(year: number): Promise<Date> {
   const { Seasons } = await import('astronomy-engine');
   return Seasons(year).mar_equinox.date;
 }
+
+// IRST = UTC+3:30
+const IRST_OFFSET_MS = 3.5 * 60 * 60 * 1000;
+// Solar noon in Tehran ≈ 12:14 IRST = 08:44 UTC
+const SOLAR_NOON_UTC_MS = (8 * 60 + 44) * 60 * 1000;
+const MS_PER_DAY = 86_400_000;
+
+/**
+ * Get the UTC timestamp for end of the Norouz celebration period.
+ * Correctly applies the solar noon rule to determine 1 Farvardin,
+ * then returns midnight IRST on (1 Farvardin + days).
+ */
+export function getCelebrationEndMs(equinoxMs: number, days: number): number {
+  const isAfterSolarNoon = (equinoxMs % MS_PER_DAY) >= SOLAR_NOON_UTC_MS;
+  const eqIRST = new Date(equinoxMs + IRST_OFFSET_MS);
+  let day = eqIRST.getUTCDate();
+  if (isAfterSolarNoon) day += 1;
+  return Date.UTC(eqIRST.getUTCFullYear(), eqIRST.getUTCMonth(), day + days) - IRST_OFFSET_MS;
+}

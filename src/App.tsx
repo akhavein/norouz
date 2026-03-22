@@ -105,50 +105,69 @@ function SpringBlossom({ className }: { className?: string }) {
   );
 }
 
-/* Boteh Jeghe (بته‌جقه) — Persian paisley motif */
+/* Boteh Jeghe (بته‌جقه) — Persian paisley / bent cypress motif */
 function BotehJeghe({ className }: { className?: string }) {
   return (
     <svg width="40" height="60" viewBox="0 0 40 60" className={className} aria-hidden="true">
-      {/* Outer teardrop */}
+      {/* Outer body — asymmetric with hooked tip curving right */}
       <path
-        d="M20 4 Q32 16 32 32 Q32 48 20 56 Q8 48 8 32 Q8 16 20 4Z"
+        d="M18 56 Q8 52 6 40 Q4 28 8 18 Q12 8 18 6 Q20 4 22 4 Q26 4 30 10 Q28 6 32 4"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.2"
-        opacity="0.6"
-      />
-      {/* Inner teardrop */}
-      <path
-        d="M20 10 Q28 20 28 32 Q28 44 20 50 Q12 44 12 32 Q12 20 20 10Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="0.8"
-        opacity="0.4"
-      />
-      {/* Curved tip */}
-      <path
-        d="M20 4 Q24 2 26 6"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1"
         strokeLinecap="round"
         opacity="0.6"
       />
-      {/* Central spine */}
       <path
-        d="M20 14 Q20 32 20 48"
+        d="M18 56 Q28 52 30 40 Q32 28 30 18 Q28 10 30 10"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.6"
+      />
+      {/* Inner contour */}
+      <path
+        d="M18 50 Q10 46 9 36 Q8 26 11 18 Q14 12 18 10 Q20 8 22 9 Q26 10 27 14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.7"
+        opacity="0.35"
+      />
+      <path
+        d="M18 50 Q26 46 27 36 Q28 26 27 18 Q26 14 27 14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.7"
+        opacity="0.35"
+      />
+      {/* Central floral stem — curving upward */}
+      <path
+        d="M18 48 Q17 38 18 28 Q19 18 20 12"
         fill="none"
         stroke="currentColor"
         strokeWidth="0.6"
         opacity="0.3"
       />
-      {/* Inner floral details — small leaves */}
-      <path d="M20 20 Q24 24 20 28" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.35" />
-      <path d="M20 20 Q16 24 20 28" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.35" />
-      <path d="M20 30 Q23 34 20 38" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.3" />
-      <path d="M20 30 Q17 34 20 38" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.3" />
-      {/* Dot at center */}
-      <circle cx="20" cy="24" r="1.5" fill="currentColor" opacity="0.3" />
+      {/* Paired leaves branching off stem */}
+      <path d="M18 42 Q14 39 12 40" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.3" />
+      <path d="M18 42 Q22 39 24 40" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.3" />
+      <path d="M18 34 Q14 31 11 32" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.3" />
+      <path d="M18 34 Q22 31 25 32" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.3" />
+      <path d="M18 26 Q15 23 13 24" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.25" />
+      <path d="M19 26 Q22 23 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.25" />
+      {/* Small buds/flowers */}
+      <circle cx="12" cy="40" r="1" fill="currentColor" opacity="0.25" />
+      <circle cx="24" cy="40" r="1" fill="currentColor" opacity="0.2" />
+      <circle cx="11" cy="32" r="1" fill="currentColor" opacity="0.2" />
+      <circle cx="25" cy="32" r="0.8" fill="currentColor" opacity="0.2" />
+      {/* Flower at center */}
+      <circle cx="18" cy="30" r="1.8" fill="currentColor" opacity="0.2" />
+      <circle cx="18" cy="30" r="0.8" fill="currentColor" opacity="0.35" />
+      {/* Arabesque vine curves inside */}
+      <path d="M14 44 Q16 42 14 38" fill="none" stroke="currentColor" strokeWidth="0.4" opacity="0.2" />
+      <path d="M22 44 Q20 42 22 38" fill="none" stroke="currentColor" strokeWidth="0.4" opacity="0.2" />
+      <path d="M15 20 Q18 17 21 20" fill="none" stroke="currentColor" strokeWidth="0.4" opacity="0.2" />
     </svg>
   );
 }

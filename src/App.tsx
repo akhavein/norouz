@@ -36,6 +36,18 @@ function useTheme() {
     document.documentElement.classList.contains('dark')
   );
 
+  // Sync React state when the inline script toggles dark mode
+  // via system preference change (no localStorage override)
+  useEffect(() => {
+    if (localStorage.getItem('theme')) return;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e: MediaQueryListEvent) => {
+      if (!localStorage.getItem('theme')) setIsDark(e.matches);
+    };
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   const toggle = useCallback(() => {
     const next = !isDark;
     document.documentElement.classList.toggle('dark', next);

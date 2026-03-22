@@ -109,6 +109,11 @@ export function useNorouzState(): NorouzState {
       return;
     }
 
+    // setTimeout max safe delay is 2^31-1 ms (~24.8 days). Larger values
+    // overflow and fire immediately, causing a busy render loop.
+    // The 60-second poll handles re-evaluation until we're close enough.
+    if (msUntilTarget > 2_147_483_647) return;
+
     // Schedule resolve for the exact equinox moment (+ 100ms buffer)
     const timeout = setTimeout(resolve, msUntilTarget + 100);
     return () => clearTimeout(timeout);

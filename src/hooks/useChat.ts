@@ -30,12 +30,19 @@ export function useChat(uid: string | null, displayName: string | null) {
       active = false;
       unsubscribe?.();
     };
-  }, [retryCount]); // re-run to restart the listener after an error
+  }, [retryCount, uid]); // restart on manual retry OR when auth state changes
 
   const retry = useCallback(() => {
     setError(null);
     setRetryCount((c) => c + 1);
   }, []);
+
+  // Auto-retry once on first error (handles cold-start transient failures)
+  useEffect(() => {
+    if (!error || retryCount > 0) return;
+    const timer = setTimeout(retry, 5000);
+    return () => clearTimeout(timer);
+  }, [error]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Check if the signed-in user has already posted this Norouz year
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback, lazy, Suspense } from 'react';
+import { useRef, useEffect, useState, useCallback, lazy, Suspense, type ComponentType } from 'react';
 import { Header } from './components/Header';
 import { Countdown } from './components/Countdown';
 import { Footer } from './components/Footer';
@@ -14,8 +14,28 @@ import { getShamsiYear } from './utils/persianYear';
 import { formatIRST, formatLocal, formatUTC } from './utils/dateHelpers';
 import { toPersianNumerals } from './utils/persian';
 
-const ChatToggle = lazy(() => import('./components/Chat/ChatToggle'));
-const ChatPanel = lazy(() => import('./components/Chat/ChatPanel'));
+// Reload once on chunk-load 404 so users with stale bundles pick up the new deployment.
+function lazyWithReload<T extends object>(
+  factory: () => Promise<{ default: ComponentType<T> }>
+) {
+  return lazy(() =>
+    factory().catch((err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (
+        (msg.includes('dynamically imported module') || msg.includes('module script failed')) &&
+        !sessionStorage.getItem('_chunk_reload')
+      ) {
+        sessionStorage.setItem('_chunk_reload', '1');
+        window.location.reload();
+        return new Promise<{ default: ComponentType<T> }>(() => {});
+      }
+      return Promise.reject(err);
+    })
+  );
+}
+
+const ChatToggle = lazyWithReload(() => import('./components/Chat/ChatToggle'));
+const ChatPanel = lazyWithReload(() => import('./components/Chat/ChatPanel'));
 
 function usePrefersReducedMotion(): boolean {
   const [prefersReduced, setPrefersReduced] = useState(() =>

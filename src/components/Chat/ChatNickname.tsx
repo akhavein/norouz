@@ -8,6 +8,7 @@ interface ChatNicknameProps {
 export function ChatNickname({ onSave }: ChatNicknameProps) {
   const [value, setValue] = useState('');
   const [saving, setSaving] = useState(false);
+  const [failed, setFailed] = useState(false);
   const { t, locale } = useLanguage();
   const fontClass = locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : '';
 
@@ -16,8 +17,11 @@ export function ChatNickname({ onSave }: ChatNicknameProps) {
     const nick = value.trim().replace(/#/g, '').slice(0, 20);
     if (!nick) return;
     setSaving(true);
+    setFailed(false);
     try {
       await onSave(nick);
+    } catch {
+      setFailed(true);
     } finally {
       setSaving(false);
     }
@@ -45,9 +49,15 @@ export function ChatNickname({ onSave }: ChatNicknameProps) {
           {t('chat_nickname_save')}
         </button>
       </form>
-      <p className="text-[10px] text-warm-charcoal/35 dark:text-cream/30 mt-2">
-        {t('chat_nickname_hint')}
-      </p>
+      {failed ? (
+        <p className={`text-[10px] text-red-400/80 mt-2 ${fontClass}`}>
+          {t('chat_error')} {t('chat_retry').toLowerCase()}
+        </p>
+      ) : (
+        <p className="text-[10px] text-warm-charcoal/35 dark:text-cream/30 mt-2">
+          {t('chat_nickname_hint')}
+        </p>
+      )}
     </div>
   );
 }

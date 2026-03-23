@@ -9,11 +9,16 @@ export function useAuth() {
     let active = true;
     let unsubscribe: (() => void) | null = null;
 
-    import('../firebase/auth').then(({ onAuthChange }) => {
+    import('../firebase/auth').then(({ onAuthChange, checkRedirectResult }) => {
       if (!active) return;
-      // onAuthStateChanged fires automatically after signInWithRedirect completes —
-      // calling getRedirectResult() explicitly is not needed and can cause auth loops
-      // if it fails while processing the pending credential.
+      // Only call getRedirectResult when a redirect was actually initiated.
+      // Fire-and-forget: don't await, so the auth listener is set up immediately.
+      // The SW cross-origin fix ensures Firebase's auth iframe is no longer blocked,
+      // so getRedirectResult completes cleanly and onAuthStateChanged fires with the user.
+      if (sessionStorage.getItem('norouz_auth_redirect')) {
+        sessionStorage.removeItem('norouz_auth_redirect');
+        checkRedirectResult().catch(() => {});
+      }
       unsubscribe = onAuthChange((u) => {
         if (!active) return;
         setUser(u);

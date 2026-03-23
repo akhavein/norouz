@@ -39,19 +39,23 @@ export function useChat(uid: string | null, displayName: string | null) {
 
   // Check if the signed-in user has already posted this Norouz year
   useEffect(() => {
-    if (!uid) {
-      hasPostedRef.current = false;
-      setHasPosted(false);
-      return;
-    }
+    let active = true;
+    // Reset optimistically before the async check so a new uid is never blocked
+    // by a stale value from a previous user, and so a slow response for an old
+    // uid can't overwrite the result for the current uid.
+    hasPostedRef.current = false;
+    setHasPosted(false);
+    if (!uid) return () => { active = false; };
     import('../firebase/firestore').then(({ getUserHasPostedThisYear, getCurrentNorouzYear }) => {
       getUserHasPostedThisYear(uid, getCurrentNorouzYear()).then((posted) => {
+        if (!active) return;
         hasPostedRef.current = posted;
         setHasPosted(posted);
       });
     }).catch(() => {
       // Silently ignore — don't block posting if the check fails
     });
+    return () => { active = false; };
   }, [uid]);
 
   const displayNameRef = useRef(displayName);

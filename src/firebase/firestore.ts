@@ -1,6 +1,9 @@
 import {
   getFirestore,
   collection,
+  doc,
+  getDoc,
+  setDoc,
   addDoc,
   query,
   orderBy,
@@ -25,6 +28,30 @@ export interface ChatMessage {
 }
 
 const MESSAGE_LIMIT = 100;
+
+/** SHA-256 of email → first 4 hex characters (2 bytes). */
+export async function hashEmail4(email: string): Promise<string> {
+  const data = new TextEncoder().encode(email.toLowerCase().trim());
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf).slice(0, 2))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+/** Load the stored nickname for a user (null if not set). */
+export async function getUserNickname(uid: string): Promise<string | null> {
+  const db = getFirestore(getFirebaseApp());
+  const snap = await getDoc(doc(db, 'users', uid));
+  if (!snap.exists()) return null;
+  const nickname = snap.data().nickname;
+  return typeof nickname === 'string' ? nickname : null;
+}
+
+/** Persist a nickname for a user. */
+export async function setUserNickname(uid: string, nickname: string): Promise<void> {
+  const db = getFirestore(getFirebaseApp());
+  await setDoc(doc(db, 'users', uid), { nickname }, { merge: true });
+}
 
 /** Returns the Gregorian year of the most recent Norouz equinox. */
 export function getCurrentNorouzYear(): number {
@@ -79,11 +106,11 @@ export function subscribeToMessages(
   );
 }
 
-export async function sendMessage(user: User, text: string): Promise<void> {
+export async function sendMessage(user: User, text: string, displayName: string): Promise<void> {
   const db = getFirestore(getFirebaseApp());
   await addDoc(collection(db, 'messages'), {
     uid: user.uid,
-    displayName: user.displayName ?? 'Anonymous',
+    displayName,
     photoURL: user.photoURL ?? '',
     text: text.trim().slice(0, 280),
     year: getCurrentNorouzYear(),

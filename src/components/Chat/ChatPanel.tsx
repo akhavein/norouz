@@ -2,9 +2,11 @@ import { useEffect, useRef } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useAuth } from '../../hooks/useAuth';
 import { useChat } from '../../hooks/useChat';
+import { useNickname } from '../../hooks/useNickname';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { ChatSignIn } from './ChatSignIn';
+import { ChatNickname } from './ChatNickname';
 
 interface ChatPanelProps {
   onClose: () => void;
@@ -14,7 +16,8 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
   const { t, locale } = useLanguage();
   const fontClass = locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : '';
   const { user, loading: authLoading, signIn, signOut } = useAuth();
-  const { messages, error, sending, send, hasPosted } = useChat(user?.uid ?? null);
+  const { nickname, loading: nicknameLoading, displayName, saveNickname } = useNickname(user);
+  const { messages, error, sending, send, hasPosted } = useChat(user?.uid ?? null, displayName);
   const listRef = useRef<HTMLDivElement>(null);
   const prevCountRef = useRef(0);
 
@@ -25,6 +28,14 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
     }
     prevCountRef.current = messages.length;
   }, [messages.length]);
+
+  // Determine what to show in the bottom action area
+  const showSignIn = !authLoading && !user;
+  const showNickname = !authLoading && !!user && !nicknameLoading && !nickname;
+  const showInput = !authLoading && !!user && !!nickname;
+
+  // Messages are only shown to authenticated users who have set a nickname
+  const showMessages = !!user && !!nickname;
 
   return (
     <div
@@ -47,28 +58,30 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
         </button>
       </div>
 
-      {/* Messages */}
-      <div ref={listRef} className="flex-1 overflow-y-auto min-h-0 py-2" style={{ maxHeight: 'calc(70vh - 8rem)' }}>
-        {error && (
-          <p className={`text-xs text-center text-warm-charcoal/50 dark:text-cream/40 px-4 py-6 ${fontClass}`}>
-            {t('chat_error')}
-          </p>
-        )}
-        {!error && messages.length === 0 && (
-          <p className={`text-xs text-center text-warm-charcoal/40 dark:text-cream/35 px-4 py-6 ${fontClass}`}>
-            {t('chat_empty')}
-          </p>
-        )}
-        {messages.map((msg) => (
-          <ChatMessage key={msg.id} message={msg} isOwn={msg.uid === user?.uid} />
-        ))}
-      </div>
+      {/* Messages — only for authenticated users with a nickname */}
+      {showMessages && (
+        <div ref={listRef} className="flex-1 overflow-y-auto min-h-0 py-2" style={{ maxHeight: 'calc(70vh - 8rem)' }}>
+          {error && (
+            <p className={`text-xs text-center text-warm-charcoal/50 dark:text-cream/40 px-4 py-6 ${fontClass}`}>
+              {t('chat_error')}
+            </p>
+          )}
+          {!error && messages.length === 0 && (
+            <p className={`text-xs text-center text-warm-charcoal/40 dark:text-cream/35 px-4 py-6 ${fontClass}`}>
+              {t('chat_empty')}
+            </p>
+          )}
+          {messages.map((msg) => (
+            <ChatMessage key={msg.id} message={msg} isOwn={msg.uid === user?.uid} />
+          ))}
+        </div>
+      )}
 
-      {/* Input or sign-in */}
-      {authLoading ? null : user ? (
-        <ChatInput user={user} sending={sending} hasPosted={hasPosted} onSend={send} onSignOut={signOut} />
-      ) : (
-        <ChatSignIn onSignIn={signIn} loading={authLoading} />
+      {/* Bottom action area */}
+      {showSignIn && <ChatSignIn onSignIn={signIn} loading={authLoading} />}
+      {showNickname && <ChatNickname onSave={saveNickname} />}
+      {showInput && (
+        <ChatInput user={user!} sending={sending} hasPosted={hasPosted} onSend={send} onSignOut={signOut} />
       )}
     </div>
   );

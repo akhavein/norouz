@@ -45,5 +45,9 @@
   "chat_open": "Open chat",
   "chat_error": "Could not connect to chat",
   "chat_empty": "Be the first to send a Norouz greeting!",
-  "chat_already_sent": "You\u2019ve sent your Norouz greeting this year \u2014 see you next year!"
+  "chat_already_sent": "You\u2019ve sent your Norouz greeting this year \u2014 see you next year!",
+  "chat_nickname_prompt": "Choose a display name for the chat",
+  "chat_nickname_placeholder": "Your nickname",
+  "chat_nickname_save": "Save",
+  "chat_nickname_hint": "Shown as nickname#1234 \u2014 your email is never shared"
 }

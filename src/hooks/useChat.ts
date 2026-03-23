@@ -4,7 +4,7 @@ import type { User } from 'firebase/auth';
 
 const RATE_LIMIT_MS = 5_000;
 
-export function useChat(uid: string | null) {
+export function useChat(uid: string | null, displayName: string | null) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
@@ -39,10 +39,15 @@ export function useChat(uid: string | null) {
     });
   }, [uid]);
 
+  const displayNameRef = useRef(displayName);
+  useEffect(() => { displayNameRef.current = displayName; }, [displayName]);
+
   const send = useCallback(async (user: User, text: string) => {
     const trimmed = text.trim();
     if (!trimmed || trimmed.length > 280) return;
     if (hasPostedRef.current) return;
+    const dn = displayNameRef.current;
+    if (!dn) return;
 
     // Client-side rate limit
     const now = Date.now();
@@ -51,7 +56,7 @@ export function useChat(uid: string | null) {
     setSending(true);
     try {
       const { sendMessage } = await import('../firebase/firestore');
-      await sendMessage(user, trimmed);
+      await sendMessage(user, trimmed, dn);
       lastSentRef.current = Date.now();
       hasPostedRef.current = true;
       setHasPosted(true);

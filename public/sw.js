@@ -60,7 +60,9 @@ self.addEventListener('fetch', (event) => {
     caches.match(request).then((cached) => {
       if (cached) return cached;
       return fetch(request).then((response) => {
-        if (response.ok) {
+        // Only cache complete responses — 206 Partial Content (range requests for audio)
+        // is unsupported by the Cache API and must not be stored.
+        if (response.status === 200) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
         }

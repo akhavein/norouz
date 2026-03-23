@@ -9,17 +9,11 @@ export function useAuth() {
     let active = true;
     let unsubscribe: (() => void) | null = null;
 
-    import('../firebase/auth').then(async ({ onAuthChange, checkRedirectResult }) => {
+    import('../firebase/auth').then(({ onAuthChange }) => {
       if (!active) return;
-      // Only call getRedirectResult when a redirect was actually initiated.
-      // Await it before setting up onAuthStateChanged so the listener fires
-      // with the signed-in user rather than the initial null state — prevents
-      // the sign-in button from flashing after a successful redirect.
-      if (sessionStorage.getItem('norouz_auth_redirect')) {
-        sessionStorage.removeItem('norouz_auth_redirect');
-        await checkRedirectResult().catch(() => {});
-        if (!active) return;
-      }
+      // onAuthStateChanged fires automatically after signInWithRedirect completes —
+      // calling getRedirectResult() explicitly is not needed and can cause auth loops
+      // if it fails while processing the pending credential.
       unsubscribe = onAuthChange((u) => {
         if (!active) return;
         setUser(u);

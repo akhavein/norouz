@@ -41,6 +41,10 @@ self.addEventListener('fetch', (event) => {
   // Skip non-GET requests
   if (request.method !== 'GET') return;
 
+  // Skip non-http(s) schemes — chrome-extension://, blob:, data:, etc.
+  // The Cache API only accepts http/https requests.
+  if (!request.url.startsWith('http')) return;
+
   // Navigation requests (HTML): network-first, cache fallback
   if (request.mode === 'navigate') {
     event.respondWith(

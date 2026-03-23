@@ -1,6 +1,7 @@
 import {
   getAuth,
   GoogleAuthProvider,
+  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   signOut as fbSignOut,
@@ -16,10 +17,19 @@ function auth() {
 }
 
 export async function signInWithGoogle(): Promise<void> {
-  // Redirect is required on GitHub Pages — COOP: same-origin blocks popup's
-  // window.closed polling, making signInWithPopup unreliable.
-  await signInWithRedirect(auth(), provider);
-  // Page navigates away; onAuthStateChanged handles the user after return.
+  try {
+    await signInWithPopup(auth(), provider);
+    // onAuthStateChanged handles the user — no need to return it.
+  } catch (err: unknown) {
+    const code = (err as { code?: string }).code;
+    // Popup blocked (common on mobile / strict browsers) — fall back to redirect.
+    if (code === 'auth/popup-blocked') {
+      await signInWithRedirect(auth(), provider);
+      // Page navigates away; onAuthStateChanged fires on return.
+    } else {
+      throw err;
+    }
+  }
 }
 
 /** Call once on app load to complete any pending redirect sign-in. */

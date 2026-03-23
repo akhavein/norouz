@@ -49,7 +49,7 @@ export function useNickname(user: User | null) {
       if (active) setDisplayName(nickname);
     });
     return () => { active = false; };
-  }, [nickname, user?.email]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [nickname, user?.email]);
 
   const saveNickname = useCallback(async (nick: string) => {
     if (!user) return;

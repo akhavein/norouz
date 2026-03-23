@@ -208,13 +208,21 @@ const AUDIO_WINDOW_HOURS = 24;
 function useNorouzAudio(target: Date | null, phase: string) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isInAudioWindow, setIsInAudioWindow] = useState(false);
   const triggeredRef = useRef(false);
   const prevPhaseRef = useRef(phase);
 
-  const isInAudioWindow = target
-    ? Date.now() >= target.getTime() &&
-      Date.now() < target.getTime() + AUDIO_WINDOW_HOURS * 60 * 60 * 1000
-    : false;
+  useEffect(() => {
+    const windowEnd = target ? target.getTime() + AUDIO_WINDOW_HOURS * 60 * 60 * 1000 : 0;
+    const check = () => {
+      const now = Date.now();
+      setIsInAudioWindow(!!target && now >= target.getTime() && now < windowEnd);
+    };
+    check();
+    if (!target) return;
+    const interval = setInterval(check, 60_000);
+    return () => clearInterval(interval);
+  }, [target]);
 
   const play = useCallback(() => {
     if (!audioRef.current) {

@@ -16,9 +16,10 @@ export function useChat(uid: string | null, displayName: string | null) {
   useEffect(() => {
     let active = true;
     let unsubscribe: (() => void) | null = null;
-    import('../firebase/firestore').then(({ subscribeToMessages }) => {
+    import('../firebase/firestore').then(({ subscribeToMessages, getCurrentNorouzYear }) => {
       if (!active) return; // unmounted before import resolved — don't start a subscription
       unsubscribe = subscribeToMessages(
+        getCurrentNorouzYear(),
         (msgs) => { setMessages(msgs); setError(null); }, // clear stale error on reconnect
         (err) => setError(err.message),
       );

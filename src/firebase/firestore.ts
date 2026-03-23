@@ -77,29 +77,36 @@ export async function getUserHasPostedThisYear(uid: string, year: number): Promi
 }
 
 export function subscribeToMessages(
+  year: number,
   onMessages: (msgs: ChatMessage[]) => void,
   onError: (err: Error) => void,
 ): Unsubscribe {
   const db = getFirestore(getFirebaseApp());
+  // Order descending so the most-recent 100 documents are fetched first.
+  // This allows client-side year filtering without a composite index while
+  // ensuring current-year messages are always within the window.
   const q = query(
     collection(db, 'messages'),
-    orderBy('createdAt', 'asc'),
+    orderBy('createdAt', 'desc'),
     limit(MESSAGE_LIMIT),
   );
   return onSnapshot(
     q,
     (snapshot) => {
-      const messages: ChatMessage[] = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          uid: data.uid,
-          displayName: data.displayName,
-          photoURL: data.photoURL ?? '',
-          text: data.text,
-          createdAt: data.createdAt?.toDate() ?? null,
-        };
-      });
+      const messages: ChatMessage[] = snapshot.docs
+        .filter((doc) => doc.data().year === year)
+        .map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            uid: data.uid,
+            displayName: data.displayName,
+            photoURL: data.photoURL ?? '',
+            text: data.text,
+            createdAt: data.createdAt?.toDate() ?? null,
+          };
+        })
+        .reverse(); // restore chronological (oldest-first) order for display
       onMessages(messages);
     },
     onError,

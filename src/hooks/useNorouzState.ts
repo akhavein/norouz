@@ -7,15 +7,15 @@ const CELEBRATION_DAYS = 13; // Through Sizdah Bedar
 const DORMANT_DAYS = 7;     // Brief pause before next countdown
 const MS_PER_DAY = 86_400_000;
 const IRST_OFFSET_MS = 3.5 * 60 * 60 * 1000; // UTC+3:30
-// Solar noon in Tehran ≈ 12:14 IRST = 08:44 UTC (in ms from midnight UTC)
-const SOLAR_NOON_UTC_MS = (8 * 60 + 44) * 60 * 1000;
+// Solar noon in Tehran ≈ 12:14 IRST, expressed as ms from midnight IRST
+const SOLAR_NOON_IRST_MS = (12 * 60 + 14) * 60 * 1000;
 
 // Get the Gregorian date of 1 Farvardin using the solar noon rule.
 // If equinox is before solar noon in Tehran → that IRST date is 1 Farvardin.
 // If after → the next IRST date is 1 Farvardin.
 // Returns a local Date at midnight for day-counting.
 function getFarvardinOneDate(equinoxMs: number): Date {
-  const isAfterSolarNoon = (equinoxMs % MS_PER_DAY) >= SOLAR_NOON_UTC_MS;
+  const isAfterSolarNoon = ((equinoxMs + IRST_OFFSET_MS) % MS_PER_DAY) >= SOLAR_NOON_IRST_MS;
   // Get equinox date in IRST
   const eqIRST = new Date(equinoxMs + IRST_OFFSET_MS);
   let day = eqIRST.getUTCDate();
@@ -92,7 +92,8 @@ export function useNorouzState(): NorouzState {
   }, []);
 
   useEffect(() => {
-    resolve();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    resolve(); // async — setState is called after the awaited computeState(), not synchronously
 
     // Background poll for dormant/celebration end transitions
     const interval = setInterval(resolve, 60_000);
@@ -105,7 +106,8 @@ export function useNorouzState(): NorouzState {
 
     const msUntilTarget = state.target.getTime() - Date.now();
     if (msUntilTarget <= 0) {
-      resolve();
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      resolve(); // async — setState is called after the awaited computeState(), not synchronously
       return;
     }
 

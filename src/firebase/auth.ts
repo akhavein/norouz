@@ -1,6 +1,7 @@
 import {
   getAuth,
   GoogleAuthProvider,
+  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   signOut as fbSignOut,
@@ -16,11 +17,27 @@ function auth() {
 }
 
 export async function signInWithGoogle(): Promise<void> {
-  // GitHub Pages enforces COOP: same-origin which breaks popup auth.
-  await signInWithRedirect(auth(), provider);
+  // Use popup as primary. GitHub Pages sets COOP: same-origin which blocks
+  // Firebase's window.closed polling (causes console warnings) but does NOT
+  // block postMessage credential delivery — popup auth completes successfully.
+  // signInWithRedirect fails on GitHub Pages because Chrome's storage
+  // partitioning prevents the auth iframe from syncing the session (empty
+  // firebaseLocalStorageDb after redirect). Fall back to redirect only when
+  // the popup is explicitly blocked by the browser.
+  try {
+    await signInWithPopup(auth(), provider);
+  } catch (err: unknown) {
+    const code = (err as { code?: string }).code;
+    if (code === 'auth/popup-blocked') {
+      sessionStorage.setItem('norouz_auth_redirect', '1');
+      await signInWithRedirect(auth(), provider);
+    } else {
+      throw err;
+    }
+  }
 }
 
-/** Process the pending redirect credential. Must be called after signInWithRedirect returns. */
+/** Process a pending redirect credential (fallback path only). */
 export async function checkRedirectResult(): Promise<User | null> {
   const result = await getRedirectResult(auth());
   return result?.user ?? null;

@@ -11,12 +11,12 @@ export function useAuth() {
 
     import('../firebase/auth').then(({ onAuthChange, checkRedirectResult }) => {
       if (!active) return;
-      // Call unconditionally on every page load — required to process the OAuth
-      // credential after signInWithRedirect. Fire-and-forget so the auth listener
-      // is set up immediately. The SW cross-origin fix ensures Firebase's auth
-      // iframe is no longer intercepted, so this completes cleanly without the
-      // previous loop issue.
-      checkRedirectResult().catch(() => {});
+      // Only process a redirect result when the redirect fallback path was used
+      // (popup was blocked). Normal popup sign-in resolves directly via onAuthStateChanged.
+      if (sessionStorage.getItem('norouz_auth_redirect')) {
+        sessionStorage.removeItem('norouz_auth_redirect');
+        checkRedirectResult().catch(() => {});
+      }
       unsubscribe = onAuthChange((u) => {
         if (!active) return;
         setUser(u);

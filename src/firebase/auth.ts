@@ -17,8 +17,6 @@ function auth() {
 
 export async function signInWithGoogle(): Promise<void> {
   // GitHub Pages enforces COOP: same-origin which breaks popup auth.
-  // Mark that a redirect was initiated so useAuth calls getRedirectResult on return.
-  sessionStorage.setItem('norouz_auth_redirect', '1');
   await signInWithRedirect(auth(), provider);
 }
 

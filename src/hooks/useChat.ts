@@ -13,13 +13,19 @@ export function useChat(uid: string | null, displayName: string | null) {
   const hasPostedRef = useRef(false);
 
   useEffect(() => {
+    let active = true;
     let unsubscribe: (() => void) | null = null;
     import('../firebase/firestore').then(({ subscribeToMessages }) => {
+      if (!active) return; // unmounted before import resolved — don't start a subscription
       unsubscribe = subscribeToMessages(setMessages, (err) => setError(err.message));
     }).catch((err) => {
+      if (!active) return;
       setError(err instanceof Error ? err.message : 'Failed to connect');
     });
-    return () => unsubscribe?.();
+    return () => {
+      active = false;
+      unsubscribe?.();
+    };
   }, []);
 
   // Check if the signed-in user has already posted this Norouz year

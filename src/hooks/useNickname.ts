@@ -8,6 +8,7 @@ export function useNickname(user: User | null) {
 
   // Load nickname from Firestore when user changes
   useEffect(() => {
+    let active = true;
     if (!user) {
       setNicknameState(null);
       setDisplayName(null);
@@ -18,26 +19,36 @@ export function useNickname(user: User | null) {
     import('../firebase/firestore').then(({ getUserNickname }) =>
       getUserNickname(user.uid)
     ).then((nick) => {
+      if (!active) return;
       setNicknameState(nick);
       setLoading(false);
     }).catch(() => {
+      if (!active) return;
       setLoading(false);
     });
+    return () => { active = false; };
   }, [user?.uid]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Recompute displayName whenever nickname or email changes
   useEffect(() => {
-    if (!nickname || !user?.email) {
+    let active = true;
+    if (!nickname) {
       setDisplayName(null);
+      return;
+    }
+    if (!user?.email) {
+      // Google always provides email, but if absent show nickname without hash
+      setDisplayName(nickname);
       return;
     }
     import('../firebase/firestore').then(({ hashEmail4 }) =>
       hashEmail4(user.email!)
     ).then((hash) => {
-      setDisplayName(`${nickname}#${hash}`);
+      if (active) setDisplayName(`${nickname}#${hash}`);
     }).catch(() => {
-      setDisplayName(nickname);
+      if (active) setDisplayName(nickname);
     });
+    return () => { active = false; };
   }, [nickname, user?.email]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const saveNickname = useCallback(async (nick: string) => {

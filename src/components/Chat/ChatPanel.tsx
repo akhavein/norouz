@@ -32,7 +32,9 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
   // Determine what to show in the bottom action area
   const showSignIn = !authLoading && !user;
   const showNickname = !authLoading && !!user && !nicknameLoading && !nickname;
-  const showInput = !authLoading && !!user && !!nickname;
+  // Require displayName (not just nickname) so the send function always has a non-null display name.
+  // displayName is null while the email hash is computing or if nickname is absent.
+  const showInput = !authLoading && !!user && !!displayName;
 
   // Messages are only shown to authenticated users who have set a nickname
   const showMessages = !!user && !!nickname;

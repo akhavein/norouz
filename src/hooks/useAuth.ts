@@ -9,14 +9,16 @@ export function useAuth() {
     let active = true;
     let unsubscribe: (() => void) | null = null;
 
-    import('../firebase/auth').then(({ onAuthChange, checkRedirectResult }) => {
+    import('../firebase/auth').then(async ({ onAuthChange, checkRedirectResult }) => {
       if (!active) return;
       // Only call getRedirectResult when a redirect was actually initiated.
-      // Calling it unconditionally can clear auth state when the Firebase iframe
-      // has CORS issues, causing a sign-in loop.
+      // Await it before setting up onAuthStateChanged so the listener fires
+      // with the signed-in user rather than the initial null state — prevents
+      // the sign-in button from flashing after a successful redirect.
       if (sessionStorage.getItem('norouz_auth_redirect')) {
         sessionStorage.removeItem('norouz_auth_redirect');
-        checkRedirectResult().catch(() => {});
+        await checkRedirectResult().catch(() => {});
+        if (!active) return;
       }
       unsubscribe = onAuthChange((u) => {
         if (!active) return;

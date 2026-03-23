@@ -1,4 +1,4 @@
-const CACHE_NAME = 'norouz-v1';
+const CACHE_NAME = 'norouz-v2';
 
 // Essential assets — SW install fails if these can't be cached
 const ESSENTIAL_URLS = [

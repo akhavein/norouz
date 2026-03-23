@@ -6,16 +6,27 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
     let unsubscribe: (() => void) | null = null;
-    import('../firebase/auth').then(({ onAuthChange }) => {
+
+    import('../firebase/auth').then(({ onAuthChange, checkRedirectResult }) => {
+      if (!active) return;
+      // Process any pending redirect result from signInWithGoogle().
+      // onAuthStateChanged will fire automatically once it resolves.
+      checkRedirectResult().catch(() => {});
       unsubscribe = onAuthChange((u) => {
+        if (!active) return;
         setUser(u);
         setLoading(false);
       });
     }).catch(() => {
-      setLoading(false);
+      if (active) setLoading(false);
     });
-    return () => unsubscribe?.();
+
+    return () => {
+      active = false;
+      unsubscribe?.();
+    };
   }, []);
 
   const signIn = useCallback(async () => {

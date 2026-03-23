@@ -12,7 +12,11 @@ export function ChatSignIn({ onSignIn, loading }: ChatSignInProps) {
   return (
     <div className="p-4 border-t border-persian-gold/15">
       <button
-        onClick={onSignIn}
+        onClick={() => {
+          // Remember that chat was open so we can reopen it after the auth redirect returns.
+          sessionStorage.setItem('norouz_chat_open', '1');
+          onSignIn();
+        }}
         disabled={loading}
         className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-dark-surface/80 hover:bg-persian-gold/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-persian-gold disabled:opacity-50 ${fontClass}`}
       >

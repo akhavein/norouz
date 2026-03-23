@@ -352,7 +352,12 @@ function App() {
   const audio = useNorouzAudio(target, phase);
   const { t, locale } = useLanguage();
   const theme = useTheme();
-  const [chatOpen, setChatOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(() => {
+    // After a sign-in redirect, reopen the chat automatically.
+    const flag = sessionStorage.getItem('norouz_chat_open');
+    if (flag) { sessionStorage.removeItem('norouz_chat_open'); return true; }
+    return false;
+  });
 
   useConfetti(phase, prefersReducedMotion);
 

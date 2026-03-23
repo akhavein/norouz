@@ -17,7 +17,10 @@ export function useChat(uid: string | null, displayName: string | null) {
     let unsubscribe: (() => void) | null = null;
     import('../firebase/firestore').then(({ subscribeToMessages }) => {
       if (!active) return; // unmounted before import resolved — don't start a subscription
-      unsubscribe = subscribeToMessages(setMessages, (err) => setError(err.message));
+      unsubscribe = subscribeToMessages(
+        (msgs) => { setMessages(msgs); setError(null); }, // clear stale error on reconnect
+        (err) => setError(err.message),
+      );
     }).catch((err) => {
       if (!active) return;
       setError(err instanceof Error ? err.message : 'Failed to connect');

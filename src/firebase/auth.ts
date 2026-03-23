@@ -1,8 +1,8 @@
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
   signInWithRedirect,
+  getRedirectResult,
   signOut as fbSignOut,
   onAuthStateChanged,
   type User,
@@ -15,19 +15,17 @@ function auth() {
   return getAuth(getFirebaseApp());
 }
 
-export async function signInWithGoogle(): Promise<User> {
-  try {
-    const result = await signInWithPopup(auth(), provider);
-    return result.user;
-  } catch (err: unknown) {
-    // Popup blocked (common on mobile) — fall back to redirect
-    if (err instanceof Error && 'code' in err && (err as { code: string }).code === 'auth/popup-blocked') {
-      await signInWithRedirect(auth(), provider);
-      // Won't reach here — page redirects
-      throw err;
-    }
-    throw err;
-  }
+export async function signInWithGoogle(): Promise<void> {
+  // Redirect is required on GitHub Pages — COOP: same-origin blocks popup's
+  // window.closed polling, making signInWithPopup unreliable.
+  await signInWithRedirect(auth(), provider);
+  // Page navigates away; onAuthStateChanged handles the user after return.
+}
+
+/** Call once on app load to complete any pending redirect sign-in. */
+export async function checkRedirectResult(): Promise<User | null> {
+  const result = await getRedirectResult(auth());
+  return result?.user ?? null;
 }
 
 export async function signOut(): Promise<void> {

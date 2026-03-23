@@ -4,7 +4,7 @@ import type { User } from 'firebase/auth';
 
 const RATE_LIMIT_MS = 5_000;
 
-export function useChat(uid: string | null, displayName: string | null) {
+export function useChat(uid: string | null, displayName: string | null, norouzYear: number) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
@@ -16,10 +16,10 @@ export function useChat(uid: string | null, displayName: string | null) {
   useEffect(() => {
     let active = true;
     let unsubscribe: (() => void) | null = null;
-    import('../firebase/firestore').then(({ subscribeToMessages, getCurrentNorouzYear }) => {
+    import('../firebase/firestore').then(({ subscribeToMessages }) => {
       if (!active) return; // unmounted before import resolved — don't start a subscription
       unsubscribe = subscribeToMessages(
-        getCurrentNorouzYear(),
+        norouzYear,
         (msgs) => { setMessages(msgs); setError(null); }, // clear stale error on reconnect
         (err) => setError(err.message),
       );
@@ -31,7 +31,7 @@ export function useChat(uid: string | null, displayName: string | null) {
       active = false;
       unsubscribe?.();
     };
-  }, [retryCount, uid]); // restart on manual retry OR when auth state changes
+  }, [retryCount, uid, norouzYear]); // restart on manual retry, auth change, or year rollover
 
   const retry = useCallback(() => {
     setError(null);
@@ -54,8 +54,8 @@ export function useChat(uid: string | null, displayName: string | null) {
     hasPostedRef.current = false;
     setHasPosted(false);
     if (!uid) return () => { active = false; };
-    import('../firebase/firestore').then(({ getUserHasPostedThisYear, getCurrentNorouzYear }) => {
-      getUserHasPostedThisYear(uid, getCurrentNorouzYear()).then((posted) => {
+    import('../firebase/firestore').then(({ getUserHasPostedThisYear }) => {
+      getUserHasPostedThisYear(uid, norouzYear).then((posted) => {
         if (!active) return;
         hasPostedRef.current = posted;
         setHasPosted(posted);
@@ -64,7 +64,7 @@ export function useChat(uid: string | null, displayName: string | null) {
       // Silently ignore — don't block posting if the check fails
     });
     return () => { active = false; };
-  }, [uid]);
+  }, [uid, norouzYear]); // re-check when year rolls over — user who posted in year N can post in N+1
 
   const displayNameRef = useRef(displayName);
   useEffect(() => { displayNameRef.current = displayName; }, [displayName]);

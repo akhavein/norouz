@@ -466,7 +466,12 @@ function App() {
       {/* Chat widget — always available, lazy-loaded */}
       <Suspense fallback={null}>
         <ChatToggle onClick={() => setChatOpen(o => !o)} isOpen={chatOpen} />
-        {chatOpen && <ChatPanel onClose={() => setChatOpen(false)} />}
+        {chatOpen && (
+          <ChatPanel
+            onClose={() => setChatOpen(false)}
+            norouzYear={phase === 'celebrating' ? year! : year! - 1}
+          />
+        )}
       </Suspense>
     </div>
   );

@@ -10,14 +10,15 @@ import { ChatNickname } from './ChatNickname';
 
 interface ChatPanelProps {
   onClose: () => void;
+  norouzYear: number;
 }
 
-export default function ChatPanel({ onClose }: ChatPanelProps) {
+export default function ChatPanel({ onClose, norouzYear }: ChatPanelProps) {
   const { t, locale } = useLanguage();
   const fontClass = locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : '';
   const { user, loading: authLoading, signIn, signOut } = useAuth();
   const { nickname, loading: nicknameLoading, displayName, saveNickname } = useNickname(user);
-  const { messages, error, sending, send, hasPosted, retry } = useChat(user?.uid ?? null, displayName);
+  const { messages, error, sending, send, hasPosted, retry } = useChat(user?.uid ?? null, displayName, norouzYear);
   const listRef = useRef<HTMLDivElement>(null);
   const prevCountRef = useRef(0);
 

@@ -45,6 +45,11 @@ self.addEventListener('fetch', (event) => {
   // The Cache API only accepts http/https requests.
   if (!request.url.startsWith('http')) return;
 
+  // Skip cross-origin requests — analytics, Firebase, and other third-party
+  // scripts should be handled by the browser directly, not intercepted by the SW.
+  const reqOrigin = new URL(request.url).origin;
+  if (reqOrigin !== self.location.origin) return;
+
   // Navigation requests (HTML): network-first, cache fallback
   if (request.mode === 'navigate') {
     event.respondWith(

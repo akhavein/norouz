@@ -17,7 +17,7 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
   const fontClass = locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : '';
   const { user, loading: authLoading, signIn, signOut } = useAuth();
   const { nickname, loading: nicknameLoading, displayName, saveNickname } = useNickname(user);
-  const { messages, error, sending, send, hasPosted } = useChat(user?.uid ?? null, displayName);
+  const { messages, error, sending, send, hasPosted, retry } = useChat(user?.uid ?? null, displayName);
   const listRef = useRef<HTMLDivElement>(null);
   const prevCountRef = useRef(0);
 
@@ -65,7 +65,13 @@ export default function ChatPanel({ onClose }: ChatPanelProps) {
         <div ref={listRef} className="flex-1 overflow-y-auto min-h-0 py-2" style={{ maxHeight: 'calc(70vh - 8rem)' }}>
           {error && (
             <p className={`text-xs text-center text-warm-charcoal/50 dark:text-cream/40 px-4 py-6 ${fontClass}`}>
-              {t('chat_error')}
+              {t('chat_error')}{' '}
+              <button
+                onClick={retry}
+                className="underline underline-offset-2 hover:text-persian-gold transition-colors"
+              >
+                {t('chat_retry')}
+              </button>
             </p>
           )}
           {!error && messages.length === 0 && (

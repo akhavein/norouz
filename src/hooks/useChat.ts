@@ -9,6 +9,7 @@ export function useChat(uid: string | null, displayName: string | null) {
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [hasPosted, setHasPosted] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const lastSentRef = useRef(0);
   const hasPostedRef = useRef(false);
 
@@ -29,6 +30,11 @@ export function useChat(uid: string | null, displayName: string | null) {
       active = false;
       unsubscribe?.();
     };
+  }, [retryCount]); // re-run to restart the listener after an error
+
+  const retry = useCallback(() => {
+    setError(null);
+    setRetryCount((c) => c + 1);
   }, []);
 
   // Check if the signed-in user has already posted this Norouz year
@@ -76,7 +82,7 @@ export function useChat(uid: string | null, displayName: string | null) {
     }
   }, []);
 
-  return { messages, error, sending, send, hasPosted };
+  return { messages, error, sending, send, hasPosted, retry };
 }
 
 export type { ChatMessage };

@@ -1,7 +1,6 @@
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   signOut as fbSignOut,
@@ -17,19 +16,11 @@ function auth() {
 }
 
 export async function signInWithGoogle(): Promise<void> {
-  try {
-    await signInWithPopup(auth(), provider);
-    // onAuthStateChanged handles the user — no need to return it.
-  } catch (err: unknown) {
-    const code = (err as { code?: string }).code;
-    // Popup blocked (common on mobile / strict browsers) — fall back to redirect.
-    if (code === 'auth/popup-blocked') {
-      await signInWithRedirect(auth(), provider);
-      // Page navigates away; onAuthStateChanged fires on return.
-    } else {
-      throw err;
-    }
-  }
+  // GitHub Pages enforces Cross-Origin-Opener-Policy: same-origin, which severs
+  // the opener reference Firebase needs for popup auth. Use redirect universally.
+  sessionStorage.setItem('norouz_auth_redirect', '1');
+  await signInWithRedirect(auth(), provider);
+  // Page navigates away; checkRedirectResult() fires on return.
 }
 
 /** Call once on app load to complete any pending redirect sign-in. */

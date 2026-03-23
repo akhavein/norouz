@@ -11,9 +11,13 @@ export function useAuth() {
 
     import('../firebase/auth').then(({ onAuthChange, checkRedirectResult }) => {
       if (!active) return;
-      // Process any pending redirect result from signInWithGoogle().
-      // onAuthStateChanged will fire automatically once it resolves.
-      checkRedirectResult().catch(() => {});
+      // Only call getRedirectResult when a redirect was actually initiated.
+      // Calling it unconditionally can clear auth state when the Firebase iframe
+      // has CORS issues, causing a sign-in loop.
+      if (sessionStorage.getItem('norouz_auth_redirect')) {
+        sessionStorage.removeItem('norouz_auth_redirect');
+        checkRedirectResult().catch(() => {});
+      }
       unsubscribe = onAuthChange((u) => {
         if (!active) return;
         setUser(u);

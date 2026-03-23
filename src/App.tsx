@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback, lazy, Suspense } from 'react';
 import { Header } from './components/Header';
 import { Countdown } from './components/Countdown';
 import { Footer } from './components/Footer';
@@ -13,6 +13,9 @@ import { useLanguage } from './i18n/LanguageContext';
 import { getShamsiYear } from './utils/persianYear';
 import { formatIRST, formatLocal, formatUTC } from './utils/dateHelpers';
 import { toPersianNumerals } from './utils/persian';
+
+const ChatToggle = lazy(() => import('./components/Chat/ChatToggle'));
+const ChatPanel = lazy(() => import('./components/Chat/ChatPanel'));
 
 function usePrefersReducedMotion(): boolean {
   const [prefersReduced, setPrefersReduced] = useState(() =>
@@ -349,6 +352,7 @@ function App() {
   const audio = useNorouzAudio(target, phase);
   const { t, locale } = useLanguage();
   const theme = useTheme();
+  const [chatOpen, setChatOpen] = useState(false);
 
   useConfetti(phase, prefersReducedMotion);
 
@@ -445,6 +449,12 @@ function App() {
       <div className="mt-auto pt-12 relative z-10">
         <Footer />
       </div>
+
+      {/* Chat widget — always available, lazy-loaded */}
+      <Suspense fallback={null}>
+        <ChatToggle onClick={() => setChatOpen(o => !o)} isOpen={chatOpen} />
+        {chatOpen && <ChatPanel onClose={() => setChatOpen(false)} />}
+      </Suspense>
     </div>
   );
 }

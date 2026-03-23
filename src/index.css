@@ -169,6 +169,29 @@ body {
   }
 }
 
+/* ── Haft-Sin item modal ── */
+
+@keyframes modal-slide-up {
+  from {
+    transform: translateY(16px) scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-enter {
+  animation: modal-slide-up 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-enter {
+    animation: none;
+  }
+}
+
 /* ── Chat panel ── */
 
 @keyframes chat-slide-up {

@@ -1,4 +1,5 @@
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import type en from '../i18n/en.json';
 
@@ -240,6 +241,97 @@ const EXTRA_ITEMS: HaftSinItem[] = [
   { icon: <IconSekkeh />, persian: 'سکه', english: 'Coins', meaningKey: 'haftsin_sekkeh' },
 ];
 
+/* ── Modal ── */
+
+function HaftSinModal({
+  item,
+  onClose,
+  locale,
+  t,
+}: {
+  item: HaftSinItem;
+  onClose: () => void;
+  locale: string;
+  t: (key: TranslationKey) => string;
+}) {
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+
+  const primaryName = locale === 'fa' ? item.persian : item.english;
+  const secondaryName = locale === 'fa' ? item.english : item.persian;
+  const faFont = "font-['Vazirmatn',sans-serif]";
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-warm-charcoal/55 dark:bg-dark-bg/75 backdrop-blur-sm"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={primaryName}
+    >
+      <div
+        className="modal-enter relative bg-cream dark:bg-dark-surface border border-persian-gold/30 rounded-2xl shadow-2xl w-full max-w-xs overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Gold accent bar at top */}
+        <div className="h-1 w-full bg-gradient-to-r from-persian-gold/20 via-persian-gold/60 to-persian-gold/20" />
+
+        <div className="p-6 pt-5">
+          {/* Close button */}
+          <button
+            type="button"
+            onClick={onClose}
+            autoFocus
+            className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full text-warm-charcoal/35 dark:text-cream/35 hover:text-warm-charcoal dark:hover:text-cream hover:bg-persian-gold/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-persian-gold/40"
+            aria-label="Close"
+          >
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <path d="M1.5 1.5L11.5 11.5M11.5 1.5L1.5 11.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </button>
+
+          {/* Icon */}
+          <div className="flex justify-center mb-5">
+            <div className="w-20 h-20 [&_svg]:w-full [&_svg]:h-full drop-shadow-sm">
+              {item.icon}
+            </div>
+          </div>
+
+          {/* Names */}
+          <div className="text-center mb-4">
+            <p className={`text-2xl font-bold text-persian-gold mb-1 ${locale === 'fa' ? faFont : ''}`}>
+              {primaryName}
+            </p>
+            <p className={`text-sm text-warm-charcoal/45 dark:text-cream/40 ${locale === 'fa' ? '' : faFont}`}>
+              {secondaryName}
+            </p>
+          </div>
+
+          {/* Divider */}
+          <div className="flex items-center gap-2 mb-4">
+            <div className="flex-1 h-px bg-persian-gold/15" />
+            <div className="w-1 h-1 rounded-full bg-persian-gold/30" />
+            <div className="flex-1 h-px bg-persian-gold/15" />
+          </div>
+
+          {/* Description */}
+          <p className={`text-sm leading-relaxed text-warm-charcoal/70 dark:text-cream/65 text-center ${locale === 'fa' ? faFont : ''}`}>
+            {t(item.meaningKey)}
+          </p>
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 /* ── Component ── */
 
 function usePrefersReducedMotion(): boolean {
@@ -250,29 +342,21 @@ function usePrefersReducedMotion(): boolean {
 function ItemCard({
   item,
   index,
-  expanded,
-  onToggle,
+  onClick,
   reducedMotion,
   locale,
-  t,
 }: {
   item: HaftSinItem;
   index: number;
-  expanded: boolean;
-  onToggle: () => void;
+  onClick: () => void;
   reducedMotion: boolean;
   locale: string;
-  t: (key: TranslationKey) => string;
 }) {
   return (
     <button
       type="button"
-      onClick={onToggle}
-      className={`group flex flex-col items-center gap-1.5 p-4 rounded-xl border transition-all duration-200 w-full cursor-pointer ${
-        expanded
-          ? 'border-persian-gold/40 shadow-md bg-cream/80 dark:bg-dark-surface/80'
-          : 'border-persian-gold/15 bg-cream/60 dark:bg-dark-surface/60 hover:border-persian-gold/40 hover:shadow-md hover:-translate-y-0.5'
-      }`}
+      onClick={onClick}
+      className="group flex flex-col items-center gap-1.5 p-4 rounded-xl border border-persian-gold/15 bg-cream/60 dark:bg-dark-surface/60 hover:border-persian-gold/40 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 w-full cursor-pointer"
       style={
         reducedMotion
           ? undefined
@@ -285,24 +369,6 @@ function ItemCard({
       <span className={`text-sm font-bold text-warm-charcoal dark:text-cream leading-tight text-center ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
         {locale === 'fa' ? item.persian : item.english}
       </span>
-      {/* Chevron indicator */}
-      <svg
-        width="14" height="14" viewBox="0 0 12 12"
-        className={`text-persian-gold/50 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
-        aria-hidden="true"
-      >
-        <path d="M2 4 L6 8 L10 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      {/* Expandable description */}
-      <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out w-full ${
-          expanded ? 'max-h-72 opacity-100 mt-2' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <p className={`text-[11px] sm:text-xs leading-relaxed text-warm-charcoal/70 dark:text-cream/65 text-center ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
-          {t(item.meaningKey)}
-        </p>
-      </div>
     </button>
   );
 }
@@ -310,11 +376,7 @@ function ItemCard({
 export function HaftSin() {
   const { t, locale } = useLanguage();
   const reducedMotion = usePrefersReducedMotion();
-  const [expandedKey, setExpandedKey] = useState<string | null>(null);
-
-  const toggleExpand = (key: string) => {
-    setExpandedKey(prev => (prev === key ? null : key));
-  };
+  const [selectedItem, setSelectedItem] = useState<HaftSinItem | null>(null);
 
   return (
     <section className="w-full max-w-2xl mx-auto" aria-label={t('haftsin_title')}>
@@ -327,11 +389,9 @@ export function HaftSin() {
             <ItemCard
               item={item}
               index={i}
-              expanded={expandedKey === item.meaningKey}
-              onToggle={() => toggleExpand(item.meaningKey)}
+              onClick={() => setSelectedItem(item)}
               reducedMotion={reducedMotion}
               locale={locale}
-              t={t}
             />
           </div>
         ))}
@@ -351,15 +411,22 @@ export function HaftSin() {
             <ItemCard
               item={item}
               index={ITEMS.length + i}
-              expanded={expandedKey === item.meaningKey}
-              onToggle={() => toggleExpand(item.meaningKey)}
+              onClick={() => setSelectedItem(item)}
               reducedMotion={reducedMotion}
               locale={locale}
-              t={t}
             />
           </div>
         ))}
       </div>
+
+      {selectedItem && (
+        <HaftSinModal
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+          locale={locale}
+          t={t}
+        />
+      )}
     </section>
   );
 }

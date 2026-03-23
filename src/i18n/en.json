@@ -35,5 +35,15 @@
   "haftsin_sekkeh": "Gold or silver coins placed on the table, symbolizing prosperity, wealth, and the hope for financial well-being. In many families, elders give coins as Eidi \u2014 new year\u2019s gifts \u2014 to younger members, sharing the wish for abundance.",
   "dormant_sizdah_bedar": "We hope you enjoyed Sizdah Bedar \u2014 the thirteenth day of Norouz, when families picnic in nature and release their Sabzeh into running water, symbolizing the renewal of life.",
   "dormant_next_norouz": "Next Norouz",
-  "dormant_next_countdown": "The countdown to the next Norouz will begin soon."
+  "dormant_next_countdown": "The countdown to the next Norouz will begin soon.",
+  "chat_title": "Norouz Chat",
+  "chat_sign_in": "Sign in with Google to chat",
+  "chat_sign_out": "Sign out",
+  "chat_placeholder": "Send a Norouz greeting\u2026",
+  "chat_send": "Send",
+  "chat_close": "Close chat",
+  "chat_open": "Open chat",
+  "chat_error": "Could not connect to chat",
+  "chat_empty": "Be the first to send a Norouz greeting!",
+  "chat_already_sent": "You\u2019ve sent your Norouz greeting this year \u2014 see you next year!"
 }

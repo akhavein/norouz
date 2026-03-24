@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, useRef, useEffect } from 'react';
 
 /**
  * Persian 12-year animal cycle (سال حیوانات)
@@ -571,6 +571,35 @@ function IconPig() {
   );
 }
 
+/* ── Food SVG icons per zodiac animal (24×24, same illustrated palette) ── */
+
+const ZODIAC_FOOD_SVG: string[] = [
+  // Mouse — cheese wedge
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20L12 4l9 16Z" fill="#d4b060"/><path d="M5 18L12 6l7 12Z" fill="#c9a050" opacity=".4"/><circle cx="9" cy="15" r="1.5" fill="#b08530" opacity=".4"/><circle cx="15" cy="17" r="1.2" fill="#b08530" opacity=".35"/><circle cx="13" cy="12" r=".9" fill="#b08530" opacity=".3"/><line x1="3" y1="20" x2="21" y2="20" stroke="#b08530" stroke-width=".6"/></svg>',
+  // Cow — grass tuft
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 22Q6 14 4 8" stroke="#7dad8a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M12 22Q11 12 9 5" stroke="#7dad8a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 22Q18 14 20 9" stroke="#7dad8a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M9 22Q8 16 6 11" stroke="#5a9a6a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".6"/><path d="M15 22Q16 16 18 11" stroke="#5a9a6a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".6"/></svg>',
+  // Leopard — meat chunk with bone
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="13" cy="14" rx="8" ry="6" fill="#c94c4c" transform="rotate(-15 13 14)"/><ellipse cx="13" cy="13" rx="6" ry="4" fill="#d96666" opacity=".4" transform="rotate(-15 13 13)"/><path d="M6 12Q8 10 10 12" stroke="#a03030" stroke-width=".6" fill="none" opacity=".5"/><circle cx="5" cy="7" r="2.2" fill="#f0e6d3"/><circle cx="5" cy="7" r="1.3" fill="#fefdf8" opacity=".3"/><path d="M6 8.5L8 11" stroke="#f0e6d3" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  // Rabbit — carrot
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5Q7 12 10 20Q12 23 14 20Q17 12 15 5Z" fill="#c9a050"/><path d="M10 7Q9 12 11 18Q12 20 13 18Q15 12 14 7Z" fill="#d4b060" opacity=".35"/><path d="M9 5Q8 2 6 0" stroke="#7dad8a" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M12 4Q12 1 13 0" stroke="#7dad8a" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M15 5Q16 2 18 0" stroke="#5a9a6a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".7"/><line x1="10" y1="11" x2="14" y2="11" stroke="#b08530" stroke-width=".4" opacity=".3"/><line x1="10.5" y1="15" x2="13.5" y2="15" stroke="#b08530" stroke-width=".4" opacity=".3"/></svg>',
+  // Whale — small fish
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12Q8 6 14 6Q20 6 20 12Q20 18 14 18Q8 18 6 12Z" fill="#5b9ea6"/><path d="M8 12Q10 8 14 8Q18 8 18 12" fill="#3d7a82" opacity=".3"/><path d="M5 12L2 8V16Z" fill="#5b9ea6"/><circle cx="17" cy="11" r="1.2" fill="#2c2417"/><circle cx="17.3" cy="10.7" r=".4" fill="#5b9ea6"/><path d="M12 7Q13 4 14 7" fill="#3d7a82" opacity=".5"/></svg>',
+  // Snake — egg
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="13" rx="7" ry="9" fill="#f0e6d3"/><ellipse cx="12" cy="12" rx="5.5" ry="7.5" fill="#fefdf8" opacity=".4"/><ellipse cx="10" cy="10" rx="2" ry="3" fill="#fefdf8" opacity=".3" transform="rotate(-15 10 10)"/><ellipse cx="12" cy="13" rx="7" ry="9" fill="none" stroke="#d4c4a8" stroke-width=".5" opacity=".5"/></svg>',
+  // Horse — grass tuft
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 22Q6 14 4 8" stroke="#7dad8a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M12 22Q11 12 9 5" stroke="#7dad8a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 22Q18 14 20 9" stroke="#7dad8a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M9 22Q8 16 6 11" stroke="#5a9a6a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".6"/><path d="M15 22Q16 16 18 11" stroke="#5a9a6a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".6"/></svg>',
+  // Sheep — grass tuft
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 22Q6 14 4 8" stroke="#7dad8a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M12 22Q11 12 9 5" stroke="#7dad8a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M17 22Q18 14 20 9" stroke="#7dad8a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M9 22Q8 16 6 11" stroke="#5a9a6a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".6"/><path d="M15 22Q16 16 18 11" stroke="#5a9a6a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".6"/></svg>',
+  // Monkey — banana
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18Q4 12 8 6Q12 2 16 4Q14 4 10 8Q6 14 8 20Z" fill="#d4b060"/><path d="M7 16Q6 12 9 7Q12 4 14 5Q12 5 9 9Q7 14 8 18Z" fill="#c9a050" opacity=".5"/><path d="M6 18Q8 20 8 20" stroke="#b08530" stroke-width=".8" fill="none"/><path d="M16 4Q17 3 18 4" stroke="#8b6232" stroke-width="1" stroke-linecap="round"/></svg>',
+  // Rooster — scattered seeds
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="16" rx="2" ry="1.5" fill="#c9a050" transform="rotate(-20 8 16)"/><ellipse cx="14" cy="14" rx="2" ry="1.5" fill="#d4b060" transform="rotate(15 14 14)"/><ellipse cx="10" cy="10" rx="2" ry="1.5" fill="#c9a050" transform="rotate(-10 10 10)"/><ellipse cx="16" cy="18" rx="2" ry="1.5" fill="#b08530" transform="rotate(5 16 18)"/><ellipse cx="6" cy="11" rx="1.8" ry="1.3" fill="#d4b060" transform="rotate(-30 6 11)"/><ellipse cx="18" cy="10" rx="1.8" ry="1.3" fill="#c9a050" transform="rotate(20 18 10)"/><ellipse cx="12" cy="19" rx="1.8" ry="1.3" fill="#b08530" transform="rotate(-5 12 19)" opacity=".8"/></svg>',
+  // Dog — bone
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="10" width="12" height="4" rx="2" fill="#f0e6d3"/><circle cx="6" cy="10" r="3" fill="#f0e6d3"/><circle cx="6" cy="14" r="3" fill="#f0e6d3"/><circle cx="18" cy="10" r="3" fill="#f0e6d3"/><circle cx="18" cy="14" r="3" fill="#f0e6d3"/><circle cx="6" cy="9.5" r="1.5" fill="#fefdf8" opacity=".3"/><circle cx="18" cy="9.5" r="1.5" fill="#fefdf8" opacity=".3"/></svg>',
+  // Pig — acorn
+  '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10Q6 8 12 7Q18 8 18 10L18 12Q12 13 6 12Z" fill="#8b6232"/><path d="M7 9Q12 8 17 9" stroke="#6b4226" stroke-width=".5" fill="none" opacity=".5"/><ellipse cx="12" cy="16" rx="6" ry="7" fill="#c9a050"/><ellipse cx="12" cy="15" rx="4.5" ry="5.5" fill="#d4b060" opacity=".35"/><ellipse cx="10" cy="14" rx="1.5" ry="2" fill="#d4b060" opacity=".3" transform="rotate(-8 10 14)"/><path d="M12 7V4" stroke="#6b4226" stroke-width="1.5" stroke-linecap="round"/></svg>',
+];
+
 interface ZodiacAnimalProps {
   shamsiYear: number;
 }
@@ -579,10 +608,244 @@ export function ZodiacAnimal({ shamsiYear }: ZodiacAnimalProps) {
   const index = getZodiacIndex(shamsiYear);
   const animal = ZODIAC_ANIMALS[index];
   const Icon = animal.icon;
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const MARGIN = 80;
+    const MIN_SCALE = 0.45;
+    const MAX_SCALE = 1.4;
+    const MIN_OPACITY = 0.2;
+    const MAX_OPACITY = 0.65;
+    const BASE_SPEED = 50;
+    const ESCAPE_SPEED = 180;
+    const STEER = 2.0;
+    const ESCAPE_STEER = 5.0;
+    const ESCAPE_DIST = 250;
+    const FLEE_RADIUS = 100;
+    const FOOD_COUNT = 4;
+    const EAT_DURATION = 2.5;
+    const EAT_FADE = 0.8;
+    const FOOD_REACH = 30;
+    const RESPAWN_MIN = 6;
+    const RESPAWN_MAX = 12;
+
+    const pickPos = () => ({
+      x: MARGIN + Math.random() * Math.max(0, window.innerWidth - 2 * MARGIN),
+      y: window.innerHeight * 0.1 + Math.random() * (window.innerHeight * 0.78),
+    });
+
+    const persp = (py: number) => {
+      const yn = Math.max(0, Math.min(1, py / window.innerHeight));
+      return {
+        scale: MIN_SCALE + yn * (MAX_SCALE - MIN_SCALE),
+        opacity: MIN_OPACITY + yn * (MAX_OPACITY - MIN_OPACITY),
+        yn,
+      };
+    };
+
+    /* ── Spawn food ── */
+    const foodSvg = ZODIAC_FOOD_SVG[index];
+    const foods: { el: HTMLDivElement; x: number; y: number; eaten: boolean; timer: number }[] = [];
+
+    for (let i = 0; i < FOOD_COUNT; i++) {
+      const pos = pickPos();
+      const div = document.createElement('div');
+      div.innerHTML = foodSvg;
+      div.setAttribute('aria-hidden', 'true');
+      div.style.cssText =
+        'position:fixed;left:0;top:0;z-index:9;pointer-events:none;user-select:none;' +
+        'will-change:transform,opacity;line-height:0;';
+      document.body.appendChild(div);
+      const p = persp(pos.y);
+      div.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(${p.scale})`;
+      div.style.opacity = `${p.opacity}`;
+      foods.push({ el: div, ...pos, eaten: false, timer: 0 });
+    }
+
+    /* ── Animal state ── */
+    let x = -MARGIN;
+    let y = window.innerHeight * 0.7;
+    let vx = 30;
+    let vy = 0;
+    let target = pickPos();
+    let facingRight = true;
+    let prev = 0;
+    let frame: number;
+    let escaping = false;
+    let escapeTimer = 0;
+    let eating = false;
+    let eatTimer = 0;
+    let eatIdx = -1;
+    let pointerX = -9999;
+    let pointerY = -9999;
+    let lastLegDur = '0.6';
+
+    const flee = (px: number, py: number) => {
+      const dx = (x + 32) - px;
+      const dy = (y + 24) - py;
+      const d = Math.hypot(dx, dy) || 1;
+      target = {
+        x: Math.max(MARGIN, Math.min(window.innerWidth - MARGIN, x + (dx / d) * ESCAPE_DIST)),
+        y: Math.max(window.innerHeight * 0.05, Math.min(window.innerHeight * 0.9, y + (dy / d) * ESCAPE_DIST)),
+      };
+      escaping = true;
+      escapeTimer = 1.2;
+      if (eating) {
+        eating = false;
+        el.classList.remove('zodiac-eating');
+        if (eatIdx >= 0 && !foods[eatIdx].eaten) {
+          foods[eatIdx].el.style.opacity = `${persp(foods[eatIdx].y).opacity}`;
+        }
+        eatIdx = -1;
+      }
+    };
+
+    const nearest = () => {
+      let best = -1;
+      let bd = Infinity;
+      const ax = x + 32;
+      const ay = y + 24;
+      for (let i = 0; i < foods.length; i++) {
+        if (foods[i].eaten) continue;
+        const d = Math.hypot(foods[i].x + 12 - ax, foods[i].y + 12 - ay);
+        if (d < bd) { bd = d; best = i; }
+      }
+      return best;
+    };
+
+    const onPointer = (e: PointerEvent) => { pointerX = e.clientX; pointerY = e.clientY; };
+    document.addEventListener('pointermove', onPointer, { passive: true });
+    document.addEventListener('pointerdown', onPointer, { passive: true });
+
+    const step = (now: number) => {
+      if (!prev) prev = now;
+      const dt = Math.min((now - prev) / 1000, 0.1);
+      prev = now;
+
+      /* ── Respawn eaten food ── */
+      for (const f of foods) {
+        if (!f.eaten) continue;
+        f.timer -= dt;
+        if (f.timer <= 0) {
+          const pos = pickPos();
+          f.x = pos.x;
+          f.y = pos.y;
+          f.eaten = false;
+          const p = persp(pos.y);
+          f.el.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(${p.scale})`;
+          f.el.style.opacity = `${p.opacity}`;
+        }
+      }
+
+      /* ── Escape cooldown ── */
+      if (escaping) {
+        escapeTimer -= dt;
+        if (escapeTimer <= 0) escaping = false;
+      }
+
+      /* ── Eating ── */
+      if (eating) {
+        eatTimer -= dt;
+        vx *= Math.pow(0.05, dt);
+        vy *= Math.pow(0.05, dt);
+
+        if (eatIdx >= 0 && eatTimer < EAT_FADE) {
+          const baseOp = persp(foods[eatIdx].y).opacity;
+          foods[eatIdx].el.style.opacity = `${Math.max(0, (eatTimer / EAT_FADE) * baseOp)}`;
+        }
+
+        if (eatTimer <= 0) {
+          eating = false;
+          el.classList.remove('zodiac-eating');
+          if (eatIdx >= 0) {
+            foods[eatIdx].eaten = true;
+            foods[eatIdx].timer = RESPAWN_MIN + Math.random() * (RESPAWN_MAX - RESPAWN_MIN);
+            foods[eatIdx].el.style.opacity = '0';
+          }
+          eatIdx = -1;
+        }
+      }
+
+      const { scale, yn } = persp(y);
+
+      /* ── Flee from pointer ── */
+      if (!escaping && !eating) {
+        const dp = Math.hypot(x + 32 - pointerX, y + 24 - pointerY);
+        if (dp < FLEE_RADIUS * scale) flee(pointerX, pointerY);
+      }
+
+      /* ── Targeting: head toward nearest food, or roam randomly ── */
+      const cx = x + 32;
+      const cy = y + 24;
+
+      if (!escaping && !eating) {
+        const ni = nearest();
+        if (ni >= 0) {
+          const fcx = foods[ni].x + 12;
+          const fcy = foods[ni].y + 12;
+          target = { x: fcx, y: fcy };
+          if (Math.hypot(fcx - cx, fcy - cy) < FOOD_REACH * scale) {
+            eating = true;
+            eatTimer = EAT_DURATION;
+            eatIdx = ni;
+            el.classList.add('zodiac-eating');
+          }
+        } else if (Math.hypot(target.x - cx, target.y - cy) < 25) {
+          target = pickPos();
+        }
+      }
+
+      /* ── Movement ── */
+      if (!eating) {
+        const dx = target.x - cx;
+        const dy = target.y - cy;
+        const dist = Math.hypot(dx, dy);
+        const speed = (escaping ? ESCAPE_SPEED : BASE_SPEED) * scale;
+        const steer = escaping ? ESCAPE_STEER : STEER;
+        if (dist > 1) {
+          vx += ((dx / dist) * speed - vx) * steer * dt;
+          vy += ((dy / dist) * speed - vy) * steer * dt;
+        }
+      }
+
+      x += vx * dt;
+      y += vy * dt;
+
+      if (Math.abs(vx) > 1) facingRight = vx > 0;
+
+      const opacity = MIN_OPACITY + yn * (MAX_OPACITY - MIN_OPACITY);
+      const sx = (facingRight ? 1 : -1) * scale;
+      const currentSpeed = Math.hypot(vx, vy);
+      const legDur = currentSpeed > 3
+        ? (Math.round(Math.max(1.5, Math.min(8, 200 / currentSpeed))) / 10).toFixed(1)
+        : '99';
+
+      el.style.transform = `translate(${x}px, ${y}px) scale(${sx}, ${scale})`;
+      el.style.opacity = `${opacity}`;
+      if (legDur !== lastLegDur) {
+        el.style.setProperty('--leg-dur', `${legDur}s`);
+        lastLegDur = legDur;
+      }
+
+      frame = requestAnimationFrame(step);
+    };
+
+    frame = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(frame);
+      document.removeEventListener('pointermove', onPointer);
+      document.removeEventListener('pointerdown', onPointer);
+      foods.forEach(f => f.el.remove());
+    };
+  }, [index]);
 
   return (
     <div
-      className="zodiac-walk pointer-events-none fixed bottom-6 z-10"
+      ref={ref}
+      className="zodiac-roam fixed left-0 top-0 z-10"
       role="img"
       aria-label={`Year of the ${animal.en} — سال ${animal.fa}`}
     >

@@ -110,30 +110,21 @@ body {
   }
 }
 
-/* ── Zodiac animal walk ── */
+/* ── Zodiac animal roam ── */
 
-.zodiac-walk {
-  animation: zodiac-walk-across 18s linear infinite;
-  opacity: 0.5;
+.zodiac-roam {
+  will-change: transform, opacity;
+  touch-action: none;
 }
 
-@keyframes zodiac-walk-across {
-  from {
-    left: -80px;
-  }
-  to {
-    left: calc(100vw + 80px);
-  }
-}
-
-/* Leg walk cycle — front and back alternate */
+/* Leg walk cycle — duration driven by JS via --leg-dur */
 .zodiac-leg-front {
-  animation: zodiac-leg-stride-front 0.6s ease-in-out infinite alternate;
+  animation: zodiac-leg-stride-front var(--leg-dur, 0.6s) ease-in-out infinite alternate;
   transform-origin: center top;
 }
 
 .zodiac-leg-back {
-  animation: zodiac-leg-stride-back 0.6s ease-in-out infinite alternate;
+  animation: zodiac-leg-stride-back var(--leg-dur, 0.6s) ease-in-out infinite alternate;
   transform-origin: center top;
 }
 
@@ -148,7 +139,7 @@ body {
 }
 
 /* Subtle body bob */
-.zodiac-walk svg {
+.zodiac-roam svg {
   animation: zodiac-bob 0.3s ease-in-out infinite alternate;
 }
 
@@ -157,14 +148,25 @@ body {
   to   { transform: translateY(-1.5px); }
 }
 
+/* Eating nod — overrides normal bob (higher specificity) */
+.zodiac-roam.zodiac-eating svg {
+  animation: zodiac-eat-nod 0.5s ease-in-out infinite;
+}
+
+@keyframes zodiac-eat-nod {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(2px) rotate(8deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .zodiac-walk,
+  .zodiac-roam,
   .zodiac-leg-front,
   .zodiac-leg-back,
-  .zodiac-walk svg {
+  .zodiac-roam svg,
+  .zodiac-roam.zodiac-eating svg {
     animation: none;
   }
-  .zodiac-walk {
+  .zodiac-roam {
     display: none;
   }
 }

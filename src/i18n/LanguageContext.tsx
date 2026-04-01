@@ -19,8 +19,7 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 function detectLocale(): Locale {
   const saved = localStorage.getItem('locale');
   if (saved === 'en' || saved === 'fa') return saved;
-  const lang = navigator.language.toLowerCase();
-  return lang.startsWith('fa') ? 'fa' : 'en';
+  return 'fa';
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {

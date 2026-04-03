@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { nowMs } from '../utils/now';
 
 interface CountdownValues {
   days: number;
@@ -22,7 +23,7 @@ export function useCountdown(target: Date | null): CountdownValues {
     if (!target) return;
 
     function tick() {
-      const diff = target!.getTime() - Date.now();
+      const diff = target!.getTime() - nowMs();
 
       if (diff <= 0) {
         setValues({ days: 0, hours: 0, minutes: 0, seconds: 0, isComplete: true });

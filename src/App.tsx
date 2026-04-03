@@ -13,6 +13,7 @@ import { useLanguage } from './i18n/LanguageContext';
 import { getShamsiYear } from './utils/persianYear';
 import { formatIRST, formatLocal, formatUTC } from './utils/dateHelpers';
 import { toPersianNumerals } from './utils/persian';
+import { nowMs } from './utils/now';
 
 // Reload once on chunk-load 404 so users with stale bundles pick up the new deployment.
 function lazyWithReload<T extends object>(
@@ -235,7 +236,7 @@ function useNorouzAudio(target: Date | null, phase: string) {
   useEffect(() => {
     const windowEnd = target ? target.getTime() + AUDIO_WINDOW_HOURS * 60 * 60 * 1000 : 0;
     const check = () => {
-      const now = Date.now();
+      const now = nowMs();
       setIsInAudioWindow(!!target && now >= target.getTime() && now < windowEnd);
     };
     check();

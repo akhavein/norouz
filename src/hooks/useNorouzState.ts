@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { EQUINOX_UTC, getEquinoxFallback, getCelebrationEndMs } from '../data/equinox-times';
+import { nowMs } from '../utils/now';
 
 export type NorouzPhase = 'counting' | 'celebrating' | 'dormant';
 
@@ -46,8 +47,8 @@ async function resolveEquinox(year: number): Promise<Date> {
 }
 
 async function computeState(): Promise<NorouzState> {
-  const now = Date.now();
-  const currentYear = new Date().getFullYear();
+  const now = nowMs();
+  const currentYear = new Date(now).getFullYear();
 
   const thisEquinox = await resolveEquinox(currentYear);
   const thisMs = thisEquinox.getTime();
@@ -61,7 +62,7 @@ async function computeState(): Promise<NorouzState> {
   if (now < celebrationEnd) {
     // Count days from 1 Farvardin (solar noon rule)
     const farvardinOne = getFarvardinOneDate(thisMs);
-    const today = new Date();
+    const today = new Date(now);
     today.setHours(0, 0, 0, 0);
     const rawDay = Math.round((today.getTime() - farvardinOne.getTime()) / MS_PER_DAY) + 1;
     const norouzDay = Math.max(1, Math.min(CELEBRATION_DAYS, rawDay));
@@ -104,7 +105,7 @@ export function useNorouzState(): NorouzState {
   useEffect(() => {
     if (state.phase !== 'counting' || !state.target) return;
 
-    const msUntilTarget = state.target.getTime() - Date.now();
+    const msUntilTarget = state.target.getTime() - nowMs();
     if (msUntilTarget <= 0) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       resolve(); // async — setState is called after the awaited computeState(), not synchronously

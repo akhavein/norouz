@@ -476,9 +476,12 @@ function App() {
         </p>
       </main>
 
-      {phase === 'celebrating' && shamsiYear && !prefersReducedMotion && (
-        <ZodiacAnimal shamsiYear={shamsiYear} />
-      )}
+      {shamsiYear && !prefersReducedMotion && target && (() => {
+        const msUntilTarget = target.getTime() - nowMs();
+        const hideAnimalBeforeNorouzMs = 7 * 24 * 60 * 60 * 1000;
+        const showAnimal = phase === 'celebrating' || msUntilTarget > hideAnimalBeforeNorouzMs;
+        return showAnimal ? <ZodiacAnimal shamsiYear={shamsiYear} /> : null;
+      })()}
 
       <div className="mt-auto pt-12 relative z-10">
         <Footer />

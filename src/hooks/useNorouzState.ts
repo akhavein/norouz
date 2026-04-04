@@ -5,7 +5,7 @@ import { nowMs } from '../utils/now';
 export type NorouzPhase = 'counting' | 'celebrating' | 'dormant';
 
 const CELEBRATION_DAYS = 13; // Through Sizdah Bedar
-const DORMANT_DAYS = 7;     // Brief pause before next countdown
+const DORMANT_DAYS = 1;     // Only the day after Sizdah Bedar
 const MS_PER_DAY = 86_400_000;
 const IRST_OFFSET_MS = 3.5 * 60 * 60 * 1000; // UTC+3:30
 // Solar noon in Tehran ≈ 12:14 IRST, expressed as ms from midnight IRST

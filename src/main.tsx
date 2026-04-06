@@ -5,19 +5,19 @@ import App from './App.tsx'
 import { LanguageProvider } from './i18n/LanguageContext.tsx'
 import { syncNowOffset } from './utils/now.ts'
 
-void syncNowOffset().finally(() => {
-  createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <LanguageProvider>
-        <App />
-      </LanguageProvider>
-    </StrictMode>,
-  )
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <LanguageProvider>
+      <App />
+    </LanguageProvider>
+  </StrictMode>,
+)
 
-  // Register service worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    });
-  }
-})
+void syncNowOffset();
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}

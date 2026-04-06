@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { EQUINOX_UTC, getEquinoxFallback, getCelebrationEndMs } from '../data/equinox-times';
-import { nowMs } from '../utils/now';
+import { nowMs, subscribeToNowSync } from '../utils/now';
 
 export type NorouzPhase = 'counting' | 'celebrating' | 'dormant';
 
@@ -96,9 +96,16 @@ export function useNorouzState(): NorouzState {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     resolve(); // async — setState is called after the awaited computeState(), not synchronously
 
+    const unsubscribeNowSync = subscribeToNowSync(() => {
+      void resolve();
+    });
+
     // Background poll for dormant/celebration end transitions
     const interval = setInterval(resolve, 60_000);
-    return () => clearInterval(interval);
+    return () => {
+      unsubscribeNowSync();
+      clearInterval(interval);
+    };
   }, [resolve]);
 
   // Precise transition: schedule re-resolve at exactly the equinox moment

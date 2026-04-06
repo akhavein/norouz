@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { EQUINOX_UTC, getCelebrationEndMs } from '../data/equinox-times';
+import { nowMs, subscribeToNowSync } from '../utils/now';
 import { getShamsiYear } from '../utils/persianYear';
 import { toPersianNumerals } from '../utils/persian';
 
 const CELEBRATION_DAYS = 13;
 
 function getRelevantEquinox(): { date: Date; year: number } | null {
-  const now = Date.now();
-  const currentYear = new Date().getFullYear();
+  const now = nowMs();
+  const currentYear = new Date(now).getFullYear();
 
   // During celebration period (through Sizdah Bedar), show the current year's equinox
   const thisTs = EQUINOX_UTC[currentYear];
@@ -28,6 +29,12 @@ function getRelevantEquinox(): { date: Date; year: number } | null {
 }
 
 export function JsonLd() {
+  const [syncVersion, setSyncVersion] = useState(0);
+
+  useEffect(() => subscribeToNowSync(() => {
+    setSyncVersion((version) => version + 1);
+  }), []);
+
   useEffect(() => {
     const equinox = getRelevantEquinox();
     if (!equinox) return;
@@ -55,7 +62,7 @@ export function JsonLd() {
     return () => {
       document.head.removeChild(script);
     };
-  }, []);
+  }, [syncVersion]);
 
   return null;
 }

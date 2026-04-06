@@ -6,7 +6,7 @@ interface ChatInputProps {
   user: User;
   sending: boolean;
   hasPosted: boolean;
-  onSend: (user: User, text: string) => void;
+  onSend: (user: User, text: string) => Promise<boolean>;
   onSignOut: () => void;
 }
 
@@ -15,11 +15,11 @@ export function ChatInput({ user, sending, hasPosted, onSend, onSignOut }: ChatI
   const { t, locale } = useLanguage();
   const fontClass = locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : '';
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim() || sending) return;
-    onSend(user, text);
-    setText('');
+    const sent = await onSend(user, text);
+    if (sent) setText('');
   }, [text, sending, onSend, user]);
 
   return (

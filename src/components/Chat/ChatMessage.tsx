@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { nowMs, subscribeToNowSync } from '../../utils/now';
 import type { ChatMessage as ChatMessageType } from '../../hooks/useChat';
 
 interface ChatMessageProps {
@@ -8,7 +10,7 @@ interface ChatMessageProps {
 
 function timeAgo(date: Date | null, locale: string): string {
   if (!date) return locale === 'fa' ? '...' : '...';
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  const seconds = Math.max(0, Math.floor((nowMs() - date.getTime()) / 1000));
   if (seconds < 60) return locale === 'fa' ? 'الان' : 'now';
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return locale === 'fa' ? `${minutes}د` : `${minutes}m`;
@@ -20,6 +22,20 @@ function timeAgo(date: Date | null, locale: string): string {
 
 export function ChatMessage({ message, isOwn }: ChatMessageProps) {
   const { locale } = useLanguage();
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setTick((tick) => tick + 1);
+    }, 60_000);
+    const unsubscribeNowSync = subscribeToNowSync(() => {
+      setTick((tick) => tick + 1);
+    });
+    return () => {
+      window.clearInterval(interval);
+      unsubscribeNowSync();
+    };
+  }, []);
 
   return (
     <div className={`flex gap-2 px-3 py-1.5 ${isOwn ? 'bg-persian-gold/5 dark:bg-persian-gold/10' : ''}`}>

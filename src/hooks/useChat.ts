@@ -12,6 +12,7 @@ export function useChat(uid: string | null, displayName: string | null, norouzYe
   const [retryCount, setRetryCount] = useState(0);
   const lastSentRef = useRef(0);
   const hasPostedRef = useRef(false);
+  const sendingRef = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -71,25 +72,30 @@ export function useChat(uid: string | null, displayName: string | null, norouzYe
 
   const send = useCallback(async (user: User, text: string) => {
     const trimmed = text.trim();
-    if (!trimmed || trimmed.length > 280) return;
-    if (hasPostedRef.current) return;
+    if (!trimmed || trimmed.length > 280) return false;
+    if (hasPostedRef.current || sendingRef.current) return false;
     const dn = displayNameRef.current;
-    if (!dn) return;
+    if (!dn) return false;
 
     // Client-side rate limit
     const now = Date.now();
-    if (now - lastSentRef.current < RATE_LIMIT_MS) return;
+    if (now - lastSentRef.current < RATE_LIMIT_MS) return false;
 
+    sendingRef.current = true;
     setSending(true);
+    setError(null);
     try {
       const { sendMessage } = await import('../firebase/firestore');
       await sendMessage(user, trimmed, dn);
       lastSentRef.current = Date.now();
       hasPostedRef.current = true;
       setHasPosted(true);
+      return true;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send');
+      return false;
     } finally {
+      sendingRef.current = false;
       setSending(false);
     }
   }, []);

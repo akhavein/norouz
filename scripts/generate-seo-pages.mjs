@@ -7,7 +7,6 @@ const root = new URL('../', import.meta.url);
 
 const years = [2026, 2027, 2028, 2029, 2030];
 const baseUrl = 'https://norouz.akhave.in';
-const buildTimestamp = new Date().toISOString();
 const equinoxIsoByYear = {
   2026: '2026-03-20T14:45:53.000Z',
   2027: '2027-03-20T20:24:18.000Z',
@@ -209,10 +208,26 @@ async function generateOgImages() {
     const key = getOgImageKey(variant.fa, variant.year);
     const svgPath = path.join(ogDir, `${key}.svg`);
     const pngPath = path.join(ogDir, `${key}.png`);
-    await fs.writeFile(svgPath, renderOgSvg(variant.fa, variant.year));
+    const nextSvg = renderOgSvg(variant.fa, variant.year);
+    let existingSvg = null;
+
+    try {
+      existingSvg = await fs.readFile(svgPath, 'utf8');
+    } catch {
+      existingSvg = null;
+    }
+
+    const svgChanged = existingSvg !== nextSvg;
+
+    if (svgChanged) {
+      await fs.writeFile(svgPath, nextSvg);
+    }
 
     if (canRasterizePng) {
-      execFileSync('sips', ['-s', 'format', 'png', svgPath, '--out', pngPath], { stdio: 'ignore' });
+      const pngExists = await fs.access(pngPath).then(() => true).catch(() => false);
+      if (svgChanged || !pngExists) {
+        execFileSync('sips', ['-s', 'format', 'png', svgPath, '--out', pngPath], { stdio: 'ignore' });
+      }
       continue;
     }
 
@@ -398,7 +413,6 @@ function getStructuredData({ canonical, locale, year, fa }) {
       name: fa
         ? year ? `نوروز ${year} | زمان دقیق تحویل سال` : 'نوروز | شمارش معکوس و زمان دقیق تحویل سال'
         : year ? `Nowruz ${year} | Exact date and time` : 'Nowruz | Countdown and exact equinox time',
-      dateModified: buildTimestamp,
       about: ['Nowruz', 'Norouz', 'نوروز', 'Persian New Year', 'Spring Equinox'],
     },
     {
@@ -483,7 +497,6 @@ function getStructuredData({ canonical, locale, year, fa }) {
           ? `زمان دقیق نوروز ${year} به وقت UTC و تهران.`
           : `Exact Nowruz ${year} timing in UTC and Tehran time.`,
         url: canonical,
-        dateModified: buildTimestamp,
         variableMeasured: [
           { '@type': 'PropertyValue', name: 'UTC time', value: timeInfo.utc },
           { '@type': 'PropertyValue', name: 'Tehran time', value: timeInfo.tehran },
@@ -594,7 +607,6 @@ function renderPage(locale, year) {
     <meta name="author" content="Mehrzad Akhavein" />
     <meta name="theme-color" content="#fefdf8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1a1612" media="(prefers-color-scheme: dark)" />
-    <meta property="article:modified_time" content="${buildTimestamp}" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.json" />
@@ -718,6 +730,14 @@ function renderPage(locale, year) {
 async function writePage(filePath, content) {
   const targetPath = fileURLToPath(filePath);
   await fs.mkdir(path.dirname(targetPath), { recursive: true });
+
+  try {
+    const existing = await fs.readFile(targetPath, 'utf8');
+    if (existing === content) return;
+  } catch {
+    // File does not exist yet, fall through to write it.
+  }
+
   await fs.writeFile(targetPath, content);
 }
 
@@ -752,11 +772,11 @@ async function main() {
       { href: page.year === 'years' ? buildYearsHubUrl('en') : buildUrl('en', page.year), hreflang: 'en' },
       { href: page.year === 'years' ? buildYearsHubUrl('fa') : buildUrl('fa', page.year), hreflang: 'fa' },
     ].map((alt) => `    <xhtml:link rel="alternate" hreflang="${alt.hreflang}" href="${alt.href}" />`).join('\n');
-    return `  <url>\n    <loc>${url}</loc>\n${alternates}\n    <lastmod>${buildTimestamp}</lastmod>\n    <changefreq>${page.year && page.year !== 'years' ? 'monthly' : 'weekly'}</changefreq>\n    <priority>${page.locale === null && page.year === null ? '1.0' : page.year && page.year !== 'years' ? '0.9' : '0.8'}</priority>\n  </url>`;
+    return `  <url>\n    <loc>${url}</loc>\n${alternates}\n    <changefreq>${page.year && page.year !== 'years' ? 'monthly' : 'weekly'}</changefreq>\n    <priority>${page.locale === null && page.year === null ? '1.0' : page.year && page.year !== 'years' ? '0.9' : '0.8'}</priority>\n  </url>`;
   }).join('\n');
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sitemapEntries}\n</urlset>\n`;
-  await fs.writeFile(fileURLToPath(new URL('../public/sitemap.xml', import.meta.url)), sitemap);
+  await writePage(new URL('../public/sitemap.xml', import.meta.url), sitemap);
 
   await generateOgImages();
 }

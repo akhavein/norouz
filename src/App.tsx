@@ -16,6 +16,8 @@ import { getShamsiYear } from './utils/persianYear';
 import { formatIRST, formatLocal, formatUTC } from './utils/dateHelpers';
 import { toPersianNumerals } from './utils/persian';
 import { nowMs } from './utils/now';
+import { getSiteRouteInfo } from './utils/siteRoutes';
+import { EQUINOX_UTC } from './data/equinox-times';
 
 // Reload once on chunk-load 404 so users with stale bundles pick up the new deployment.
 function lazyWithReload<T extends object>(
@@ -383,6 +385,7 @@ function App() {
   const audio = useNorouzAudio(target, phase);
   const { t, locale } = useLanguage();
   const theme = useTheme();
+  const routeInfo = getSiteRouteInfo();
   const [chatOpen, setChatOpen] = useState(() => {
     // After a sign-in redirect, reopen the chat automatically.
     const flag = sessionStorage.getItem('norouz_chat_open');
@@ -401,11 +404,16 @@ function App() {
   }
 
   const shamsiYear = year ? getShamsiYear(year) : null;
+  const seoYear = routeInfo.year ?? year;
+  const seoTarget = routeInfo.year && EQUINOX_UTC[routeInfo.year]
+    ? new Date(EQUINOX_UTC[routeInfo.year])
+    : target;
+  const seoShamsiYear = seoYear ? getShamsiYear(seoYear) : shamsiYear;
 
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center px-4 pt-16 pb-8 relative overflow-hidden ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : "font-['Inter',sans-serif]"}`}>
-      <SeoHead year={year} />
-      <JsonLd phase={phase} target={target} year={year} />
+      <SeoHead year={seoYear} />
+      <JsonLd phase={phase} target={seoTarget} year={seoYear} />
       {/* Toggles — pinned top-right to avoid title overlap */}
       <div className="fixed top-4 right-4 flex items-center gap-2 z-20" dir="ltr">
         <LanguageToggle />
@@ -478,7 +486,7 @@ function App() {
           {t('blurb')}
         </p>
 
-        <SeoContent target={target} year={year} shamsiYear={shamsiYear} />
+        <SeoContent target={seoTarget} year={year} shamsiYear={seoShamsiYear} focusedYear={seoYear} />
       </main>
 
       {shamsiYear && !prefersReducedMotion && target && (() => {

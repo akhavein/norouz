@@ -3,6 +3,7 @@ import { getCelebrationEndMs } from '../data/equinox-times';
 import { useLanguage } from '../i18n/LanguageContext';
 import { getShamsiYear } from '../utils/persianYear';
 import { toPersianNumerals } from '../utils/persian';
+import { buildAbsoluteSiteUrl, getSiteRouteInfo } from '../utils/siteRoutes';
 
 interface JsonLdProps {
   phase: 'counting' | 'celebrating' | 'dormant';
@@ -17,6 +18,9 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
 
   useEffect(() => {
     if (!target || !year) return;
+
+    const route = getSiteRouteInfo();
+    const canonicalUrl = buildAbsoluteSiteUrl(route.locale, route.year ?? year);
 
     const shamsiYear = getShamsiYear(year);
     const celebrationEnd = new Date(getCelebrationEndMs(target.getTime(), CELEBRATION_DAYS)).toISOString();
@@ -79,7 +83,7 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
           '@type': 'WebSite',
           name: 'Nowruz Countdown',
           alternateName: ['Norouz Countdown', 'نوروز'],
-          url: 'https://norouz.akhave.in',
+          url: canonicalUrl,
           inLanguage: ['en', 'fa'],
           description: locale === 'fa'
             ? 'شمارش معکوس نوروز با زمان دقیق تحویل سال، زمان تهران، UTC و معرفی رسم‌های نوروزی.'
@@ -100,7 +104,7 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
             : `The exact astronomical moment of the vernal equinox, marking the beginning of the Persian New Year, Nowruz ${year}.`,
           location: {
             '@type': 'VirtualLocation',
-            url: 'https://norouz.akhave.in',
+            url: canonicalUrl,
           },
         },
         {

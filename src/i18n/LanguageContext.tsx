@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import en from './en.json';
 import fa from './fa.json';
+import { buildSitePath, getSiteRouteInfo } from '../utils/siteRoutes';
 
 type Locale = 'en' | 'fa';
 type Translations = typeof en;
@@ -17,6 +18,8 @@ interface LanguageContextValue {
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 function detectLocale(): Locale {
+  const routeLocale = getSiteRouteInfo().locale;
+  if (routeLocale === 'en' || routeLocale === 'fa') return routeLocale;
   const saved = localStorage.getItem('locale');
   if (saved === 'en' || saved === 'fa') return saved;
   return 'fa';
@@ -26,7 +29,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>(detectLocale);
 
   const toggleLocale = useCallback(() => {
-    setLocale(prev => (prev === 'en' ? 'fa' : 'en'));
+    setLocale(prev => {
+      const next = prev === 'en' ? 'fa' : 'en';
+      const { year } = getSiteRouteInfo();
+      window.location.assign(buildSitePath(next, year));
+      return next;
+    });
   }, []);
 
   useEffect(() => {

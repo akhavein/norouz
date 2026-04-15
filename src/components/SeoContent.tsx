@@ -6,13 +6,15 @@ interface SeoContentProps {
   target: Date | null;
   year: number | null;
   shamsiYear: number | null;
+  focusedYear: number | null;
 }
 
-export function SeoContent({ target, year, shamsiYear }: SeoContentProps) {
+export function SeoContent({ target, year, shamsiYear, focusedYear }: SeoContentProps) {
   const { locale } = useLanguage();
 
   const fa = locale === 'fa';
-  const gregorianYearLabel = year ? (fa ? toPersianNumerals(year) : String(year)) : '';
+  const effectiveYear = focusedYear ?? year;
+  const gregorianYearLabel = effectiveYear ? (fa ? toPersianNumerals(effectiveYear) : String(effectiveYear)) : '';
   const shamsiYearLabel = shamsiYear ? (fa ? toPersianNumerals(shamsiYear) : String(shamsiYear)) : '';
 
   const faqs = fa
@@ -69,8 +71,8 @@ export function SeoContent({ target, year, shamsiYear }: SeoContentProps) {
           </h2>
           <p className={`text-sm sm:text-base leading-7 ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
             {fa
-              ? `نوروز ${shamsiYearLabel ? `${shamsiYearLabel} ` : ''}آغاز سال نوی ایرانی و جشن اعتدال بهاری است. این صفحه زمان دقیق تحویل سال را به‌صورت زنده نشان می‌دهد و در کنار آن توضیح کوتاهی دربارهٔ هفت‌سین، تحویل سال و رسم‌های نوروزی ارائه می‌کند.`
-              : `Nowruz, also spelled Norouz and written نوروز in Persian, is the Persian New Year celebrated at the exact moment of the spring equinox. This page gives a live countdown to the Tahvil of the year and explains core traditions like Haft-Sin and Sizdah Bedar.`}
+              ? `نوروز ${shamsiYearLabel ? `${shamsiYearLabel} ` : ''}آغاز سال نوی ایرانی و جشن اعتدال بهاری است. این صفحه زمان دقیق تحویل سال را نشان می‌دهد و در کنار آن توضیحی کوتاه دربارهٔ هفت‌سین، تحویل سال، Nowruz، Norouz و رسم‌های نوروزی ارائه می‌کند.`
+              : `Nowruz, also spelled Norouz and written نوروز in Persian, is the Persian New Year celebrated at the exact moment of the spring equinox. This page explains the exact Tahvil timing, common spellings, and core traditions like Haft-Sin and Sizdah Bedar.`}
           </p>
         </header>
 

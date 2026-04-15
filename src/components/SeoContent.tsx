@@ -1,0 +1,125 @@
+import { useLanguage } from '../i18n/LanguageContext';
+import { formatIRST, formatLocal, formatUTC } from '../utils/dateHelpers';
+import { toPersianNumerals } from '../utils/persian';
+
+interface SeoContentProps {
+  target: Date | null;
+  year: number | null;
+  shamsiYear: number | null;
+}
+
+export function SeoContent({ target, year, shamsiYear }: SeoContentProps) {
+  const { locale } = useLanguage();
+
+  const fa = locale === 'fa';
+  const gregorianYearLabel = year ? (fa ? toPersianNumerals(year) : String(year)) : '';
+  const shamsiYearLabel = shamsiYear ? (fa ? toPersianNumerals(shamsiYear) : String(shamsiYear)) : '';
+
+  const faqs = fa
+    ? [
+        {
+          q: 'نوروز چیست؟',
+          a: 'نوروز سال نوی ایرانی و آغاز بهار است که در لحظهٔ دقیق اعتدال بهاری آغاز می‌شود. به همین دلیل زمان تحویل سال از نظر فرهنگی و نجومی اهمیت زیادی دارد.',
+        },
+        {
+          q: year ? `نوروز ${gregorianYearLabel} چه زمانی است؟` : 'نوروز چه زمانی است؟',
+          a: target
+            ? `در این صفحه زمان دقیق تحویل سال را در ساعت محلی شما، تهران و UTC می‌بینید. لحظهٔ نوروز ${gregorianYearLabel} برابر است با ${formatIRST(target)}.`
+            : 'در این صفحه زمان دقیق نوروز به‌صورت زنده نمایش داده می‌شود.',
+        },
+        {
+          q: 'هفت‌سین چیست؟',
+          a: 'هفت‌سین سفرهٔ سنتی نوروزی است که با هفت نماد آغازشونده با حرف سین چیده می‌شود و مفاهیمی مثل نوزایی، تندرستی، فراوانی، عشق و شکیبایی را بازتاب می‌دهد.',
+        },
+        {
+          q: 'چرا لحظهٔ دقیق تحویل سال مهم است؟',
+          a: 'نوروز بر اساس تقویم خورشیدی و لحظهٔ واقعی اعتدال بهاری تعیین می‌شود، نه صرفاً تغییر یک تاریخ قراردادی. به همین دلیل ساعت دقیق تحویل سال در فرهنگ ایرانی جایگاه ویژه‌ای دارد.',
+        },
+      ]
+    : [
+        {
+          q: 'What is Nowruz?',
+          a: 'Nowruz is the Persian New Year and the start of spring, celebrated at the exact astronomical moment of the vernal equinox.',
+        },
+        {
+          q: year ? `When is Nowruz ${gregorianYearLabel}?` : 'When is Nowruz?',
+          a: target
+            ? `This page shows the exact Tahvil time for Nowruz ${gregorianYearLabel} in your local time, Tehran time, and UTC. The Tehran-time reference is ${formatIRST(target)}.`
+            : 'This page shows the exact Tahvil time for the next Nowruz as a live countdown.',
+        },
+        {
+          q: 'What is Haft-Sin?',
+          a: 'Haft-Sin is the traditional Nowruz table arranged with seven symbolic items whose Persian names begin with the letter sin, representing renewal, health, abundance, love, and patience.',
+        },
+        {
+          q: 'Why does the exact equinox matter?',
+          a: 'Nowruz is tied to the solar calendar and begins at the real astronomical equinox, not simply at midnight on a fixed date. That exact moment is the Tahvil of the year.',
+        },
+      ];
+
+  return (
+    <section
+      className="w-full max-w-3xl rounded-3xl border border-persian-gold/15 bg-cream/70 dark:bg-dark-surface/60 px-5 py-6 sm:px-8 sm:py-8 text-warm-charcoal/80 dark:text-cream/80 shadow-sm"
+      dir={fa ? 'rtl' : 'ltr'}
+    >
+      <div className="space-y-6">
+        <header className="space-y-3 text-center">
+          <h2 className={`text-2xl sm:text-3xl font-bold text-warm-charcoal dark:text-cream ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+            {fa ? 'نوروز، Nowruz و Norouz' : 'Nowruz, Norouz, and نوروز'}
+          </h2>
+          <p className={`text-sm sm:text-base leading-7 ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+            {fa
+              ? `نوروز ${shamsiYearLabel ? `${shamsiYearLabel} ` : ''}آغاز سال نوی ایرانی و جشن اعتدال بهاری است. این صفحه زمان دقیق تحویل سال را به‌صورت زنده نشان می‌دهد و در کنار آن توضیح کوتاهی دربارهٔ هفت‌سین، تحویل سال و رسم‌های نوروزی ارائه می‌کند.`
+              : `Nowruz, also spelled Norouz and written نوروز in Persian, is the Persian New Year celebrated at the exact moment of the spring equinox. This page gives a live countdown to the Tahvil of the year and explains core traditions like Haft-Sin and Sizdah Bedar.`}
+          </p>
+        </header>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <section className="rounded-2xl border border-persian-gold/15 bg-persian-gold/5 px-4 py-4">
+            <h3 className={`text-base font-semibold text-persian-gold mb-2 ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+              {fa ? `زمان تحویل سال ${gregorianYearLabel}` : `When is Nowruz ${gregorianYearLabel}`}
+            </h3>
+            {target ? (
+              <div className="space-y-2 text-sm leading-6">
+                <p><strong>{fa ? 'تهران:' : 'Tehran:'}</strong> {formatIRST(target)}</p>
+                <p><strong>{fa ? 'محلی شما:' : 'Your local time:'}</strong> {formatLocal(target)}</p>
+                <p><strong>UTC:</strong> {formatUTC(target)}</p>
+              </div>
+            ) : (
+              <p className="text-sm">{fa ? 'زمان دقیق به‌زودی بارگذاری می‌شود.' : 'The exact time will load shortly.'}</p>
+            )}
+          </section>
+
+          <section className="rounded-2xl border border-persian-gold/15 bg-persian-gold/5 px-4 py-4">
+            <h3 className={`text-base font-semibold text-persian-gold mb-2 ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+              {fa ? 'هفت‌سین و رسم‌های نوروزی' : 'Haft-Sin and Nowruz traditions'}
+            </h3>
+            <p className={`text-sm leading-6 ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+              {fa
+                ? 'هفت‌سین با هفت نماد اصلی چیده می‌شود و در کنار آن آیینه، شمع، ماهی، تخم‌مرغ رنگی و موسیقی تحویل سال، فضای نوروز را کامل می‌کنند. سیزده‌بدر نیز پایان آیین‌های نوروزی در دامان طبیعت است.'
+                : 'The Haft-Sin table is arranged with seven symbolic items. Mirrors, candles, painted eggs, goldfish, Tahvil music, family visits, and Sizdah Bedar in nature all help shape the Nowruz season.'}
+            </p>
+          </section>
+        </div>
+
+        <section className="space-y-3">
+          <h3 className={`text-xl font-semibold text-warm-charcoal dark:text-cream ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+            {fa ? 'سوال‌های رایج دربارهٔ نوروز' : 'Frequently asked questions about Nowruz'}
+          </h3>
+          <div className="space-y-3">
+            {faqs.map((faq) => (
+              <details key={faq.q} className="rounded-2xl border border-persian-gold/15 bg-white/60 dark:bg-dark-bg/35 px-4 py-3">
+                <summary className={`cursor-pointer text-sm sm:text-base font-semibold text-persian-gold ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+                  {faq.q}
+                </summary>
+                <p className={`mt-3 text-sm leading-7 ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+      </div>
+    </section>
+  );
+}

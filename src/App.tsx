@@ -4,6 +4,8 @@ import { Countdown } from './components/Countdown';
 import { Footer } from './components/Footer';
 import { LanguageToggle } from './components/LanguageToggle';
 import { JsonLd } from './components/JsonLd';
+import { SeoContent } from './components/SeoContent';
+import { SeoHead } from './components/SeoHead';
 import { HaftSin } from './components/HaftSin';
 import { ZodiacAnimal } from './components/ZodiacAnimal';
 import { useNorouzState } from './hooks/useNorouzState';
@@ -402,7 +404,8 @@ function App() {
 
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center px-4 pt-16 pb-8 relative overflow-hidden ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : "font-['Inter',sans-serif]"}`}>
-      <JsonLd />
+      <SeoHead year={year} />
+      <JsonLd phase={phase} target={target} year={year} />
       {/* Toggles — pinned top-right to avoid title overlap */}
       <div className="fixed top-4 right-4 flex items-center gap-2 z-20" dir="ltr">
         <LanguageToggle />
@@ -474,6 +477,8 @@ function App() {
         <p className="text-sm text-warm-charcoal/60 dark:text-cream/55 text-center max-w-sm leading-relaxed">
           {t('blurb')}
         </p>
+
+        <SeoContent target={target} year={year} shamsiYear={shamsiYear} />
       </main>
 
       {shamsiYear && !prefersReducedMotion && target && (() => {

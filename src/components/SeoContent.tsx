@@ -1,6 +1,7 @@
 import { useLanguage } from '../i18n/LanguageContext';
 import { formatIRST, formatLocal, formatUTC } from '../utils/dateHelpers';
 import { toPersianNumerals } from '../utils/persian';
+import { buildSitePath } from '../utils/siteRoutes';
 
 interface SeoContentProps {
   target: Date | null;
@@ -16,6 +17,7 @@ export function SeoContent({ target, year, shamsiYear, focusedYear }: SeoContent
   const effectiveYear = focusedYear ?? year;
   const gregorianYearLabel = effectiveYear ? (fa ? toPersianNumerals(effectiveYear) : String(effectiveYear)) : '';
   const shamsiYearLabel = shamsiYear ? (fa ? toPersianNumerals(shamsiYear) : String(shamsiYear)) : '';
+  const years = [2026, 2027, 2028, 2029, 2030];
 
   const faqs = fa
     ? [
@@ -74,6 +76,11 @@ export function SeoContent({ target, year, shamsiYear, focusedYear }: SeoContent
               ? `نوروز ${shamsiYearLabel ? `${shamsiYearLabel} ` : ''}آغاز سال نوی ایرانی و جشن اعتدال بهاری است. این صفحه زمان دقیق تحویل سال را نشان می‌دهد و در کنار آن توضیحی کوتاه دربارهٔ هفت‌سین، تحویل سال، Nowruz، Norouz و رسم‌های نوروزی ارائه می‌کند.`
               : `Nowruz, also spelled Norouz and written نوروز in Persian, is the Persian New Year celebrated at the exact moment of the spring equinox. This page explains the exact Tahvil timing, common spellings, and core traditions like Haft-Sin and Sizdah Bedar.`}
           </p>
+          <p className={`text-sm sm:text-base leading-7 ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+            {fa
+              ? 'اگر به دنبال این هستید که نوروز چه زمانی است، تحویل سال به وقت تهران چه ساعتی است، یا تفاوت سال‌های مختلف نوروز را ببینید، از اینجا می‌توانید هم لحظهٔ دقیق اعتدال بهاری را ببینید و هم وارد صفحهٔ سال‌های مختلف شوید.'
+              : 'If you are searching for when Nowruz is, what time Tahvil happens in Tehran, or how different Nowruz years compare, this page gives you the exact equinox timing and quick paths into year-specific pages.'}
+          </p>
         </header>
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -103,6 +110,34 @@ export function SeoContent({ target, year, shamsiYear, focusedYear }: SeoContent
             </p>
           </section>
         </div>
+
+        <section className="rounded-2xl border border-persian-gold/15 bg-white/60 dark:bg-dark-bg/35 px-4 py-4 space-y-3">
+          <h3 className={`text-xl font-semibold text-warm-charcoal dark:text-cream ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+            {fa ? 'مرور سال‌های نوروز' : 'Browse Nowruz by year'}
+          </h3>
+          <p className={`text-sm leading-7 ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+            {fa
+              ? 'برای جستجوهایی مثل «نوروز ۲۰۲۸ چه زمانی است؟» یا «تحویل سال ۲۰۳۰»، می‌توانید وارد صفحهٔ هر سال شوید یا همهٔ سال‌ها را یکجا در مرکز سال‌ها ببینید.'
+              : 'For searches like “When is Nowruz 2028?” or “Tahvil time 2030,” you can jump into each year page directly or open the full years hub.'}
+          </p>
+          <div className={`flex flex-wrap gap-2 ${fa ? 'justify-end' : ''}`}>
+            <a
+              href={buildSitePath(fa ? 'fa' : 'en', null).replace(/\/$/, '') + '/years/'}
+              className={`inline-flex items-center rounded-full border border-persian-gold/30 px-3 py-1.5 text-sm font-semibold text-persian-gold hover:bg-persian-gold/10 transition-colors ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}
+            >
+              {fa ? 'همهٔ سال‌ها' : 'All years'}
+            </a>
+            {years.map((itemYear) => (
+              <a
+                key={itemYear}
+                href={buildSitePath(fa ? 'fa' : 'en', itemYear)}
+                className={`inline-flex items-center rounded-full border border-persian-gold/20 px-3 py-1.5 text-sm text-warm-charcoal/80 dark:text-cream/80 hover:bg-persian-gold/10 transition-colors ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}
+              >
+                {fa ? `نوروز ${toPersianNumerals(itemYear)}` : `Nowruz ${itemYear}`}
+              </a>
+            ))}
+          </div>
+        </section>
 
         <section className="space-y-3">
           <h3 className={`text-xl font-semibold text-warm-charcoal dark:text-cream ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}>

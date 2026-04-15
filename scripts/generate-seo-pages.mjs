@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = new URL('../', import.meta.url);
@@ -44,6 +45,17 @@ function formatDateTime(date, locale, timeZone) {
   }).format(date);
 }
 
+function formatCompactDateTime(date, locale, timeZone) {
+  return new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone,
+  }).format(date);
+}
+
 function getYearTimeInfo(year, fa) {
   if (!year || !equinoxIsoByYear[year]) return null;
 
@@ -59,6 +71,137 @@ function getYearTimeInfo(year, fa) {
       timeZone: 'UTC',
     }).format(date),
   };
+}
+
+function getOgImageKey(fa, year) {
+  return fa ? (year ? `fa-${year}` : 'fa-home') : (year ? `en-${year}` : 'en-home');
+}
+
+function getOgImagePath(fa, year) {
+  return `/og/${getOgImageKey(fa, year)}.png`;
+}
+
+function getOgImageAlt(fa, year) {
+  if (fa) {
+    return year
+      ? `پوستر نوروز ${year} با زمان دقیق تحویل سال به وقت تهران و UTC`
+      : 'پوستر شمارش معکوس نوروز با حال‌وهوای بهاری و زمان تحویل سال';
+  }
+
+  return year
+    ? `Nowruz ${year} social preview card with exact Tahvil time in Tehran and UTC`
+    : 'Nowruz Countdown social preview card with spring motifs and exact Tahvil timing';
+}
+
+function getOgImageUrl(fa, year) {
+  return `${baseUrl}${getOgImagePath(fa, year)}`;
+}
+
+function getOgCardData(fa, year) {
+  const timeInfo = getYearTimeInfo(year, fa);
+
+  if (fa) {
+    return {
+      eyebrow: 'Nowruz • Norouz • نوروز',
+      title: year ? `نوروز ${year}` : 'شمارش معکوس نوروز',
+      subtitle: year ? 'زمان دقیق تحویل سال' : 'زمان دقیق تحویل سال، تهران و UTC',
+      body: year
+        ? [
+            { label: 'تهران', value: timeInfo ? formatCompactDateTime(new Date(timeInfo.iso), 'fa-IR', 'Asia/Tehran') : '' },
+            { label: 'UTC', value: timeInfo ? formatCompactDateTime(new Date(timeInfo.iso), 'fa-IR', 'UTC') : '' },
+            { label: 'سال خورشیدی', value: String(getShamsiYear(year)) },
+          ]
+        : [
+            { label: 'ویژگی', value: 'شمارش زنده تا لحظهٔ اعتدال بهاری' },
+            { label: 'درباره', value: 'هفت‌سین، تحویل سال، تهران و UTC' },
+          ],
+    };
+  }
+
+  return {
+    eyebrow: 'Nowruz • Norouz • نوروز',
+    title: year ? `Nowruz ${year}` : 'Nowruz Countdown',
+    subtitle: year ? 'Exact Tahvil time' : 'Exact Tahvil time, Tehran and UTC',
+    body: year
+      ? [
+          { label: 'Tehran', value: timeInfo ? formatCompactDateTime(new Date(timeInfo.iso), 'en-US', 'Asia/Tehran') : '' },
+          { label: 'UTC', value: timeInfo ? formatCompactDateTime(new Date(timeInfo.iso), 'en-US', 'UTC') : '' },
+          { label: 'Solar Hijri', value: String(getShamsiYear(year)) },
+        ]
+      : [
+          { label: 'Live', value: 'Countdown to the spring equinox' },
+          { label: 'Includes', value: 'Haft-Sin, Tahvil, Tehran time and UTC' },
+        ],
+  };
+}
+
+function renderOgSvg(fa, year) {
+  const card = getOgCardData(fa, year);
+  const bodyBlocks = card.body.map((item, index) => {
+    const x = 120 + index * 320;
+    const width = index === 2 ? 260 : 280;
+
+    return `
+      <g transform="translate(${x}, 370)">
+        <rect width="${width}" height="110" rx="24" fill="#fffaf0" stroke="#c8973e" stroke-width="1.1" opacity="0.96"/>
+        <text x="26" y="38" font-family="${fa ? "'Vazirmatn', 'Arial', sans-serif" : "'Inter', 'Arial', sans-serif"}" font-size="20" font-weight="700" fill="#b08530">${escapeHtml(item.label)}</text>
+        <text x="26" y="74" font-family="${fa ? "'Vazirmatn', 'Arial', sans-serif" : "'Inter', 'Arial', sans-serif"}" font-size="24" font-weight="600" fill="#2c2417">${escapeHtml(item.value)}</text>
+      </g>`;
+  }).join('');
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fefdf8"/>
+      <stop offset="100%" stop-color="#f8f1df"/>
+    </linearGradient>
+    <pattern id="girih" x="0" y="0" width="84" height="84" patternUnits="userSpaceOnUse">
+      <polygon points="42,6 47,18 59,12 51,24 63,28 51,34 59,46 47,40 42,52 37,40 25,46 33,34 21,28 33,24 25,12 37,18" fill="none" stroke="#c8973e" stroke-width="0.6" opacity="0.12"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#girih)"/>
+  <rect x="34" y="34" width="1132" height="562" rx="20" fill="none" stroke="#c8973e" stroke-width="1.2" opacity="0.35"/>
+  <rect x="54" y="54" width="1092" height="522" rx="18" fill="none" stroke="#c8973e" stroke-width="0.7" opacity="0.22"/>
+
+  <circle cx="160" cy="120" r="18" fill="#e8b4b8" opacity="0.35"/>
+  <circle cx="1040" cy="152" r="12" fill="#e8b4b8" opacity="0.3"/>
+  <circle cx="1030" cy="500" r="16" fill="#e8b4b8" opacity="0.22"/>
+  <circle cx="170" cy="510" r="12" fill="#7dad8a" opacity="0.2"/>
+
+  <text x="600" y="120" text-anchor="middle" font-family="'Inter', 'Arial', sans-serif" font-size="22" font-weight="700" fill="#b08530" letter-spacing="3">${escapeHtml(card.eyebrow)}</text>
+  <text x="600" y="220" text-anchor="middle" font-family="${fa ? "'Vazirmatn', 'Arial', sans-serif" : "'Inter', 'Georgia', serif"}" font-size="64" font-weight="800" fill="#2c2417">${escapeHtml(card.title)}</text>
+  <text x="600" y="286" text-anchor="middle" font-family="${fa ? "'Vazirmatn', 'Arial', sans-serif" : "'Inter', 'Arial', sans-serif"}" font-size="30" font-weight="600" fill="#b08530">${escapeHtml(card.subtitle)}</text>
+
+  <line x1="420" y1="315" x2="780" y2="315" stroke="#c8973e" stroke-width="1" opacity="0.28"/>
+  <polygon points="600,308 607,315 600,322 593,315" fill="#c8973e" opacity="0.36"/>
+
+  ${bodyBlocks}
+
+  <text x="600" y="560" text-anchor="middle" font-family="'Inter', 'Arial', sans-serif" font-size="20" font-weight="600" fill="#2c2417" opacity="0.45" letter-spacing="2">norouz.akhave.in</text>
+</svg>`;
+}
+
+async function generateOgImages() {
+  const ogDir = fileURLToPath(new URL('../public/og/', import.meta.url));
+  await fs.mkdir(ogDir, { recursive: true });
+
+  const variants = [
+    { fa: false, year: null },
+    { fa: true, year: null },
+    ...years.flatMap((year) => [
+      { fa: false, year },
+      { fa: true, year },
+    ]),
+  ];
+
+  for (const variant of variants) {
+    const key = getOgImageKey(variant.fa, variant.year);
+    const svgPath = path.join(ogDir, `${key}.svg`);
+    const pngPath = path.join(ogDir, `${key}.png`);
+    await fs.writeFile(svgPath, renderOgSvg(variant.fa, variant.year));
+    execFileSync('sips', ['-s', 'format', 'png', svgPath, '--out', pngPath], { stdio: 'ignore' });
+  }
 }
 
 function getYearNavigation(locale, year, fa) {
@@ -308,6 +451,8 @@ function renderPage(locale, year) {
   const timeInfo = getYearTimeInfo(year, meta.fa);
   const shamsiYear = year ? getShamsiYear(year) : null;
   const yearNav = getYearNavigation(locale, year, meta.fa);
+  const ogImage = getOgImageUrl(meta.fa, year);
+  const ogImageAlt = getOgImageAlt(meta.fa, year);
 
   return `<!doctype html>
 <html lang="${htmlLang}" dir="${htmlDir}">
@@ -332,16 +477,16 @@ function renderPage(locale, year) {
     <meta property="og:locale" content="${meta.fa ? 'fa_IR' : 'en_US'}" />
     <meta property="og:locale:alternate" content="${meta.fa ? 'en_US' : 'fa_IR'}" />
     <meta property="og:site_name" content="Nowruz Countdown" />
-    <meta property="og:image" content="https://norouz.akhave.in/og-image.png" />
+    <meta property="og:image" content="${ogImage}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Nowruz countdown artwork with Persian spring motifs" />
+    <meta property="og:image:alt" content="${escapeHtml(ogImageAlt)}" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeHtml(meta.title)}" />
     <meta name="twitter:description" content="${escapeHtml(meta.description)}" />
-    <meta name="twitter:image" content="https://norouz.akhave.in/og-image.png" />
-    <meta name="twitter:image:alt" content="Nowruz countdown artwork with Persian spring motifs" />
+    <meta name="twitter:image" content="${ogImage}" />
+    <meta name="twitter:image:alt" content="${escapeHtml(ogImageAlt)}" />
 
     <meta name="keywords" content="Nowruz, Norouz, نوروز, Persian New Year, Iranian New Year, Spring Equinox, vernal equinox, countdown, Tahvil, سال تحویل, Haft-Sin, Haft Sin, Sizdah Bedar" />
     <meta name="author" content="Mehrzad Akhavein" />
@@ -490,6 +635,8 @@ async function main() {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sitemapEntries}\n</urlset>\n`;
   await fs.writeFile(fileURLToPath(new URL('../public/sitemap.xml', import.meta.url)), sitemap);
+
+  await generateOgImages();
 }
 
 await main();

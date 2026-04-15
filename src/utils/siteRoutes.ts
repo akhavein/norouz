@@ -1,8 +1,10 @@
 export type SiteLocale = 'en' | 'fa';
+export type SitePageKind = 'home' | 'year' | 'yearsHub';
 
 export interface SiteRouteInfo {
   locale: SiteLocale | null;
   year: number | null;
+  pageKind: SitePageKind;
 }
 
 function cleanSegments(pathname: string): string[] {
@@ -12,16 +14,42 @@ function cleanSegments(pathname: string): string[] {
 export function getSiteRouteInfo(pathname: string = window.location.pathname): SiteRouteInfo {
   const segments = cleanSegments(pathname);
   const locale = segments[0] === 'en' || segments[0] === 'fa' ? segments[0] : null;
-  const yearSegment = locale ? segments[1] : segments[0];
-  const year = yearSegment && /^\d{4}$/.test(yearSegment) ? Number(yearSegment) : null;
-  return { locale, year };
+  const pageSegment = locale ? segments[1] : segments[0];
+
+  if (pageSegment === 'years') {
+    return { locale, year: null, pageKind: 'yearsHub' };
+  }
+
+  const year = pageSegment && /^\d{4}$/.test(pageSegment) ? Number(pageSegment) : null;
+  return { locale, year, pageKind: year ? 'year' : 'home' };
 }
 
-export function buildSitePath(locale: SiteLocale | null, year: number | null): string {
-  const parts = [locale, year ? String(year) : null].filter(Boolean);
+export function buildSitePath(
+  locale: SiteLocale | null,
+  year: number | null,
+  pageKind: SitePageKind = year ? 'year' : 'home'
+): string {
+  if (pageKind === 'yearsHub') {
+    const parts = [locale, 'years'].filter(Boolean);
+    return `/${parts.join('/')}/`;
+  }
+
+  const parts = [locale, pageKind === 'year' && year ? String(year) : null].filter(Boolean);
   return parts.length ? `/${parts.join('/')}/` : '/';
 }
 
-export function buildAbsoluteSiteUrl(locale: SiteLocale | null, year: number | null): string {
-  return `https://norouz.akhave.in${buildSitePath(locale, year)}`;
+export function buildYearsHubPath(locale: SiteLocale | null): string {
+  return buildSitePath(locale, null, 'yearsHub');
+}
+
+export function buildAbsoluteSiteUrl(
+  locale: SiteLocale | null,
+  year: number | null,
+  pageKind: SitePageKind = year ? 'year' : 'home'
+): string {
+  return `https://norouz.akhave.in${buildSitePath(locale, year, pageKind)}`;
+}
+
+export function buildAbsoluteYearsHubUrl(locale: SiteLocale | null): string {
+  return buildAbsoluteSiteUrl(locale, null, 'yearsHub');
 }

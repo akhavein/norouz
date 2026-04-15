@@ -404,16 +404,20 @@ function App() {
   }
 
   const shamsiYear = year ? getShamsiYear(year) : null;
-  const seoYear = routeInfo.year ?? year;
-  const seoTarget = routeInfo.year && EQUINOX_UTC[routeInfo.year]
+  const focusedYear = routeInfo.pageKind === 'year' ? routeInfo.year : null;
+  const focusedTarget = routeInfo.pageKind === 'year' && routeInfo.year && EQUINOX_UTC[routeInfo.year]
     ? new Date(EQUINOX_UTC[routeInfo.year])
     : target;
-  const seoShamsiYear = seoYear ? getShamsiYear(seoYear) : shamsiYear;
+  const focusedShamsiYear = focusedYear ? getShamsiYear(focusedYear) : shamsiYear;
+  const schemaYear = routeInfo.pageKind === 'year' ? routeInfo.year : null;
+  const schemaTarget = routeInfo.pageKind === 'year' && routeInfo.year && EQUINOX_UTC[routeInfo.year]
+    ? new Date(EQUINOX_UTC[routeInfo.year])
+    : null;
 
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center px-4 pt-16 pb-8 relative overflow-hidden ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : "font-['Inter',sans-serif]"}`}>
-      <SeoHead year={seoYear} />
-      <JsonLd phase={phase} target={seoTarget} year={seoYear} />
+      <SeoHead year={schemaYear} />
+      <JsonLd phase={phase} target={schemaTarget} year={schemaYear} />
       {/* Toggles — pinned top-right to avoid title overlap */}
       <div className="fixed top-4 right-4 flex items-center gap-2 z-20" dir="ltr">
         <LanguageToggle />
@@ -486,7 +490,7 @@ function App() {
           {t('blurb')}
         </p>
 
-        <SeoContent target={seoTarget} year={year} shamsiYear={seoShamsiYear} focusedYear={seoYear} />
+        <SeoContent target={focusedTarget} year={year} shamsiYear={focusedShamsiYear} focusedYear={focusedYear} />
       </main>
 
       {shamsiYear && !prefersReducedMotion && target && (() => {

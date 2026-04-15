@@ -17,10 +17,13 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
   const { locale } = useLanguage();
 
   useEffect(() => {
-    if (!target || !year) return;
-
     const route = getSiteRouteInfo();
-    const canonicalUrl = buildAbsoluteSiteUrl(route.locale, route.year ?? year);
+    if (route.pageKind !== 'year' || !target || !year) return;
+
+    const existingStructuredData = document.head.querySelector('script[type="application/ld+json"]');
+    if (existingStructuredData) return;
+
+    const canonicalUrl = buildAbsoluteSiteUrl(route.locale, route.year ?? year, route.pageKind);
 
     const shamsiYear = getShamsiYear(year);
     const celebrationEnd = new Date(getCelebrationEndMs(target.getTime(), CELEBRATION_DAYS)).toISOString();

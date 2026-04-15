@@ -31,8 +31,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const toggleLocale = useCallback(() => {
     setLocale(prev => {
       const next = prev === 'en' ? 'fa' : 'en';
-      const { year } = getSiteRouteInfo();
-      window.location.assign(buildSitePath(next, year));
+      const { year, pageKind } = getSiteRouteInfo();
+      window.location.assign(buildSitePath(next, year, pageKind));
       return next;
     });
   }, []);

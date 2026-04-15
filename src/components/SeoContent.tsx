@@ -1,7 +1,7 @@
 import { useLanguage } from '../i18n/LanguageContext';
 import { formatIRST, formatLocal, formatUTC } from '../utils/dateHelpers';
 import { toPersianNumerals } from '../utils/persian';
-import { buildSitePath } from '../utils/siteRoutes';
+import { buildSitePath, buildYearsHubPath } from '../utils/siteRoutes';
 
 interface SeoContentProps {
   target: Date | null;
@@ -122,7 +122,7 @@ export function SeoContent({ target, year, shamsiYear, focusedYear }: SeoContent
           </p>
           <div className={`flex flex-wrap gap-2 ${fa ? 'justify-end' : ''}`}>
             <a
-              href={buildSitePath(fa ? 'fa' : 'en', null).replace(/\/$/, '') + '/years/'}
+              href={buildYearsHubPath(fa ? 'fa' : 'en')}
               className={`inline-flex items-center rounded-full border border-persian-gold/30 px-3 py-1.5 text-sm font-semibold text-persian-gold hover:bg-persian-gold/10 transition-colors ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}
             >
               {fa ? 'همهٔ سال‌ها' : 'All years'}

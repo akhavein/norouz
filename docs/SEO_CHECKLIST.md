@@ -33,6 +33,7 @@
 - Check the Indexing > Pages report for duplicates, alternate-canonical issues, and excluded pages
 - Monitor Performance for query variants like `nowruz`, `norouz`, `نوروز`, `persian new year`, `tahvil`, and `haft-sin`
 - Use URL Inspection on `/years/` and `/en/years/` first if Google is slow to discover the new hub pages naturally
+- Exact copy-paste queue: `docs/INDEXING_REQUEST_QUEUE.md`
 
 ## Bing Webmaster Tools
 

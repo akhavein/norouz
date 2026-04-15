@@ -25,6 +25,15 @@ function buildUrl(locale, year) {
   return `${baseUrl}${buildPath(locale, year)}`;
 }
 
+function buildYearsHubPath(locale) {
+  const parts = [locale, 'years'].filter(Boolean);
+  return `/${parts.join('/')}/`;
+}
+
+function buildYearsHubUrl(locale) {
+  return `${baseUrl}${buildYearsHubPath(locale)}`;
+}
+
 function escapeHtml(value) {
   return value
     .replace(/&/g, '&amp;')
@@ -229,6 +238,7 @@ function getYearNavigation(locale, year, fa) {
     nextYear,
     previousUrl: previousYear ? buildPath(locale, previousYear) : null,
     nextUrl: nextYear ? buildPath(locale, nextYear) : null,
+    hubUrl: buildYearsHubPath(locale),
     allYears: years.map((itemYear) => ({
       year: itemYear,
       url: buildPath(locale, itemYear),
@@ -236,6 +246,86 @@ function getYearNavigation(locale, year, fa) {
       current: itemYear === year,
     })),
   };
+}
+
+function renderYearsHubPage(locale) {
+  const fa = locale !== 'en';
+  const canonical = buildYearsHubUrl(locale);
+  const xDefault = buildYearsHubUrl(null);
+  const en = buildYearsHubUrl('en');
+  const faUrl = buildYearsHubUrl('fa');
+  const ogImage = getOgImageUrl(fa, null);
+  const ogImageAlt = getOgImageAlt(fa, null);
+
+  const cards = years.map((year) => {
+    const timeInfo = getYearTimeInfo(year, fa);
+    return `
+      <article style="padding:1rem 1.1rem;border:1px solid rgba(176,133,48,.2);border-radius:1rem;background:rgba(255,250,240,.72);">
+        <h2${fa ? ' class="fa"' : ''} style="font-size:1.15rem;margin:0 0 .35rem;">
+          <a href="${buildPath(locale, year)}" style="color:#2b2118;text-decoration:none;">${escapeHtml(fa ? `نوروز ${year}` : `Nowruz ${year}`)}</a>
+        </h2>
+        <p${fa ? ' class="fa"' : ''} style="margin:0 0 .5rem;color:#6e573e;">${escapeHtml(fa ? `سال خورشیدی ${getShamsiYear(year)}` : `Solar Hijri year ${getShamsiYear(year)}`)}</p>
+        <p${fa ? ' class="fa"' : ''} style="margin:0 0 .35rem;">${escapeHtml(fa ? `تهران: ${timeInfo?.tehran ?? ''}` : `Tehran: ${timeInfo?.tehran ?? ''}`)}</p>
+        <p${fa ? ' class="fa"' : ''} style="margin:0 0 .8rem;">${escapeHtml(`UTC: ${timeInfo?.utc ?? ''}`)}</p>
+        <a href="${buildPath(locale, year)}"${fa ? ' class="fa"' : ''} style="color:#b08530;text-decoration:none;font-weight:700;">${escapeHtml(fa ? `مشاهدهٔ نوروز ${year}` : `Open Nowruz ${year}`)}</a>
+      </article>`;
+  }).join('');
+
+  return `<!doctype html>
+<html lang="${fa ? 'fa' : 'en'}" dir="${fa ? 'rtl' : 'ltr'}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${escapeHtml(fa ? 'همهٔ سال‌های نوروز | زمان دقیق تحویل سال' : 'All Nowruz years | exact date and time')}</title>
+    <meta name="description" content="${escapeHtml(fa ? 'فهرست همهٔ صفحه‌های نوروز با زمان دقیق تحویل سال به وقت تهران و UTC، برای مرور و مقایسهٔ سال‌های مختلف.' : 'Browse all available Nowruz year pages with exact Tahvil time in Tehran and UTC, and compare different years.')}" />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+    <link rel="canonical" href="${canonical}" />
+    <link rel="alternate" hreflang="x-default" href="${xDefault}" />
+    <link rel="alternate" hreflang="en" href="${en}" />
+    <link rel="alternate" hreflang="fa" href="${faUrl}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${canonical}" />
+    <meta property="og:title" content="${escapeHtml(fa ? 'همهٔ سال‌های نوروز | زمان دقیق تحویل سال' : 'All Nowruz years | exact date and time')}" />
+    <meta property="og:description" content="${escapeHtml(fa ? 'فهرست همهٔ صفحه‌های نوروز با زمان دقیق تحویل سال به وقت تهران و UTC، برای مرور و مقایسهٔ سال‌های مختلف.' : 'Browse all available Nowruz year pages with exact Tahvil time in Tehran and UTC, and compare different years.')}" />
+    <meta property="og:locale" content="${fa ? 'fa_IR' : 'en_US'}" />
+    <meta property="og:site_name" content="Nowruz Countdown" />
+    <meta property="og:image" content="${ogImage}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="${escapeHtml(ogImageAlt)}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${escapeHtml(fa ? 'همهٔ سال‌های نوروز | زمان دقیق تحویل سال' : 'All Nowruz years | exact date and time')}" />
+    <meta name="twitter:description" content="${escapeHtml(fa ? 'فهرست همهٔ صفحه‌های نوروز با زمان دقیق تحویل سال به وقت تهران و UTC، برای مرور و مقایسهٔ سال‌های مختلف.' : 'Browse all available Nowruz year pages with exact Tahvil time in Tehran and UTC, and compare different years.')}" />
+    <meta name="twitter:image" content="${ogImage}" />
+    <meta name="twitter:image:alt" content="${escapeHtml(ogImageAlt)}" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      body { margin: 0; background: #fefdf8; color: #2b2118; font-family: Inter, system-ui, sans-serif; }
+      .wrap { max-width: 68rem; margin: 0 auto; padding: 3rem 1.25rem 4rem; }
+      .fa { font-family: Vazirmatn, Inter, system-ui, sans-serif; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+      .toplinks { display:flex; flex-wrap:wrap; gap:.75rem; margin:0 0 1.5rem; ${fa ? 'direction:rtl;' : ''} }
+      a { color:#b08530; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="wrap">
+      <div class="toplinks">
+        <a href="${buildPath(locale, null)}"${fa ? ' class="fa"' : ''}>${escapeHtml(fa ? 'صفحهٔ اصلی نوروز' : 'Nowruz homepage')}</a>
+        <a href="${fa ? buildYearsHubPath('en') : buildYearsHubPath('fa')}"${fa ? ' class="fa"' : ''}>${escapeHtml(fa ? 'English years hub' : 'مرکز سال‌های فارسی')}</a>
+      </div>
+      <h1${fa ? ' class="fa"' : ''} style="font-size:2rem;margin:0 0 1rem;">${escapeHtml(fa ? 'همهٔ سال‌های نوروز' : 'All Nowruz years')}</h1>
+      <p${fa ? ' class="fa"' : ''} style="font-size:1.05rem;max-width:56rem;margin:0 0 1.5rem;line-height:1.7;">${escapeHtml(fa ? 'این صفحه همهٔ سال‌های منتشرشدهٔ نوروز را یکجا جمع می‌کند تا بتوانید زمان دقیق تحویل سال را در سال‌های مختلف، هم به وقت تهران و هم به وقت UTC، مرور و مقایسه کنید.' : 'This page gathers all published Nowruz year pages in one place so you can browse and compare exact Tahvil times across years in both Tehran time and UTC.')}</p>
+      <section class="grid">
+        ${cards}
+      </section>
+    </main>
+  </body>
+</html>
+`;
 }
 
 function getFaqs(fa, year) {
@@ -586,6 +676,7 @@ function renderPage(locale, year) {
           <div style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin:0 0 1rem;${meta.fa ? 'direction:rtl;' : ''}">
             ${yearNav.previousUrl ? `<a href="${yearNav.previousUrl}"${meta.fa ? ' class="fa"' : ''} style="color:#b08530;text-decoration:none;font-weight:600;">${escapeHtml(meta.fa ? `← نوروز ${yearNav.previousYear}` : `← Nowruz ${yearNav.previousYear}`)}</a>` : ''}
             ${yearNav.nextUrl ? `<a href="${yearNav.nextUrl}"${meta.fa ? ' class="fa"' : ''} style="color:#b08530;text-decoration:none;font-weight:600;">${escapeHtml(meta.fa ? `نوروز ${yearNav.nextYear} →` : `Nowruz ${yearNav.nextYear} →`)}</a>` : ''}
+            <a href="${yearNav.hubUrl}"${meta.fa ? ' class="fa"' : ''} style="color:#b08530;text-decoration:none;font-weight:600;">${escapeHtml(meta.fa ? 'همهٔ سال‌ها' : 'All years')}</a>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:.5rem;${meta.fa ? 'direction:rtl;' : ''}">
             ${yearNav.allYears.map((item) => item.current
@@ -622,6 +713,9 @@ async function main() {
     { locale: null, year: null, file: 'index.html' },
     { locale: 'en', year: null, file: 'en/index.html' },
     { locale: 'fa', year: null, file: 'fa/index.html' },
+    { locale: null, year: 'years', file: 'years/index.html' },
+    { locale: 'en', year: 'years', file: 'en/years/index.html' },
+    { locale: 'fa', year: 'years', file: 'fa/years/index.html' },
     ...years.flatMap((year) => [
       { locale: null, year, file: `${year}/index.html` },
       { locale: 'en', year, file: `en/${year}/index.html` },
@@ -631,17 +725,21 @@ async function main() {
 
   for (const page of pages) {
     const filePath = new URL(page.file, root);
-    await writePage(filePath, renderPage(page.locale, page.year));
+    if (page.year === 'years') {
+      await writePage(filePath, renderYearsHubPage(page.locale));
+    } else {
+      await writePage(filePath, renderPage(page.locale, page.year));
+    }
   }
 
   const sitemapEntries = pages.map((page) => {
-    const url = buildUrl(page.locale, page.year);
+    const url = page.year === 'years' ? buildYearsHubUrl(page.locale) : buildUrl(page.locale, page.year);
     const alternates = [
-      { href: buildUrl(null, page.year), hreflang: 'x-default' },
-      { href: buildUrl('en', page.year), hreflang: 'en' },
-      { href: buildUrl('fa', page.year), hreflang: 'fa' },
+      { href: page.year === 'years' ? buildYearsHubUrl(null) : buildUrl(null, page.year), hreflang: 'x-default' },
+      { href: page.year === 'years' ? buildYearsHubUrl('en') : buildUrl('en', page.year), hreflang: 'en' },
+      { href: page.year === 'years' ? buildYearsHubUrl('fa') : buildUrl('fa', page.year), hreflang: 'fa' },
     ].map((alt) => `    <xhtml:link rel="alternate" hreflang="${alt.hreflang}" href="${alt.href}" />`).join('\n');
-    return `  <url>\n    <loc>${url}</loc>\n${alternates}\n    <lastmod>${buildTimestamp}</lastmod>\n    <changefreq>${page.year ? 'monthly' : 'weekly'}</changefreq>\n    <priority>${page.locale === null && page.year === null ? '1.0' : page.year ? '0.9' : '0.8'}</priority>\n  </url>`;
+    return `  <url>\n    <loc>${url}</loc>\n${alternates}\n    <lastmod>${buildTimestamp}</lastmod>\n    <changefreq>${page.year && page.year !== 'years' ? 'monthly' : 'weekly'}</changefreq>\n    <priority>${page.locale === null && page.year === null ? '1.0' : page.year && page.year !== 'years' ? '0.9' : '0.8'}</priority>\n  </url>`;
   }).join('\n');
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sitemapEntries}\n</urlset>\n`;

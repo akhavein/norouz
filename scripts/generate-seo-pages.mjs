@@ -554,6 +554,7 @@ function renderPage(locale, year) {
   const yearNav = getYearNavigation(locale, year, meta.fa);
   const ogImage = getOgImageUrl(meta.fa, year);
   const ogImageAlt = getOgImageAlt(meta.fa, year);
+  const yearsHubPath = buildYearsHubPath(locale);
 
   return `<!doctype html>
 <html lang="${htmlLang}" dir="${htmlDir}">
@@ -654,6 +655,18 @@ function renderPage(locale, year) {
             ${meta.searches.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
           </ul>
         </section>
+
+        ${!year ? `
+        <section style="margin-top:1.5rem;">
+          <h2 style="font-size:1.25rem;margin:0 0 .75rem;">${meta.fa ? 'مرور سال‌های نوروز' : 'Browse Nowruz by year'}</h2>
+          <p${meta.fa ? ' class="fa"' : ''} style="margin:0 0 1rem;line-height:1.7;">${escapeHtml(meta.fa
+            ? 'اگر به دنبال پاسخ سریع برای «نوروز چه زمانی است؟» یا «تحویل سال ۲۰۲۸ و ۲۰۳۰» هستید، می‌توانید وارد صفحهٔ سال‌ها شوید و زمان دقیق هر سال را به وقت تهران و UTC ببینید.'
+            : 'If you are searching for quick answers like “When is Nowruz?” or exact Tahvil times for 2028 and 2030, you can open the years hub and compare each year in Tehran time and UTC.')}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:.6rem;${meta.fa ? 'direction:rtl;' : ''}">
+            <a href="${yearsHubPath}"${meta.fa ? ' class="fa"' : ''} style="padding:.45rem .85rem;border-radius:999px;border:1px solid rgba(176,133,48,.28);text-decoration:none;color:#b08530;font-weight:700;background:rgba(176,133,48,.06);">${escapeHtml(meta.fa ? 'همهٔ سال‌ها' : 'All years')}</a>
+            ${years.map((itemYear) => `<a href="${buildPath(locale, itemYear)}"${meta.fa ? ' class="fa"' : ''} style="padding:.45rem .85rem;border-radius:999px;border:1px solid rgba(176,133,48,.18);text-decoration:none;color:#2b2118;">${escapeHtml(meta.fa ? `نوروز ${itemYear}` : `Nowruz ${itemYear}`)}</a>`).join('')}
+          </div>
+        </section>` : ''}
 
         ${timeInfo ? `
         <section style="margin-top:1.5rem;">

@@ -185,6 +185,7 @@ function renderOgSvg(fa, year) {
 async function generateOgImages() {
   const ogDir = fileURLToPath(new URL('../public/og/', import.meta.url));
   await fs.mkdir(ogDir, { recursive: true });
+  const canRasterizePng = process.platform === 'darwin';
 
   const variants = [
     { fa: false, year: null },
@@ -200,7 +201,17 @@ async function generateOgImages() {
     const svgPath = path.join(ogDir, `${key}.svg`);
     const pngPath = path.join(ogDir, `${key}.png`);
     await fs.writeFile(svgPath, renderOgSvg(variant.fa, variant.year));
-    execFileSync('sips', ['-s', 'format', 'png', svgPath, '--out', pngPath], { stdio: 'ignore' });
+
+    if (canRasterizePng) {
+      execFileSync('sips', ['-s', 'format', 'png', svgPath, '--out', pngPath], { stdio: 'ignore' });
+      continue;
+    }
+
+    try {
+      await fs.access(pngPath);
+    } catch {
+      throw new Error(`Missing pre-rendered OG PNG for ${key}. Run the generator on macOS before shipping.`);
+    }
   }
 }
 

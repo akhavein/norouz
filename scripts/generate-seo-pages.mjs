@@ -4,8 +4,15 @@ import { fileURLToPath } from 'node:url';
 
 const root = new URL('../', import.meta.url);
 
-const years = [2026, 2027];
+const years = [2026, 2027, 2028, 2029, 2030];
 const baseUrl = 'https://norouz.akhave.in';
+const equinoxIsoByYear = {
+  2026: '2026-03-20T14:45:53.000Z',
+  2027: '2027-03-20T20:24:18.000Z',
+  2028: '2028-03-20T02:16:32.000Z',
+  2029: '2029-03-20T08:01:03.000Z',
+  2030: '2030-03-20T13:51:15.000Z',
+};
 
 function buildPath(locale, year) {
   const parts = [locale, year ? String(year) : null].filter(Boolean);
@@ -22,6 +29,105 @@ function escapeHtml(value) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+function getShamsiYear(year) {
+  return year - 621;
+}
+
+function getFaqs(fa, year) {
+  const label = year ? String(year) : null;
+  return fa
+    ? [
+        {
+          question: 'نوروز چیست؟',
+          answer: 'نوروز سال نوی ایرانی و آغاز بهار است که در لحظهٔ دقیق اعتدال بهاری آغاز می‌شود و به همین دلیل تحویل سال از نظر فرهنگی و نجومی اهمیت زیادی دارد.',
+        },
+        {
+          question: label ? `نوروز ${label} چه زمانی است؟` : 'نوروز چه زمانی است؟',
+          answer: label
+            ? `این صفحه برای نوروز ${label} ساخته شده و زمان دقیق تحویل سال، ساعت تهران، UTC و توضیحاتی دربارهٔ رسم‌های نوروزی را ارائه می‌کند.`
+            : 'این صفحه شمارش معکوس زنده تا لحظهٔ دقیق نوروز را همراه با توضیحاتی دربارهٔ هفت‌سین و رسم‌های نوروزی نشان می‌دهد.',
+        },
+        {
+          question: 'هفت‌سین چیست؟',
+          answer: 'هفت‌سین سفرهٔ نمادین نوروزی است که با هفت قلم شروع‌شونده با حرف سین چیده می‌شود و مفاهیمی مانند نوزایی، سلامتی، عشق، فراوانی و شکیبایی را بازتاب می‌دهد.',
+        },
+        {
+          question: 'چرا لحظهٔ دقیق تحویل سال مهم است؟',
+          answer: 'نوروز بر اساس لحظهٔ واقعی اعتدال بهاری تعیین می‌شود، نه صرفاً تغییر یک تاریخ قراردادی. به همین دلیل زمان دقیق تحویل سال در فرهنگ ایرانی جایگاهی ویژه دارد.',
+        },
+      ]
+    : [
+        {
+          question: 'What is Nowruz?',
+          answer: 'Nowruz is the Persian New Year and the start of spring, celebrated at the exact astronomical moment of the vernal equinox.',
+        },
+        {
+          question: label ? `When is Nowruz ${label}?` : 'When is Nowruz?',
+          answer: label
+            ? `This page focuses on Nowruz ${label}, with exact Tahvil timing, Tehran time, UTC, and Persian New Year traditions.`
+            : 'This page provides a live countdown to the exact moment of Nowruz, with Tahvil time and core Nowruz traditions.',
+        },
+        {
+          question: 'What is Haft-Sin?',
+          answer: 'Haft-Sin is the traditional Nowruz table arranged with seven symbolic items whose Persian names begin with the letter sin, representing renewal, health, abundance, love, and patience.',
+        },
+        {
+          question: 'Why does the exact equinox matter?',
+          answer: 'Nowruz begins at the real astronomical equinox, not simply at midnight on a fixed date. That exact moment is the Tahvil of the year.',
+        },
+      ];
+}
+
+function getStructuredData({ canonical, locale, year, fa }) {
+  const faqs = getFaqs(fa, year);
+  const graph = [
+    {
+      '@type': 'WebSite',
+      name: 'Nowruz Countdown',
+      alternateName: ['Norouz Countdown', 'نوروز'],
+      url: canonical,
+      inLanguage: fa ? ['fa', 'en'] : ['en', 'fa'],
+      description: fa
+        ? 'شمارش معکوس نوروز با زمان دقیق تحویل سال، زمان تهران، UTC و معرفی رسم‌های نوروزی.'
+        : 'A live countdown to the exact moment of Nowruz, with precise Tahvil time, Tehran time, UTC, and core Nowruz traditions.',
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: fa ? 'fa' : 'en',
+      mainEntity: faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
+    },
+  ];
+
+  if (year && equinoxIsoByYear[year]) {
+    graph.push({
+      '@type': 'Event',
+      name: `Nowruz ${year} — Persian New Year`,
+      alternateName: [`Norouz ${year}`, `نوروز ${getShamsiYear(year)}`],
+      startDate: equinoxIsoByYear[year],
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+      inLanguage: fa ? 'fa' : 'en',
+      image: 'https://norouz.akhave.in/og-image.png',
+      description: fa
+        ? `لحظهٔ دقیق اعتدال بهاری و آغاز سال نوی ایرانی برای نوروز ${year}.`
+        : `The exact astronomical moment of the vernal equinox, marking the beginning of the Persian New Year, Nowruz ${year}.`,
+      location: {
+        '@type': 'VirtualLocation',
+        url: canonical,
+      },
+    });
+  }
+
+  return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
 }
 
 function getPageMeta(locale, year, explicitFaPath = false) {
@@ -69,7 +175,6 @@ function getPageMeta(locale, year, explicitFaPath = false) {
 }
 
 function renderPage(locale, year) {
-  const routePath = buildPath(locale, year);
   const canonical = buildUrl(locale, year);
   const xDefault = buildUrl(null, year);
   const en = buildUrl('en', year);
@@ -77,6 +182,8 @@ function renderPage(locale, year) {
   const meta = getPageMeta(locale, year, locale === 'fa');
   const htmlLang = meta.fa ? 'fa' : 'en';
   const htmlDir = meta.fa ? 'rtl' : 'ltr';
+  const structuredData = getStructuredData({ canonical, locale, year, fa: meta.fa });
+  const faqs = getFaqs(meta.fa, year);
 
   return `<!doctype html>
 <html lang="${htmlLang}" dir="${htmlDir}">
@@ -114,6 +221,7 @@ function renderPage(locale, year) {
     <meta name="author" content="Mehrzad Akhavein" />
     <meta name="theme-color" content="#fefdf8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1a1612" media="(prefers-color-scheme: dark)" />
+    <meta property="article:modified_time" content="${new Date().toISOString()}" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.json" />
@@ -155,6 +263,7 @@ function renderPage(locale, year) {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet" />
+    <script type="application/ld+json">${escapeHtml(structuredData)}</script>
   </head>
   <body>
     <div id="root">
@@ -172,6 +281,15 @@ function renderPage(locale, year) {
           <ul${meta.fa ? ' class="fa"' : ''} style="margin:0;padding-inline-start:1.25rem;">
             ${meta.searches.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
           </ul>
+        </section>
+
+        <section style="margin-top:1.5rem;">
+          <h2 style="font-size:1.25rem;margin:0 0 .75rem;">${meta.fa ? 'سوال‌های رایج دربارهٔ نوروز' : 'Frequently asked questions about Nowruz'}</h2>
+          ${faqs.map((faq) => `
+          <details style="margin:0 0 .75rem;padding:.75rem 1rem;border:1px solid rgba(176,133,48,.18);border-radius:1rem;">
+            <summary${meta.fa ? ' class="fa"' : ''} style="cursor:pointer;font-weight:600;color:#b08530;">${escapeHtml(faq.question)}</summary>
+            <p${meta.fa ? ' class="fa"' : ''} style="margin:.75rem 0 0;">${escapeHtml(faq.answer)}</p>
+          </details>`).join('')}
         </section>
       </main>
     </div>
@@ -207,7 +325,7 @@ async function main() {
 
   const sitemapEntries = pages.map((page) => {
     const url = buildUrl(page.locale, page.year);
-    return `  <url>\n    <loc>${url}</loc>\n    <changefreq>${page.year ? 'monthly' : 'weekly'}</changefreq>\n    <priority>${page.locale === null && page.year === null ? '1.0' : page.year ? '0.9' : '0.8'}</priority>\n  </url>`;
+    return `  <url>\n    <loc>${url}</loc>\n    <lastmod>${new Date().toISOString()}</lastmod>\n    <changefreq>${page.year ? 'monthly' : 'weekly'}</changefreq>\n    <priority>${page.locale === null && page.year === null ? '1.0' : page.year ? '0.9' : '0.8'}</priority>\n  </url>`;
   }).join('\n');
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n`;

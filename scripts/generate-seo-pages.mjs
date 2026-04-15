@@ -271,6 +271,55 @@ function renderYearsHubPage(locale) {
   const faUrl = buildYearsHubUrl('fa');
   const ogImage = getOgImageUrl(fa, null);
   const ogImageAlt = getOgImageAlt(fa, null);
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        url: canonical,
+        inLanguage: fa ? 'fa' : 'en',
+        name: fa ? 'همهٔ سال‌های نوروز' : 'All Nowruz years',
+        about: ['Nowruz', 'Norouz', 'نوروز', 'Persian New Year', 'Spring Equinox'],
+      },
+      {
+        '@type': 'CollectionPage',
+        url: canonical,
+        inLanguage: fa ? 'fa' : 'en',
+        name: fa ? 'مرکز سال‌های نوروز' : 'Nowruz years hub',
+        description: fa
+          ? 'فهرست همهٔ صفحه‌های نوروز با زمان دقیق تحویل سال برای سال‌های مختلف.'
+          : 'A directory of Nowruz year pages with exact Tahvil time for multiple years.',
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: fa ? 'نوروز' : 'Nowruz',
+            item: buildUrl(locale, null),
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: fa ? 'همهٔ سال‌ها' : 'All years',
+            item: canonical,
+          },
+        ],
+      },
+      {
+        '@type': 'ItemList',
+        name: fa ? 'فهرست سال‌های نوروز' : 'List of Nowruz years',
+        numberOfItems: years.length,
+        itemListElement: years.map((year, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          url: buildUrl(locale, year),
+          name: fa ? `نوروز ${year}` : `Nowruz ${year}`,
+        })),
+      },
+    ],
+  };
 
   const cards = years.map((year) => {
     const timeInfo = getYearTimeInfo(year, fa);
@@ -325,6 +374,7 @@ function renderYearsHubPage(locale) {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet" />
+    <script type="application/ld+json">${escapeHtml(JSON.stringify(jsonLd))}</script>
   </head>
   <body>
     <main class="wrap">

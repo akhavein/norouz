@@ -6,6 +6,7 @@ const root = new URL('../', import.meta.url);
 
 const years = [2026, 2027, 2028, 2029, 2030];
 const baseUrl = 'https://norouz.akhave.in';
+const buildTimestamp = new Date().toISOString();
 const equinoxIsoByYear = {
   2026: '2026-03-20T14:45:53.000Z',
   2027: '2027-03-20T20:24:18.000Z',
@@ -35,8 +36,34 @@ function getShamsiYear(year) {
   return year - 621;
 }
 
+function formatDateTime(date, locale, timeZone) {
+  return new Intl.DateTimeFormat(locale, {
+    dateStyle: 'full',
+    timeStyle: 'long',
+    timeZone,
+  }).format(date);
+}
+
+function getYearTimeInfo(year, fa) {
+  if (!year || !equinoxIsoByYear[year]) return null;
+
+  const date = new Date(equinoxIsoByYear[year]);
+  return {
+    iso: date.toISOString(),
+    utc: formatDateTime(date, fa ? 'fa-IR' : 'en-US', 'UTC'),
+    tehran: formatDateTime(date, fa ? 'fa-IR' : 'en-US', 'Asia/Tehran'),
+    dateOnly: new Intl.DateTimeFormat(fa ? 'fa-IR' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'UTC',
+    }).format(date),
+  };
+}
+
 function getFaqs(fa, year) {
   const label = year ? String(year) : null;
+  const timeInfo = getYearTimeInfo(year, fa);
   return fa
     ? [
         {
@@ -46,8 +73,14 @@ function getFaqs(fa, year) {
         {
           question: label ? `نوروز ${label} چه زمانی است؟` : 'نوروز چه زمانی است؟',
           answer: label
-            ? `این صفحه برای نوروز ${label} ساخته شده و زمان دقیق تحویل سال، ساعت تهران، UTC و توضیحاتی دربارهٔ رسم‌های نوروزی را ارائه می‌کند.`
+            ? `این صفحه برای نوروز ${label} ساخته شده و زمان دقیق تحویل سال را نشان می‌دهد. زمان UTC برابر ${timeInfo?.utc ?? equinoxIsoByYear[year]} و زمان تهران برابر ${timeInfo?.tehran ?? equinoxIsoByYear[year]} است.`
             : 'این صفحه شمارش معکوس زنده تا لحظهٔ دقیق نوروز را همراه با توضیحاتی دربارهٔ هفت‌سین و رسم‌های نوروزی نشان می‌دهد.',
+        },
+        {
+          question: label ? `تحویل سال ${label} به وقت تهران چه ساعتی است؟` : 'تحویل سال به وقت تهران چه ساعتی است؟',
+          answer: label
+            ? `زمان تحویل سال ${label} به وقت تهران ${timeInfo?.tehran ?? equinoxIsoByYear[year]} است.`
+            : 'این صفحه زمان تحویل سال را هم به وقت تهران و هم به وقت UTC نشان می‌دهد.',
         },
         {
           question: 'هفت‌سین چیست؟',
@@ -66,8 +99,14 @@ function getFaqs(fa, year) {
         {
           question: label ? `When is Nowruz ${label}?` : 'When is Nowruz?',
           answer: label
-            ? `This page focuses on Nowruz ${label}, with exact Tahvil timing, Tehran time, UTC, and Persian New Year traditions.`
+            ? `This page focuses on Nowruz ${label}, which falls on ${timeInfo?.dateOnly ?? year}, with exact Tahvil timing in UTC (${timeInfo?.utc ?? equinoxIsoByYear[year]}) and Tehran time (${timeInfo?.tehran ?? equinoxIsoByYear[year]}).`
             : 'This page provides a live countdown to the exact moment of Nowruz, with Tahvil time and core Nowruz traditions.',
+        },
+        {
+          question: label ? `What time is Nowruz ${label} in Tehran?` : 'What time is Nowruz in Tehran?',
+          answer: label
+            ? `Nowruz ${label} begins at ${timeInfo?.tehran ?? equinoxIsoByYear[year]} in Tehran time.`
+            : 'This page includes the exact Tahvil time in Tehran time as well as UTC.',
         },
         {
           question: 'What is Haft-Sin?',
@@ -82,7 +121,18 @@ function getFaqs(fa, year) {
 
 function getStructuredData({ canonical, locale, year, fa }) {
   const faqs = getFaqs(fa, year);
+  const timeInfo = getYearTimeInfo(year, fa);
   const graph = [
+    {
+      '@type': 'WebPage',
+      url: canonical,
+      inLanguage: fa ? 'fa' : 'en',
+      name: fa
+        ? year ? `نوروز ${year} | زمان دقیق تحویل سال` : 'نوروز | شمارش معکوس و زمان دقیق تحویل سال'
+        : year ? `Nowruz ${year} | Exact date and time` : 'Nowruz | Countdown and exact equinox time',
+      dateModified: buildTimestamp,
+      about: ['Nowruz', 'Norouz', 'نوروز', 'Persian New Year', 'Spring Equinox'],
+    },
     {
       '@type': 'WebSite',
       name: 'Nowruz Countdown',
@@ -124,7 +174,34 @@ function getStructuredData({ canonical, locale, year, fa }) {
         '@type': 'VirtualLocation',
         url: canonical,
       },
+      organizer: {
+        '@type': 'Person',
+        name: 'Mehrzad Akhavein',
+      },
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+        url: canonical,
+      },
     });
+
+    if (timeInfo) {
+      graph.push({
+        '@type': 'Dataset',
+        name: fa ? `زمان‌های نوروز ${year}` : `Nowruz ${year} times`,
+        description: fa
+          ? `زمان دقیق نوروز ${year} به وقت UTC و تهران.`
+          : `Exact Nowruz ${year} timing in UTC and Tehran time.`,
+        url: canonical,
+        dateModified: buildTimestamp,
+        variableMeasured: [
+          { '@type': 'PropertyValue', name: 'UTC time', value: timeInfo.utc },
+          { '@type': 'PropertyValue', name: 'Tehran time', value: timeInfo.tehran },
+        ],
+      });
+    }
   }
 
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
@@ -137,18 +214,18 @@ function getPageMeta(locale, year, explicitFaPath = false) {
 
   const title = fa
     ? isYearPage
-      ? `نوروز ${yearLabel} | شمارش معکوس Nowruz و Norouz`
+      ? `نوروز ${yearLabel} | زمان دقیق تحویل سال و شمارش معکوس Nowruz`
       : 'Nowruz Countdown | Norouz, نوروز, Persian New Year & Spring Equinox'
     : isYearPage
-      ? `Nowruz ${yearLabel} Countdown | Norouz, نوروز, Persian New Year`
+      ? `Nowruz ${yearLabel} Date & Time | Exact Tahvil in Tehran and UTC`
       : 'Nowruz Countdown | Norouz, نوروز, Persian New Year & Spring Equinox';
 
   const description = fa
     ? isYearPage
-      ? `زمان دقیق تحویل سال و اطلاعات نوروز ${yearLabel}، با ساعت تهران، UTC، و توضیحاتی دربارهٔ هفت‌سین و رسم‌های نوروزی.`
+      ? `زمان دقیق تحویل سال نوروز ${yearLabel} با تاریخ و ساعت دقیق به وقت تهران و UTC، به همراه توضیحات هفت‌سین و رسم‌های نوروزی.`
       : 'شمارش معکوس زنده تا لحظهٔ دقیق نوروز، با زمان تحویل سال در ساعت محلی شما، تهران و UTC، به همراه هفت‌سین و رسم‌های نوروزی.'
     : isYearPage
-      ? `Find the exact time of Nowruz ${yearLabel}, with Tahvil time in Tehran time, UTC, and your local time, plus Haft-Sin and Persian New Year traditions.`
+      ? `Find the exact date and time of Nowruz ${yearLabel}, with Tahvil time in Tehran and UTC, plus Haft-Sin and Persian New Year traditions.`
       : 'Live countdown to the exact moment of Nowruz (Norouz, نوروز), the Persian New Year and spring equinox. See the precise Tahvil time in your local time, Tehran time, and UTC, plus Haft-Sin and Nowruz traditions.';
 
   const heading = fa
@@ -157,10 +234,10 @@ function getPageMeta(locale, year, explicitFaPath = false) {
 
   const intro = fa
     ? isYearPage
-      ? `در این صفحه زمان و اطلاعات سئویی مربوط به نوروز ${yearLabel} را می‌بینید، از جمله تحویل سال، Nowruz، Norouz و توضیحی کوتاه دربارهٔ رسم‌های سال نوی ایرانی.`
+      ? `در این صفحه زمان دقیق نوروز ${yearLabel} و لحظهٔ تحویل سال را می‌بینید، همراه با ساعت تهران، UTC، عبارت‌های رایج جستجو مثل Nowruz و Norouz، و توضیحی کوتاه دربارهٔ سال نوی ایرانی.`
       : 'نوروز جشن سال نو ایرانی و آغاز بهار است که در لحظهٔ دقیق اعتدال بهاری، یا همان لحظهٔ تحویل سال، جشن گرفته می‌شود.'
     : isYearPage
-      ? `This page is focused on Nowruz ${yearLabel}, including the exact Tahvil timing, common spellings like Norouz and نوروز, and key Persian New Year traditions.`
+      ? `This page is focused on Nowruz ${yearLabel}, including the exact date and Tahvil time, common spellings like Norouz and نوروز, and key Persian New Year traditions.`
       : 'Live countdown to the exact moment of Nowruz (also spelled Norouz, نوروز), the Persian New Year celebrated at the spring equinox.';
 
   const what = fa
@@ -184,6 +261,8 @@ function renderPage(locale, year) {
   const htmlDir = meta.fa ? 'rtl' : 'ltr';
   const structuredData = getStructuredData({ canonical, locale, year, fa: meta.fa });
   const faqs = getFaqs(meta.fa, year);
+  const timeInfo = getYearTimeInfo(year, meta.fa);
+  const shamsiYear = year ? getShamsiYear(year) : null;
 
   return `<!doctype html>
 <html lang="${htmlLang}" dir="${htmlDir}">
@@ -221,7 +300,7 @@ function renderPage(locale, year) {
     <meta name="author" content="Mehrzad Akhavein" />
     <meta name="theme-color" content="#fefdf8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1a1612" media="(prefers-color-scheme: dark)" />
-    <meta property="article:modified_time" content="${new Date().toISOString()}" />
+    <meta property="article:modified_time" content="${buildTimestamp}" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.json" />
@@ -283,6 +362,21 @@ function renderPage(locale, year) {
           </ul>
         </section>
 
+        ${timeInfo ? `
+        <section style="margin-top:1.5rem;">
+          <h2 style="font-size:1.25rem;margin:0 0 .75rem;">${meta.fa ? `زمان دقیق نوروز ${year}` : `Exact time for Nowruz ${year}`}</h2>
+          <div style="display:grid;grid-template-columns:minmax(9rem,14rem) 1fr;gap:.5rem 1rem;${meta.fa ? 'direction:rtl;' : ''}">
+            <div${meta.fa ? ' class="fa"' : ''} style="font-weight:600;">${meta.fa ? 'تاریخ میلادی' : 'Gregorian date'}</div>
+            <div${meta.fa ? ' class="fa"' : ''}>${escapeHtml(timeInfo.dateOnly)}</div>
+            <div${meta.fa ? ' class="fa"' : ''} style="font-weight:600;">UTC</div>
+            <div><time dateTime="${timeInfo.iso}">${escapeHtml(timeInfo.utc)}</time></div>
+            <div${meta.fa ? ' class="fa"' : ''} style="font-weight:600;">${meta.fa ? 'زمان تهران' : 'Tehran time'}</div>
+            <div><time dateTime="${timeInfo.iso}">${escapeHtml(timeInfo.tehran)}</time></div>
+            <div${meta.fa ? ' class="fa"' : ''} style="font-weight:600;">${meta.fa ? 'سال خورشیدی' : 'Solar Hijri year'}</div>
+            <div${meta.fa ? ' class="fa"' : ''}>${escapeHtml(String(shamsiYear))}</div>
+          </div>
+        </section>` : ''}
+
         <section style="margin-top:1.5rem;">
           <h2 style="font-size:1.25rem;margin:0 0 .75rem;">${meta.fa ? 'سوال‌های رایج دربارهٔ نوروز' : 'Frequently asked questions about Nowruz'}</h2>
           ${faqs.map((faq) => `
@@ -325,10 +419,15 @@ async function main() {
 
   const sitemapEntries = pages.map((page) => {
     const url = buildUrl(page.locale, page.year);
-    return `  <url>\n    <loc>${url}</loc>\n    <lastmod>${new Date().toISOString()}</lastmod>\n    <changefreq>${page.year ? 'monthly' : 'weekly'}</changefreq>\n    <priority>${page.locale === null && page.year === null ? '1.0' : page.year ? '0.9' : '0.8'}</priority>\n  </url>`;
+    const alternates = [
+      { href: buildUrl(null, page.year), hreflang: 'x-default' },
+      { href: buildUrl('en', page.year), hreflang: 'en' },
+      { href: buildUrl('fa', page.year), hreflang: 'fa' },
+    ].map((alt) => `    <xhtml:link rel="alternate" hreflang="${alt.hreflang}" href="${alt.href}" />`).join('\n');
+    return `  <url>\n    <loc>${url}</loc>\n${alternates}\n    <lastmod>${buildTimestamp}</lastmod>\n    <changefreq>${page.year ? 'monthly' : 'weekly'}</changefreq>\n    <priority>${page.locale === null && page.year === null ? '1.0' : page.year ? '0.9' : '0.8'}</priority>\n  </url>`;
   }).join('\n');
 
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n`;
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${sitemapEntries}\n</urlset>\n`;
   await fs.writeFile(fileURLToPath(new URL('../public/sitemap.xml', import.meta.url)), sitemap);
 }
 

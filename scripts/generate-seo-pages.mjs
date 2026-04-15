@@ -61,6 +61,29 @@ function getYearTimeInfo(year, fa) {
   };
 }
 
+function getYearNavigation(locale, year, fa) {
+  if (!year) return null;
+
+  const index = years.indexOf(year);
+  if (index === -1) return null;
+
+  const previousYear = index > 0 ? years[index - 1] : null;
+  const nextYear = index < years.length - 1 ? years[index + 1] : null;
+
+  return {
+    previousYear,
+    nextYear,
+    previousUrl: previousYear ? buildPath(locale, previousYear) : null,
+    nextUrl: nextYear ? buildPath(locale, nextYear) : null,
+    allYears: years.map((itemYear) => ({
+      year: itemYear,
+      url: buildPath(locale, itemYear),
+      label: fa ? `نوروز ${itemYear}` : `Nowruz ${itemYear}`,
+      current: itemYear === year,
+    })),
+  };
+}
+
 function getFaqs(fa, year) {
   const label = year ? String(year) : null;
   const timeInfo = getYearTimeInfo(year, fa);
@@ -122,6 +145,7 @@ function getFaqs(fa, year) {
 function getStructuredData({ canonical, locale, year, fa }) {
   const faqs = getFaqs(fa, year);
   const timeInfo = getYearTimeInfo(year, fa);
+  const yearNav = getYearNavigation(locale, year, fa);
   const graph = [
     {
       '@type': 'WebPage',
@@ -156,6 +180,26 @@ function getStructuredData({ canonical, locale, year, fa }) {
       })),
     },
   ];
+
+  if (yearNav) {
+    graph.push({
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: fa ? 'نوروز' : 'Nowruz',
+          item: buildUrl(locale, null),
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: fa ? `نوروز ${year}` : `Nowruz ${year}`,
+          item: canonical,
+        },
+      ],
+    });
+  }
 
   if (year && equinoxIsoByYear[year]) {
     graph.push({
@@ -263,6 +307,7 @@ function renderPage(locale, year) {
   const faqs = getFaqs(meta.fa, year);
   const timeInfo = getYearTimeInfo(year, meta.fa);
   const shamsiYear = year ? getShamsiYear(year) : null;
+  const yearNav = getYearNavigation(locale, year, meta.fa);
 
   return `<!doctype html>
 <html lang="${htmlLang}" dir="${htmlDir}">
@@ -277,6 +322,8 @@ function renderPage(locale, year) {
     <link rel="alternate" hreflang="x-default" href="${xDefault}" />
     <link rel="alternate" hreflang="en" href="${en}" />
     <link rel="alternate" hreflang="fa" href="${fa}" />
+    ${yearNav?.previousUrl ? `<link rel="prev" href="${buildUrl(locale, yearNav.previousYear)}" />` : ''}
+    ${yearNav?.nextUrl ? `<link rel="next" href="${buildUrl(locale, yearNav.nextYear)}" />` : ''}
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${canonical}" />
@@ -374,6 +421,20 @@ function renderPage(locale, year) {
             <div><time dateTime="${timeInfo.iso}">${escapeHtml(timeInfo.tehran)}</time></div>
             <div${meta.fa ? ' class="fa"' : ''} style="font-weight:600;">${meta.fa ? 'سال خورشیدی' : 'Solar Hijri year'}</div>
             <div${meta.fa ? ' class="fa"' : ''}>${escapeHtml(String(shamsiYear))}</div>
+          </div>
+        </section>` : ''}
+
+        ${yearNav ? `
+        <section style="margin-top:1.5rem;">
+          <h2 style="font-size:1.25rem;margin:0 0 .75rem;">${meta.fa ? 'جابه‌جایی بین سال‌های نوروز' : 'Browse other Nowruz years'}</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin:0 0 1rem;${meta.fa ? 'direction:rtl;' : ''}">
+            ${yearNav.previousUrl ? `<a href="${yearNav.previousUrl}"${meta.fa ? ' class="fa"' : ''} style="color:#b08530;text-decoration:none;font-weight:600;">${escapeHtml(meta.fa ? `← نوروز ${yearNav.previousYear}` : `← Nowruz ${yearNav.previousYear}`)}</a>` : ''}
+            ${yearNav.nextUrl ? `<a href="${yearNav.nextUrl}"${meta.fa ? ' class="fa"' : ''} style="color:#b08530;text-decoration:none;font-weight:600;">${escapeHtml(meta.fa ? `نوروز ${yearNav.nextYear} →` : `Nowruz ${yearNav.nextYear} →`)}</a>` : ''}
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;${meta.fa ? 'direction:rtl;' : ''}">
+            ${yearNav.allYears.map((item) => item.current
+              ? `<span${meta.fa ? ' class="fa"' : ''} style="padding:.4rem .75rem;border-radius:999px;background:rgba(176,133,48,.14);border:1px solid rgba(176,133,48,.22);font-weight:600;">${escapeHtml(item.label)}</span>`
+              : `<a href="${item.url}"${meta.fa ? ' class="fa"' : ''} style="padding:.4rem .75rem;border-radius:999px;border:1px solid rgba(176,133,48,.22);text-decoration:none;color:#2b2118;background:transparent;">${escapeHtml(item.label)}</a>`).join('')}
           </div>
         </section>` : ''}
 

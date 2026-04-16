@@ -42,6 +42,10 @@ export function buildYearsHubPath(locale: SiteLocale | null): string {
   return buildSitePath(locale, null, 'yearsHub');
 }
 
+export function resolveContentRouteLocale(routeLocale: SiteLocale | null, uiLocale: SiteLocale): SiteLocale | null {
+  return routeLocale ?? (uiLocale === 'en' ? 'en' : null);
+}
+
 export function buildAbsoluteSiteUrl(
   locale: SiteLocale | null,
   year: number | null,

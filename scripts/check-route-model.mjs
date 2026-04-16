@@ -69,11 +69,16 @@ async function main() {
     assertEqual(mod.buildSitePath('fa', null, 'home'), '/fa/', 'buildSitePath home');
     assertEqual(mod.buildYearsHubPath('en'), '/en/years/', 'buildYearsHubPath en');
     assertEqual(mod.buildAbsoluteYearsHubUrl('fa'), 'https://norouz.akhave.in/fa/years/', 'buildAbsoluteYearsHubUrl fa');
+    assertEqual(mod.resolveContentRouteLocale(null, 'fa'), null, 'x-default Farsi content links stay x-default');
+    assertEqual(mod.resolveContentRouteLocale(null, 'en'), 'en', 'x-default English content links localize to en');
+    assertEqual(mod.resolveContentRouteLocale('fa', 'fa'), 'fa', 'localized Farsi route stays fa');
+    assertEqual(mod.resolveContentRouteLocale('en', 'en'), 'en', 'localized English route stays en');
 
     console.log('Route model check passed:');
     console.log('- years hub routes are classified correctly');
     console.log('- home/year/years-hub paths build correctly');
     console.log('- locale switching targets for years hubs stay on years hubs');
+    console.log('- x-default content links preserve x-default for Farsi and localize for English');
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

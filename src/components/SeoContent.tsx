@@ -1,7 +1,7 @@
 import { useLanguage } from '../i18n/LanguageContext';
 import { formatIRST, formatLocal, formatUTC } from '../utils/dateHelpers';
 import { toPersianNumerals } from '../utils/persian';
-import { buildSitePath, buildYearsHubPath } from '../utils/siteRoutes';
+import { buildSitePath, buildYearsHubPath, getSiteRouteInfo, resolveContentRouteLocale } from '../utils/siteRoutes';
 
 interface SeoContentProps {
   target: Date | null;
@@ -12,8 +12,10 @@ interface SeoContentProps {
 
 export function SeoContent({ target, year, shamsiYear, focusedYear }: SeoContentProps) {
   const { locale } = useLanguage();
+  const routeInfo = getSiteRouteInfo();
 
   const fa = locale === 'fa';
+  const contentRouteLocale = resolveContentRouteLocale(routeInfo.locale, locale);
   const effectiveYear = focusedYear ?? year;
   const gregorianYearLabel = effectiveYear ? (fa ? toPersianNumerals(effectiveYear) : String(effectiveYear)) : '';
   const shamsiYearLabel = shamsiYear ? (fa ? toPersianNumerals(shamsiYear) : String(shamsiYear)) : '';
@@ -122,7 +124,7 @@ export function SeoContent({ target, year, shamsiYear, focusedYear }: SeoContent
           </p>
           <div className={`flex flex-wrap gap-2 ${fa ? 'justify-end' : ''}`}>
             <a
-              href={buildYearsHubPath(fa ? 'fa' : 'en')}
+              href={buildYearsHubPath(contentRouteLocale)}
               className={`inline-flex items-center rounded-full border border-persian-gold/30 px-3 py-1.5 text-sm font-semibold text-persian-gold hover:bg-persian-gold/10 transition-colors ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}
             >
               {fa ? 'همهٔ سال‌ها' : 'All years'}
@@ -130,7 +132,7 @@ export function SeoContent({ target, year, shamsiYear, focusedYear }: SeoContent
             {years.map((itemYear) => (
               <a
                 key={itemYear}
-                href={buildSitePath(fa ? 'fa' : 'en', itemYear)}
+                href={buildSitePath(contentRouteLocale, itemYear)}
                 className={`inline-flex items-center rounded-full border border-persian-gold/20 px-3 py-1.5 text-sm text-warm-charcoal/80 dark:text-cream/80 hover:bg-persian-gold/10 transition-colors ${fa ? "font-['Vazirmatn',sans-serif]" : ''}`}
               >
                 {fa ? `نوروز ${toPersianNumerals(itemYear)}` : `Nowruz ${itemYear}`}

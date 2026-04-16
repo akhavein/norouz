@@ -101,7 +101,9 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
           eventStatus,
           eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
           inLanguage: locale,
-          image: 'https://norouz.akhave.in/og-image.png',
+          image: locale === 'fa'
+            ? `https://norouz.akhave.in/og/fa-${year}.png`
+            : `https://norouz.akhave.in/og/en-${year}.png`,
           description: locale === 'fa'
             ? `لحظهٔ دقیق اعتدال بهاری و آغاز سال نوی ایرانی (نوروز ${toPersianNumerals(shamsiYear)}).`
             : `The exact astronomical moment of the vernal equinox, marking the beginning of the Persian New Year, Nowruz ${year}.`,

@@ -551,7 +551,7 @@ function getStructuredData({ canonical, locale, year, fa }) {
       eventStatus: 'https://schema.org/EventScheduled',
       eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
       inLanguage: fa ? 'fa' : 'en',
-      image: 'https://norouz.akhave.in/og-image.png',
+      image: getOgImageUrl(fa, year, 'year'),
       description: fa
         ? `لحظهٔ دقیق اعتدال بهاری و آغاز سال نوی ایرانی برای نوروز ${year}.`
         : `The exact astronomical moment of the vernal equinox, marking the beginning of the Persian New Year, Nowruz ${year}.`,

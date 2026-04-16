@@ -42,7 +42,11 @@ async function main() {
   assertIncludes(enYear, 'rel="prev" href="https://norouz.akhave.in/en/2027/"', 'English prev link');
   assertIncludes(enYear, 'rel="next" href="https://norouz.akhave.in/en/2029/"', 'English next link');
   assertIncludes(enYear, 'https://norouz.akhave.in/og/en-2028.png', 'English year OG image');
-  checks.push('en year page nav + OG');
+  assertIncludes(enYear, '&quot;image&quot;:&quot;https://norouz.akhave.in/og/en-2028.png&quot;', 'English year structured-data image');
+  if (enYear.includes('https://norouz.akhave.in/og-image.png')) {
+    throw new Error('Found stale generic og-image.png reference in English year page');
+  }
+  checks.push('en year page nav + OG + structured data image');
 
   const yearsHub = await read('en/years/index.html');
   assertIncludes(yearsHub, 'CollectionPage', 'years hub CollectionPage schema');

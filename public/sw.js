@@ -10,7 +10,6 @@ const ESSENTIAL_URLS = [
 // Optional assets — cached best-effort, won't block SW install
 const OPTIONAL_URLS = [
   '/tahvil.mp3',
-  '/og-image.png',
 ];
 
 self.addEventListener('install', (event) => {

@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "seo:check": "npm run build && node scripts/check-seo-build.mjs"
+    "routes:check": "node scripts/check-route-model.mjs",
+    "seo:check": "npm run build && node scripts/check-seo-build.mjs && npm run routes:check"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",

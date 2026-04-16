@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useLanguage } from '../i18n/LanguageContext';
 import { buildAbsoluteSiteUrl, buildAbsoluteYearsHubUrl, getSiteRouteInfo, resolveSeoLocale } from '../utils/siteRoutes';
 
 interface SeoHeadProps {
@@ -55,23 +54,9 @@ function upsertLink(rel: string, href: string, hreflang?: string) {
 }
 
 export function SeoHead({ year }: SeoHeadProps) {
-  const { locale } = useLanguage();
-
   useEffect(() => {
     const route = getSiteRouteInfo();
     const effectiveYear = route.pageKind === 'year' ? (route.year ?? year) : null;
-
-    const title = route.pageKind === 'yearsHub'
-      ? locale === 'fa'
-        ? 'همهٔ سال‌های نوروز | زمان دقیق تحویل سال'
-        : 'All Nowruz years | exact date and time'
-      : locale === 'fa'
-        ? effectiveYear
-          ? `نوروز ${effectiveYear} | زمان دقیق تحویل سال و شمارش معکوس Nowruz`
-          : 'Nowruz Countdown | Norouz, نوروز, Persian New Year & Spring Equinox'
-        : effectiveYear
-          ? `Nowruz ${effectiveYear} Date & Time | Exact Tahvil in Tehran and UTC`
-          : 'Nowruz Countdown | Norouz, نوروز, Persian New Year & Spring Equinox';
 
     const seoLocale = resolveSeoLocale(route.locale);
     const ogLocale = seoLocale === 'fa' ? 'fa_IR' : 'en_US';
@@ -115,7 +100,7 @@ export function SeoHead({ year }: SeoHeadProps) {
           ? `Find the exact date and time of Nowruz ${effectiveYear}, with Tahvil time in Tehran and UTC, plus Haft-Sin and Persian New Year traditions.`
           : 'Live countdown to the exact moment of Nowruz (Norouz, نوروز), the Persian New Year and spring equinox, with precise Tahvil time in local time, Tehran time, and UTC.';
 
-    document.title = title;
+    document.title = seoTitle;
     upsertMeta('name', 'description', seoDescription);
     upsertMeta('name', 'keywords', keywords);
     upsertMeta('name', 'robots', 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1');
@@ -133,7 +118,7 @@ export function SeoHead({ year }: SeoHeadProps) {
     upsertLink('alternate', defaultUrl, 'x-default');
     upsertLink('alternate', enUrl, 'en');
     upsertLink('alternate', faUrl, 'fa');
-  }, [locale, year]);
+  }, [year]);
 
   return null;
 }

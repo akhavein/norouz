@@ -6,12 +6,19 @@ interface SeoHeadProps {
   year: number | null;
 }
 
-function getOgImagePath(locale: 'en' | 'fa', year: number | null) {
+function getOgImagePath(locale: 'en' | 'fa', year: number | null, pageKind: 'home' | 'year' | 'yearsHub' = year ? 'year' : 'home') {
+  if (pageKind === 'yearsHub') return locale === 'fa' ? '/og/fa-years.png' : '/og/en-years.png';
   if (locale === 'fa') return year ? `/og/fa-${year}.png` : '/og/fa-home.png';
   return year ? `/og/en-${year}.png` : '/og/en-home.png';
 }
 
-function getOgImageAlt(locale: 'en' | 'fa', year: number | null) {
+function getOgImageAlt(locale: 'en' | 'fa', year: number | null, pageKind: 'home' | 'year' | 'yearsHub' = year ? 'year' : 'home') {
+  if (pageKind === 'yearsHub') {
+    return locale === 'fa'
+      ? 'پوستر فهرست سال‌های نوروز با دسترسی به صفحهٔ سال‌های مختلف و زمان تحویل سال'
+      : 'Nowruz years hub social preview card with links to multiple year pages and exact Tahvil timing';
+  }
+
   if (locale === 'fa') {
     return year
       ? `پوستر نوروز ${year} با زمان دقیق تحویل سال به وقت تهران و UTC`
@@ -98,8 +105,8 @@ export function SeoHead({ year }: SeoHeadProps) {
     const faUrl = route.pageKind === 'yearsHub'
       ? buildAbsoluteYearsHubUrl('fa')
       : buildAbsoluteSiteUrl('fa', effectiveYear, route.pageKind);
-    const ogImage = `https://norouz.akhave.in${getOgImagePath(locale, effectiveYear)}`;
-    const ogImageAlt = getOgImageAlt(locale, effectiveYear);
+    const ogImage = `https://norouz.akhave.in${getOgImagePath(locale, effectiveYear, route.pageKind)}`;
+    const ogImageAlt = getOgImageAlt(locale, effectiveYear, route.pageKind);
 
     document.title = title;
     upsertMeta('name', 'description', description);

@@ -81,15 +81,22 @@ function getYearTimeInfo(year, fa) {
   };
 }
 
-function getOgImageKey(fa, year) {
+function getOgImageKey(fa, year, pageKind = year ? 'year' : 'home') {
+  if (pageKind === 'yearsHub') return fa ? 'fa-years' : 'en-years';
   return fa ? (year ? `fa-${year}` : 'fa-home') : (year ? `en-${year}` : 'en-home');
 }
 
-function getOgImagePath(fa, year) {
-  return `/og/${getOgImageKey(fa, year)}.png`;
+function getOgImagePath(fa, year, pageKind = year ? 'year' : 'home') {
+  return `/og/${getOgImageKey(fa, year, pageKind)}.png`;
 }
 
-function getOgImageAlt(fa, year) {
+function getOgImageAlt(fa, year, pageKind = year ? 'year' : 'home') {
+  if (pageKind === 'yearsHub') {
+    return fa
+      ? 'پوستر فهرست سال‌های نوروز با دسترسی به صفحهٔ سال‌های مختلف و زمان تحویل سال'
+      : 'Nowruz years hub social preview card with links to multiple year pages and exact Tahvil timing';
+  }
+
   if (fa) {
     return year
       ? `پوستر نوروز ${year} با زمان دقیق تحویل سال به وقت تهران و UTC`
@@ -101,12 +108,36 @@ function getOgImageAlt(fa, year) {
     : 'Nowruz Countdown social preview card with spring motifs and exact Tahvil timing';
 }
 
-function getOgImageUrl(fa, year) {
-  return `${baseUrl}${getOgImagePath(fa, year)}`;
+function getOgImageUrl(fa, year, pageKind = year ? 'year' : 'home') {
+  return `${baseUrl}${getOgImagePath(fa, year, pageKind)}`;
 }
 
-function getOgCardData(fa, year) {
+function getOgCardData(fa, year, pageKind = year ? 'year' : 'home') {
   const timeInfo = getYearTimeInfo(year, fa);
+
+  if (pageKind === 'yearsHub') {
+    if (fa) {
+      return {
+        eyebrow: 'Nowruz • Norouz • نوروز',
+        title: 'همهٔ سال‌های نوروز',
+        subtitle: 'مرور و مقایسهٔ زمان تحویل سال',
+        body: [
+          { label: 'سال‌ها', value: '۲۰۲۶ تا ۲۰۳۰' },
+          { label: 'شامل', value: 'تهران، UTC و صفحهٔ هر سال' },
+        ],
+      };
+    }
+
+    return {
+      eyebrow: 'Nowruz • Norouz • نوروز',
+      title: 'All Nowruz years',
+      subtitle: 'Browse and compare exact Tahvil time',
+      body: [
+        { label: 'Years', value: '2026 to 2030' },
+        { label: 'Includes', value: 'Tehran, UTC, and year pages' },
+      ],
+    };
+  }
 
   if (fa) {
     return {
@@ -143,8 +174,8 @@ function getOgCardData(fa, year) {
   };
 }
 
-function renderOgSvg(fa, year) {
-  const card = getOgCardData(fa, year);
+function renderOgSvg(fa, year, pageKind = year ? 'year' : 'home') {
+  const card = getOgCardData(fa, year, pageKind);
   const bodyBlocks = card.body.map((item, index) => {
     const x = 120 + index * 320;
     const width = index === 2 ? 260 : 280;
@@ -196,19 +227,21 @@ async function generateOgImages() {
   const canRasterizePng = process.platform === 'darwin';
 
   const variants = [
-    { fa: false, year: null },
-    { fa: true, year: null },
+    { fa: false, year: null, pageKind: 'home' },
+    { fa: true, year: null, pageKind: 'home' },
+    { fa: false, year: null, pageKind: 'yearsHub' },
+    { fa: true, year: null, pageKind: 'yearsHub' },
     ...years.flatMap((year) => [
-      { fa: false, year },
-      { fa: true, year },
+      { fa: false, year, pageKind: 'year' },
+      { fa: true, year, pageKind: 'year' },
     ]),
   ];
 
   for (const variant of variants) {
-    const key = getOgImageKey(variant.fa, variant.year);
+    const key = getOgImageKey(variant.fa, variant.year, variant.pageKind);
     const svgPath = path.join(ogDir, `${key}.svg`);
     const pngPath = path.join(ogDir, `${key}.png`);
-    const nextSvg = renderOgSvg(variant.fa, variant.year);
+    const nextSvg = renderOgSvg(variant.fa, variant.year, variant.pageKind);
     let existingSvg = null;
 
     try {
@@ -269,8 +302,8 @@ function renderYearsHubPage(locale) {
   const xDefault = buildYearsHubUrl(null);
   const en = buildYearsHubUrl('en');
   const faUrl = buildYearsHubUrl('fa');
-  const ogImage = getOgImageUrl(fa, null);
-  const ogImageAlt = getOgImageAlt(fa, null);
+  const ogImage = getOgImageUrl(fa, null, 'yearsHub');
+  const ogImageAlt = getOgImageAlt(fa, null, 'yearsHub');
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [

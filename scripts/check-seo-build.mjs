@@ -48,7 +48,8 @@ async function main() {
   assertIncludes(yearsHub, 'CollectionPage', 'years hub CollectionPage schema');
   assertIncludes(yearsHub, 'ItemList', 'years hub ItemList schema');
   assertIncludes(yearsHub, 'https://norouz.akhave.in/en/2028/', 'years hub 2028 link');
-  checks.push('years hub schema + links');
+  assertIncludes(yearsHub, 'https://norouz.akhave.in/og/en-years.png', 'years hub OG image');
+  checks.push('years hub schema + links + OG');
 
   const sitemap = await read('sitemap.xml');
   assertIncludes(sitemap, 'xmlns:xhtml=', 'sitemap xhtml namespace');
@@ -57,7 +58,7 @@ async function main() {
   assertIncludes(sitemap, 'https://norouz.akhave.in/fa/years/', 'sitemap farsi years hub');
   checks.push('sitemap hub entries + alternates');
 
-  for (const asset of ['og/en-home.png', 'og/fa-home.png', 'og/en-2028.png', 'og/fa-2028.png']) {
+  for (const asset of ['og/en-home.png', 'og/fa-home.png', 'og/en-years.png', 'og/fa-years.png', 'og/en-2028.png', 'og/fa-2028.png']) {
     if (!(await exists(asset))) {
       throw new Error(`Missing built OG asset: ${asset}`);
     }

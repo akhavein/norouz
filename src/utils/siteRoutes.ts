@@ -46,6 +46,10 @@ export function resolveContentRouteLocale(routeLocale: SiteLocale | null, uiLoca
   return routeLocale ?? (uiLocale === 'en' ? 'en' : null);
 }
 
+export function resolveSeoLocale(routeLocale: SiteLocale | null): SiteLocale {
+  return routeLocale ?? 'fa';
+}
+
 export function buildAbsoluteSiteUrl(
   locale: SiteLocale | null,
   year: number | null,

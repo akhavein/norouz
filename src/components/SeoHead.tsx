@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { buildAbsoluteSiteUrl, buildAbsoluteYearsHubUrl, getSiteRouteInfo } from '../utils/siteRoutes';
+import { buildAbsoluteSiteUrl, buildAbsoluteYearsHubUrl, getSiteRouteInfo, resolveSeoLocale } from '../utils/siteRoutes';
 
 interface SeoHeadProps {
   year: number | null;
@@ -61,18 +61,11 @@ export function SeoHead({ year }: SeoHeadProps) {
     const route = getSiteRouteInfo();
     const effectiveYear = route.pageKind === 'year' ? (route.year ?? year) : null;
 
-    let title: string;
-    let description: string;
-
-    if (route.pageKind === 'yearsHub') {
-      title = locale === 'fa'
+    const title = route.pageKind === 'yearsHub'
+      ? locale === 'fa'
         ? 'همهٔ سال‌های نوروز | زمان دقیق تحویل سال'
-        : 'All Nowruz years | exact date and time';
-      description = locale === 'fa'
-        ? 'فهرست همهٔ صفحه‌های نوروز با زمان دقیق تحویل سال به وقت تهران و UTC، برای مرور و مقایسهٔ سال‌های مختلف.'
-        : 'Browse all available Nowruz year pages with exact Tahvil time in Tehran and UTC, and compare different years.';
-    } else {
-      title = locale === 'fa'
+        : 'All Nowruz years | exact date and time'
+      : locale === 'fa'
         ? effectiveYear
           ? `نوروز ${effectiveYear} | زمان دقیق تحویل سال و شمارش معکوس Nowruz`
           : 'Nowruz Countdown | Norouz, نوروز, Persian New Year & Spring Equinox'
@@ -80,17 +73,9 @@ export function SeoHead({ year }: SeoHeadProps) {
           ? `Nowruz ${effectiveYear} Date & Time | Exact Tahvil in Tehran and UTC`
           : 'Nowruz Countdown | Norouz, نوروز, Persian New Year & Spring Equinox';
 
-      description = locale === 'fa'
-        ? effectiveYear
-          ? `زمان دقیق تحویل سال نوروز ${effectiveYear} با تاریخ و ساعت دقیق به وقت تهران و UTC، به همراه توضیحات هفت‌سین و رسم‌های نوروزی.`
-          : 'شمارش معکوس زنده تا لحظهٔ دقیق نوروز، با زمان تحویل سال در ساعت محلی شما، تهران و UTC، به همراه هفت‌سین و رسم‌های نوروزی.'
-        : effectiveYear
-          ? `Find the exact date and time of Nowruz ${effectiveYear}, with Tahvil time in Tehran and UTC, plus Haft-Sin and Persian New Year traditions.`
-          : 'Live countdown to the exact moment of Nowruz (Norouz, نوروز), the Persian New Year and spring equinox, with precise Tahvil time in local time, Tehran time, and UTC.';
-    }
-
-    const ogLocale = locale === 'fa' ? 'fa_IR' : 'en_US';
-    const keywords = locale === 'fa'
+    const seoLocale = resolveSeoLocale(route.locale);
+    const ogLocale = seoLocale === 'fa' ? 'fa_IR' : 'en_US';
+    const keywords = seoLocale === 'fa'
       ? 'نوروز, Nowruz, Norouz, سال نو ایرانی, تحویل سال, هفت‌سین, سیزده‌بدر, اعتدال بهاری'
       : 'Nowruz, Norouz, نوروز, Persian New Year, Iranian New Year, Tahvil, spring equinox, Haft-Sin, Sizdah Bedar';
     const canonical = route.pageKind === 'yearsHub'
@@ -105,21 +90,43 @@ export function SeoHead({ year }: SeoHeadProps) {
     const faUrl = route.pageKind === 'yearsHub'
       ? buildAbsoluteYearsHubUrl('fa')
       : buildAbsoluteSiteUrl('fa', effectiveYear, route.pageKind);
-    const ogImage = `https://norouz.akhave.in${getOgImagePath(locale, effectiveYear, route.pageKind)}`;
-    const ogImageAlt = getOgImageAlt(locale, effectiveYear, route.pageKind);
+    const ogImage = `https://norouz.akhave.in${getOgImagePath(seoLocale, effectiveYear, route.pageKind)}`;
+    const ogImageAlt = getOgImageAlt(seoLocale, effectiveYear, route.pageKind);
+    const seoTitle = route.pageKind === 'yearsHub'
+      ? seoLocale === 'fa'
+        ? 'همهٔ سال‌های نوروز | زمان دقیق تحویل سال'
+        : 'All Nowruz years | exact date and time'
+      : seoLocale === 'fa'
+        ? effectiveYear
+          ? `نوروز ${effectiveYear} | زمان دقیق تحویل سال و شمارش معکوس Nowruz`
+          : 'Nowruz Countdown | Norouz, نوروز, Persian New Year & Spring Equinox'
+        : effectiveYear
+          ? `Nowruz ${effectiveYear} Date & Time | Exact Tahvil in Tehran and UTC`
+          : 'Nowruz Countdown | Norouz, نوروز, Persian New Year & Spring Equinox';
+    const seoDescription = route.pageKind === 'yearsHub'
+      ? seoLocale === 'fa'
+        ? 'فهرست همهٔ صفحه‌های نوروز با زمان دقیق تحویل سال به وقت تهران و UTC، برای مرور و مقایسهٔ سال‌های مختلف.'
+        : 'Browse all available Nowruz year pages with exact Tahvil time in Tehran and UTC, and compare different years.'
+      : seoLocale === 'fa'
+        ? effectiveYear
+          ? `زمان دقیق تحویل سال نوروز ${effectiveYear} با تاریخ و ساعت دقیق به وقت تهران و UTC، به همراه توضیحات هفت‌سین و رسم‌های نوروزی.`
+          : 'شمارش معکوس زنده تا لحظهٔ دقیق نوروز، با زمان تحویل سال در ساعت محلی شما، تهران و UTC، به همراه هفت‌سین و رسم‌های نوروزی.'
+        : effectiveYear
+          ? `Find the exact date and time of Nowruz ${effectiveYear}, with Tahvil time in Tehran and UTC, plus Haft-Sin and Persian New Year traditions.`
+          : 'Live countdown to the exact moment of Nowruz (Norouz, نوروز), the Persian New Year and spring equinox, with precise Tahvil time in local time, Tehran time, and UTC.';
 
     document.title = title;
-    upsertMeta('name', 'description', description);
+    upsertMeta('name', 'description', seoDescription);
     upsertMeta('name', 'keywords', keywords);
     upsertMeta('name', 'robots', 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1');
-    upsertMeta('property', 'og:title', title);
-    upsertMeta('property', 'og:description', description);
+    upsertMeta('property', 'og:title', seoTitle);
+    upsertMeta('property', 'og:description', seoDescription);
     upsertMeta('property', 'og:locale', ogLocale);
     upsertMeta('property', 'og:url', canonical);
     upsertMeta('property', 'og:image', ogImage);
     upsertMeta('property', 'og:image:alt', ogImageAlt);
-    upsertMeta('name', 'twitter:title', title);
-    upsertMeta('name', 'twitter:description', description);
+    upsertMeta('name', 'twitter:title', seoTitle);
+    upsertMeta('name', 'twitter:description', seoDescription);
     upsertMeta('name', 'twitter:image', ogImage);
     upsertMeta('name', 'twitter:image:alt', ogImageAlt);
     upsertLink('canonical', canonical);

@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
 import { getCelebrationEndMs } from '../data/equinox-times';
-import { useLanguage } from '../i18n/LanguageContext';
 import { getShamsiYear } from '../utils/persianYear';
 import { toPersianNumerals } from '../utils/persian';
-import { buildAbsoluteSiteUrl, getSiteRouteInfo } from '../utils/siteRoutes';
+import { buildAbsoluteSiteUrl, getSiteRouteInfo, resolveSeoLocale } from '../utils/siteRoutes';
 
 interface JsonLdProps {
   phase: 'counting' | 'celebrating' | 'dormant';
@@ -14,8 +13,6 @@ interface JsonLdProps {
 const CELEBRATION_DAYS = 13;
 
 export function JsonLd({ phase, target, year }: JsonLdProps) {
-  const { locale } = useLanguage();
-
   useEffect(() => {
     const route = getSiteRouteInfo();
     if (route.pageKind !== 'year' || !target || !year) return;
@@ -24,6 +21,7 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
     if (existingStructuredData) return;
 
     const canonicalUrl = buildAbsoluteSiteUrl(route.locale, route.year ?? year, route.pageKind);
+    const seoLocale = resolveSeoLocale(route.locale);
 
     const shamsiYear = getShamsiYear(year);
     const celebrationEnd = new Date(getCelebrationEndMs(target.getTime(), CELEBRATION_DAYS)).toISOString();
@@ -31,7 +29,7 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
       ? 'https://schema.org/EventInProgress'
       : 'https://schema.org/EventScheduled';
 
-    const questions = locale === 'fa'
+    const questions = seoLocale === 'fa'
       ? [
           {
             name: 'نوروز چیست؟',
@@ -88,7 +86,7 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
           alternateName: ['Norouz Countdown', 'نوروز'],
           url: canonicalUrl,
           inLanguage: ['en', 'fa'],
-          description: locale === 'fa'
+          description: seoLocale === 'fa'
             ? 'شمارش معکوس نوروز با زمان دقیق تحویل سال، زمان تهران، UTC و معرفی رسم‌های نوروزی.'
             : 'A live countdown to the exact moment of Nowruz, with precise Tahvil time, Tehran time, UTC, and core Nowruz traditions.',
         },
@@ -100,11 +98,11 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
           endDate: celebrationEnd,
           eventStatus,
           eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
-          inLanguage: locale,
-          image: locale === 'fa'
+          inLanguage: seoLocale,
+          image: seoLocale === 'fa'
             ? `https://norouz.akhave.in/og/fa-${year}.png`
             : `https://norouz.akhave.in/og/en-${year}.png`,
-          description: locale === 'fa'
+          description: seoLocale === 'fa'
             ? `لحظهٔ دقیق اعتدال بهاری و آغاز سال نوی ایرانی (نوروز ${toPersianNumerals(shamsiYear)}).`
             : `The exact astronomical moment of the vernal equinox, marking the beginning of the Persian New Year, Nowruz ${year}.`,
           location: {
@@ -114,7 +112,7 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
         },
         {
           '@type': 'FAQPage',
-          inLanguage: locale,
+          inLanguage: seoLocale,
           mainEntity: questions,
         },
       ],
@@ -128,7 +126,7 @@ export function JsonLd({ phase, target, year }: JsonLdProps) {
     return () => {
       document.head.removeChild(script);
     };
-  }, [locale, phase, target, year]);
+  }, [phase, target, year]);
 
   return null;
 }

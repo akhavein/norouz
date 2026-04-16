@@ -73,12 +73,16 @@ async function main() {
     assertEqual(mod.resolveContentRouteLocale(null, 'en'), 'en', 'x-default English content links localize to en');
     assertEqual(mod.resolveContentRouteLocale('fa', 'fa'), 'fa', 'localized Farsi route stays fa');
     assertEqual(mod.resolveContentRouteLocale('en', 'en'), 'en', 'localized English route stays en');
+    assertEqual(mod.resolveSeoLocale(null), 'fa', 'x-default SEO locale stays fa');
+    assertEqual(mod.resolveSeoLocale('fa'), 'fa', 'localized Farsi SEO locale stays fa');
+    assertEqual(mod.resolveSeoLocale('en'), 'en', 'localized English SEO locale stays en');
 
     console.log('Route model check passed:');
     console.log('- years hub routes are classified correctly');
     console.log('- home/year/years-hub paths build correctly');
     console.log('- locale switching targets for years hubs stay on years hubs');
     console.log('- x-default content links preserve x-default for Farsi and localize for English');
+    console.log('- x-default SEO locale stays anchored to the route default');
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

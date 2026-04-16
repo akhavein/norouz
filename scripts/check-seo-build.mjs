@@ -67,6 +67,11 @@ async function main() {
       throw new Error(`Missing built OG asset: ${asset}`);
     }
   }
+  for (const staleAsset of ['og-image.png', 'og-image.svg']) {
+    if (await exists(staleAsset)) {
+      throw new Error(`Found stale legacy OG asset still present: ${staleAsset}`);
+    }
+  }
   checks.push('OG assets');
 
   console.log('SEO smoke check passed:');

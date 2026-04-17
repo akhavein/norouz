@@ -50,6 +50,12 @@ export function resolveSeoLocale(routeLocale: SiteLocale | null): SiteLocale {
   return routeLocale ?? 'fa';
 }
 
+export function resolvePreferredLocalizedPath(pathname: string, savedLocale: SiteLocale | null): string | null {
+  const route = getSiteRouteInfo(pathname);
+  if (route.locale !== null || savedLocale !== 'en') return null;
+  return buildSitePath('en', route.year, route.pageKind);
+}
+
 export function buildAbsoluteSiteUrl(
   locale: SiteLocale | null,
   year: number | null,

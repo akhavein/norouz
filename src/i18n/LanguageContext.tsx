@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import en from './en.json';
 import fa from './fa.json';
-import { buildSitePath, getSiteRouteInfo } from '../utils/siteRoutes';
+import { buildSitePath, getSiteRouteInfo, resolvePreferredLocalizedPath } from '../utils/siteRoutes';
 
 type Locale = 'en' | 'fa';
 type Translations = typeof en;
@@ -27,6 +27,15 @@ function detectLocale(): Locale {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>(detectLocale);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('locale');
+    const savedLocale = saved === 'en' || saved === 'fa' ? saved : null;
+    const preferredPath = resolvePreferredLocalizedPath(window.location.pathname, savedLocale);
+    if (preferredPath && preferredPath !== window.location.pathname) {
+      window.location.replace(`${preferredPath}${window.location.search}${window.location.hash}`);
+    }
+  }, []);
 
   const toggleLocale = useCallback(() => {
     setLocale(prev => {

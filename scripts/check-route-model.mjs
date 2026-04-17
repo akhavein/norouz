@@ -76,6 +76,11 @@ async function main() {
     assertEqual(mod.resolveSeoLocale(null), 'fa', 'x-default SEO locale stays fa');
     assertEqual(mod.resolveSeoLocale('fa'), 'fa', 'localized Farsi SEO locale stays fa');
     assertEqual(mod.resolveSeoLocale('en'), 'en', 'localized English SEO locale stays en');
+    assertEqual(mod.resolvePreferredLocalizedPath('/2028/', 'en'), '/en/2028/', 'x-default English users prefer localized year route');
+    assertEqual(mod.resolvePreferredLocalizedPath('/years/', 'en'), '/en/years/', 'x-default English users prefer localized years hub');
+    assertEqual(mod.resolvePreferredLocalizedPath('/', 'en'), '/en/', 'x-default English users prefer localized home route');
+    assertEqual(mod.resolvePreferredLocalizedPath('/2028/', 'fa'), null, 'x-default Farsi users stay on x-default route');
+    assertEqual(mod.resolvePreferredLocalizedPath('/en/2028/', 'en'), null, 'localized English route does not redirect again');
 
     console.log('Route model check passed:');
     console.log('- years hub routes are classified correctly');
@@ -83,6 +88,7 @@ async function main() {
     console.log('- locale switching targets for years hubs stay on years hubs');
     console.log('- x-default content links preserve x-default for Farsi and localize for English');
     console.log('- x-default SEO locale stays anchored to the route default');
+    console.log('- x-default English preference upgrades to the localized route');
   } finally {
     await fs.rm(tempDir, { recursive: true, force: true });
   }

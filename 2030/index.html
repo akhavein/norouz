@@ -44,7 +44,12 @@
       (function() {
         var pathname = window.location.pathname;
         var forcedLocale = pathname === '/en/' || pathname.startsWith('/en/') ? 'en' : pathname === '/fa/' || pathname.startsWith('/fa/') ? 'fa' : null;
-        var locale = forcedLocale || localStorage.getItem('locale');
+        var savedLocale = localStorage.getItem('locale');
+        if (!forcedLocale && savedLocale === 'en') {
+          window.location.replace('/en' + pathname + window.location.search + window.location.hash);
+          return;
+        }
+        var locale = forcedLocale || savedLocale;
         if (locale !== 'en' && locale !== 'fa') locale = 'fa';
         document.documentElement.lang = locale;
         document.documentElement.dir = locale === 'fa' ? 'rtl' : 'ltr';

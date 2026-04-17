@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -24,6 +25,74 @@ function assertIncludes(text, needle, label) {
   }
 }
 
+function assertEqual(actual, expected, label) {
+  if (actual !== expected) {
+    throw new Error(`${label}: expected ${expected}, got ${actual}`);
+  }
+}
+
+function extractBootstrapScript(html, label) {
+  const match = html.match(/<script>([\s\S]*?)<\/script>/i);
+  if (!match) {
+    throw new Error(`Missing bootstrap script in ${label}`);
+  }
+  return match[1];
+}
+
+function runBootstrapScript(script, { pathname, search = '', hash = '', storage = {} }) {
+  const store = new Map(Object.entries(storage));
+  const classes = new Set();
+  let replaced = null;
+
+  const sandbox = {
+    window: {
+      location: {
+        pathname,
+        search,
+        hash,
+        replace: (url) => {
+          replaced = url;
+        },
+      },
+    },
+    localStorage: {
+      getItem: (key) => (store.has(key) ? store.get(key) : null),
+      setItem: (key, value) => {
+        store.set(key, String(value));
+      },
+    },
+    document: {
+      documentElement: {
+        lang: '',
+        dir: '',
+        classList: {
+          add: (name) => classes.add(name),
+          remove: (name) => classes.delete(name),
+          toggle: (name, force) => {
+            if (force === undefined) {
+              if (classes.has(name)) classes.delete(name);
+              else classes.add(name);
+              return;
+            }
+            if (force) classes.add(name);
+            else classes.delete(name);
+          },
+        },
+      },
+    },
+  };
+
+  vm.runInNewContext(script, sandbox);
+
+  return {
+    replaced,
+    lang: sandbox.document.documentElement.lang,
+    dir: sandbox.document.documentElement.dir,
+    storage: Object.fromEntries(store),
+    classes: [...classes],
+  };
+}
+
 async function main() {
   const checks = [];
 
@@ -39,6 +108,14 @@ async function main() {
   assertIncludes(faHome, "window.location.replace('/en' + pathname + window.location.search + window.location.hash);", 'x-default English redirect');
   checks.push('fa homepage copy + hub link + x-default redirect');
 
+  const homeBootstrap = extractBootstrapScript(faHome, 'root homepage');
+  const rootHomeEn = runBootstrapScript(homeBootstrap, { pathname: '/', storage: { locale: 'en' } });
+  assertEqual(rootHomeEn.replaced, '/en/', 'root homepage English upgrade');
+  const rootHomeFa = runBootstrapScript(homeBootstrap, { pathname: '/', storage: { locale: 'fa' } });
+  assertEqual(rootHomeFa.replaced, null, 'root homepage Farsi no redirect');
+  assertEqual(rootHomeFa.lang, 'fa', 'root homepage Farsi lang');
+  assertEqual(rootHomeFa.dir, 'rtl', 'root homepage Farsi dir');
+
   const enYear = await read('en/2028/index.html');
   assertIncludes(enYear, 'Exact time for Nowruz 2028', 'English year exact-time section');
   assertIncludes(enYear, 'rel="prev" href="https://norouz.akhave.in/en/2027/"', 'English prev link');
@@ -50,9 +127,19 @@ async function main() {
   }
   checks.push('en year page nav + OG + structured data image');
 
+  const enYearBootstrap = extractBootstrapScript(enYear, 'localized English year page');
+  const localizedYear = runBootstrapScript(enYearBootstrap, { pathname: '/en/2028/', storage: { locale: 'fa' } });
+  assertEqual(localizedYear.replaced, null, 'localized English year stays put');
+  assertEqual(localizedYear.lang, 'en', 'localized English year lang');
+  assertEqual(localizedYear.dir, 'ltr', 'localized English year dir');
+  assertEqual(localizedYear.storage.locale, 'en', 'localized English year persists locale');
+
   const rootYear = await read('2028/index.html');
   assertIncludes(rootYear, "if (!forcedLocale && savedLocale === 'en')", 'x-default year English upgrade guard');
   assertIncludes(rootYear, "window.location.replace('/en' + pathname + window.location.search + window.location.hash);", 'x-default year English redirect');
+  const rootYearBootstrap = extractBootstrapScript(rootYear, 'root year page');
+  const upgradedYear = runBootstrapScript(rootYearBootstrap, { pathname: '/2028/', storage: { locale: 'en' } });
+  assertEqual(upgradedYear.replaced, '/en/2028/', 'root year English upgrade');
   checks.push('x-default year redirect');
 
   const yearsHub = await read('en/years/index.html');
@@ -65,6 +152,9 @@ async function main() {
   const rootYearsHub = await read('years/index.html');
   assertIncludes(rootYearsHub, "if (!forcedLocale && savedLocale === 'en')", 'x-default years hub English upgrade guard');
   assertIncludes(rootYearsHub, "window.location.replace('/en/years/' + window.location.search + window.location.hash);", 'x-default years hub English redirect');
+  const yearsHubBootstrap = extractBootstrapScript(rootYearsHub, 'root years hub');
+  const upgradedYearsHub = runBootstrapScript(yearsHubBootstrap, { pathname: '/years/', storage: { locale: 'en' } });
+  assertEqual(upgradedYearsHub.replaced, '/en/years/', 'root years hub English upgrade');
   checks.push('x-default years hub redirect');
 
   const sitemap = await read('sitemap.xml');
@@ -85,6 +175,8 @@ async function main() {
     }
   }
   checks.push('OG assets');
+
+  checks.push('bootstrap locale redirect behavior');
 
   console.log('SEO smoke check passed:');
   for (const check of checks) {

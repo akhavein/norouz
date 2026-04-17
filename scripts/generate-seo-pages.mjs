@@ -407,6 +407,22 @@ function renderYearsHubPage(locale) {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet" />
+    <script>
+      (function() {
+        var pathname = window.location.pathname;
+        var forcedLocale = pathname === '/en/years/' ? 'en' : pathname === '/fa/years/' ? 'fa' : null;
+        var savedLocale = localStorage.getItem('locale');
+        if (!forcedLocale && savedLocale === 'en') {
+          window.location.replace('/en/years/' + window.location.search + window.location.hash);
+          return;
+        }
+        var locale = forcedLocale || savedLocale;
+        if (locale !== 'en' && locale !== 'fa') locale = 'fa';
+        document.documentElement.lang = locale;
+        document.documentElement.dir = locale === 'fa' ? 'rtl' : 'ltr';
+        localStorage.setItem('locale', locale);
+      })();
+    </script>
     <script type="application/ld+json">${escapeHtml(JSON.stringify(jsonLd))}</script>
   </head>
   <body>

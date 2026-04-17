@@ -35,7 +35,9 @@ async function main() {
   const faHome = await read('index.html');
   assertIncludes(faHome, 'مرور سال', 'Farsi homepage year section');
   assertIncludes(faHome, '/years/', 'Farsi homepage years hub link');
-  checks.push('fa homepage copy + hub link');
+  assertIncludes(faHome, "if (!forcedLocale && savedLocale === 'en')", 'x-default English upgrade guard');
+  assertIncludes(faHome, "window.location.replace('/en' + pathname + window.location.search + window.location.hash);", 'x-default English redirect');
+  checks.push('fa homepage copy + hub link + x-default redirect');
 
   const enYear = await read('en/2028/index.html');
   assertIncludes(enYear, 'Exact time for Nowruz 2028', 'English year exact-time section');
@@ -54,6 +56,11 @@ async function main() {
   assertIncludes(yearsHub, 'https://norouz.akhave.in/en/2028/', 'years hub 2028 link');
   assertIncludes(yearsHub, 'https://norouz.akhave.in/og/en-years.png', 'years hub OG image');
   checks.push('years hub schema + links + OG');
+
+  const rootYearsHub = await read('years/index.html');
+  assertIncludes(rootYearsHub, "if (!forcedLocale && savedLocale === 'en')", 'x-default years hub English upgrade guard');
+  assertIncludes(rootYearsHub, "window.location.replace('/en/years/' + window.location.search + window.location.hash);", 'x-default years hub English redirect');
+  checks.push('x-default years hub redirect');
 
   const sitemap = await read('sitemap.xml');
   assertIncludes(sitemap, 'xmlns:xhtml=', 'sitemap xhtml namespace');

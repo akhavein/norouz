@@ -50,6 +50,11 @@ async function main() {
   }
   checks.push('en year page nav + OG + structured data image');
 
+  const rootYear = await read('2028/index.html');
+  assertIncludes(rootYear, "if (!forcedLocale && savedLocale === 'en')", 'x-default year English upgrade guard');
+  assertIncludes(rootYear, "window.location.replace('/en' + pathname + window.location.search + window.location.hash);", 'x-default year English redirect');
+  checks.push('x-default year redirect');
+
   const yearsHub = await read('en/years/index.html');
   assertIncludes(yearsHub, 'CollectionPage', 'years hub CollectionPage schema');
   assertIncludes(yearsHub, 'ItemList', 'years hub ItemList schema');

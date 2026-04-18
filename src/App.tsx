@@ -378,6 +378,43 @@ function DormantView({ target, shamsiYear }: { target: Date; shamsiYear: number 
   );
 }
 
+function YearRouteView({ year, shamsiYear, target, days, hours, minutes, seconds }: { year: number; shamsiYear: number; target: Date; days: number; hours: number; minutes: number; seconds: number }) {
+  const { locale } = useLanguage();
+  const isFuture = target.getTime() > nowMs();
+
+  return (
+    <div className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10 w-full">
+      <div className="text-center space-y-2">
+        <p className={`text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+          {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
+        </p>
+        {!isFuture && (
+          <p className={`text-sm sm:text-base text-warm-charcoal/65 dark:text-cream/60 ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+            {locale === 'fa' ? `نوروز ${toPersianNumerals(year)} گذشته است` : `Nowruz ${year} has passed`}
+          </p>
+        )}
+      </div>
+
+      {isFuture && (
+        <Countdown days={days} hours={hours} minutes={minutes} seconds={seconds} />
+      )}
+
+      <HaftSin />
+
+      <div className="text-center space-y-1">
+        <p className="text-sm text-persian-teal font-medium">
+          <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
+        </p>
+        <p className="text-xs text-warm-charcoal/55 dark:text-cream/50">
+          <time dateTime={target.toISOString()}>{formatLocal(target)}</time>
+          {' · '}
+          <time dateTime={target.toISOString()}>{formatUTC(target)}</time>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const { phase, target, year, loading, norouzDay } = useNorouzState();
   const countdown = useCountdown(phase === 'counting' ? target : null);
@@ -409,6 +446,8 @@ function App() {
     ? new Date(EQUINOX_UTC[routeInfo.year])
     : target;
   const focusedShamsiYear = focusedYear ? getShamsiYear(focusedYear) : shamsiYear;
+  const focusedCountdown = useCountdown(routeInfo.pageKind === 'year' ? focusedTarget : null);
+  const isFocusedYearPage = routeInfo.pageKind === 'year' && focusedYear !== null && focusedTarget !== null && focusedShamsiYear !== null;
   const schemaYear = routeInfo.pageKind === 'year' ? routeInfo.year : null;
   const schemaTarget = routeInfo.pageKind === 'year' && routeInfo.year && EQUINOX_UTC[routeInfo.year]
     ? new Date(EQUINOX_UTC[routeInfo.year])
@@ -436,51 +475,68 @@ function App() {
       <BotehJeghe className="absolute top-1/4 left-1/2 -translate-x-[200px] sm:-translate-x-[300px] text-blush w-7 h-[42px] sm:w-9 sm:h-[54px] opacity-10 -rotate-[15deg]" />
 
       <main className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10 max-w-2xl w-full relative z-10">
-        <Header />
+        <Header
+          titleOverride={isFocusedYearPage ? (locale === 'fa' ? `نوروز ${toPersianNumerals(focusedYear)}` : `Nowruz ${focusedYear}`) : undefined}
+          subtitleOverride={isFocusedYearPage ? (locale === 'fa' ? 'زمان دقیق تحویل سال' : 'Exact Tahvil time') : undefined}
+        />
 
-        <div key={phase} className="phase-enter flex flex-col items-center gap-6 sm:gap-8 md:gap-10 w-full">
-          {phase === 'counting' && shamsiYear && (
-            <div className="text-center">
-              <p className={`text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
-                {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
-              </p>
-            </div>
-          )}
-
-          {phase === 'counting' && (
-            <Countdown
-              days={countdown.days}
-              hours={countdown.hours}
-              minutes={countdown.minutes}
-              seconds={countdown.seconds}
+        <div key={isFocusedYearPage ? `year-${focusedYear}` : phase} className="phase-enter flex flex-col items-center gap-6 sm:gap-8 md:gap-10 w-full">
+          {isFocusedYearPage ? (
+            <YearRouteView
+              year={focusedYear}
+              shamsiYear={focusedShamsiYear}
+              target={focusedTarget}
+              days={focusedCountdown.days}
+              hours={focusedCountdown.hours}
+              minutes={focusedCountdown.minutes}
+              seconds={focusedCountdown.seconds}
             />
-          )}
+          ) : (
+            <>
+              {phase === 'counting' && shamsiYear && (
+                <div className="text-center">
+                  <p className={`text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+                    {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
+                  </p>
+                </div>
+              )}
 
-          {phase === 'celebrating' && shamsiYear && (
-            <CelebrationView shamsiYear={shamsiYear} norouzDay={norouzDay} />
-          )}
+              {phase === 'counting' && (
+                <Countdown
+                  days={countdown.days}
+                  hours={countdown.hours}
+                  minutes={countdown.minutes}
+                  seconds={countdown.seconds}
+                />
+              )}
 
-          {phase === 'dormant' && target && shamsiYear && (
-            <DormantView target={target} shamsiYear={shamsiYear} />
-          )}
+              {phase === 'celebrating' && shamsiYear && (
+                <CelebrationView shamsiYear={shamsiYear} norouzDay={norouzDay} />
+              )}
 
-          {(phase === 'celebrating' || phase === 'counting') && <HaftSin />}
+              {phase === 'dormant' && target && shamsiYear && (
+                <DormantView target={target} shamsiYear={shamsiYear} />
+              )}
 
-          {audio.isInAudioWindow && (
-            <PlayButton isPlaying={audio.isPlaying} onClick={audio.toggle} />
-          )}
+              {(phase === 'celebrating' || phase === 'counting') && <HaftSin />}
 
-          {phase === 'counting' && target && (
-            <div className="text-center space-y-1">
-              <p className="text-sm text-persian-teal font-medium">
-                <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
-              </p>
-              <p className="text-xs text-warm-charcoal/55 dark:text-cream/50">
-                <time dateTime={target.toISOString()}>{formatLocal(target)}</time>
-                {' · '}
-                <time dateTime={target.toISOString()}>{formatUTC(target)}</time>
-              </p>
-            </div>
+              {audio.isInAudioWindow && (
+                <PlayButton isPlaying={audio.isPlaying} onClick={audio.toggle} />
+              )}
+
+              {phase === 'counting' && target && (
+                <div className="text-center space-y-1">
+                  <p className="text-sm text-persian-teal font-medium">
+                    <time dateTime={target.toISOString()}>{formatIRST(target)}</time>
+                  </p>
+                  <p className="text-xs text-warm-charcoal/55 dark:text-cream/50">
+                    <time dateTime={target.toISOString()}>{formatLocal(target)}</time>
+                    {' · '}
+                    <time dateTime={target.toISOString()}>{formatUTC(target)}</time>
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
 
@@ -493,7 +549,11 @@ function App() {
         <SeoContent target={focusedTarget} year={year} shamsiYear={focusedShamsiYear} focusedYear={focusedYear} />
       </main>
 
-      {shamsiYear && !prefersReducedMotion && target && (() => {
+      {!prefersReducedMotion && (() => {
+        if (isFocusedYearPage) {
+          return <ZodiacAnimal shamsiYear={focusedShamsiYear} />;
+        }
+        if (!shamsiYear || !target) return null;
         const msUntilTarget = target.getTime() - nowMs();
         const hideAnimalBeforeNorouzMs = 7 * 24 * 60 * 60 * 1000;
         const showAnimal = phase === 'celebrating' || msUntilTarget > hideAnimalBeforeNorouzMs;

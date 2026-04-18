@@ -432,14 +432,6 @@ function App() {
 
   useConfetti(phase, prefersReducedMotion);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center font-['Inter',sans-serif]">
-        <p className="text-warm-charcoal/55 dark:text-cream/50 text-sm">{t('loading')}</p>
-      </div>
-    );
-  }
-
   const shamsiYear = year ? getShamsiYear(year) : null;
   const focusedYear = routeInfo.pageKind === 'year' ? routeInfo.year : null;
   const focusedTarget = routeInfo.pageKind === 'year' && routeInfo.year && EQUINOX_UTC[routeInfo.year]
@@ -452,6 +444,14 @@ function App() {
   const schemaTarget = routeInfo.pageKind === 'year' && routeInfo.year && EQUINOX_UTC[routeInfo.year]
     ? new Date(EQUINOX_UTC[routeInfo.year])
     : null;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center font-['Inter',sans-serif]">
+        <p className="text-warm-charcoal/55 dark:text-cream/50 text-sm">{t('loading')}</p>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center px-4 pt-16 pb-8 relative overflow-hidden ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : "font-['Inter',sans-serif]"}`}>

@@ -397,13 +397,6 @@ function renderYearsHubPage(locale) {
     <meta name="twitter:image:alt" content="${escapeHtml(ogImageAlt)}" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="color-scheme" content="light dark" />
-    <script>
-      (function() {
-        var savedTheme = localStorage.getItem('theme');
-        var isDark = savedTheme ? savedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.classList.toggle('dark', isDark);
-      })();
-    </script>
     <style>
       :root {
         color-scheme: light;
@@ -472,6 +465,13 @@ function renderYearsHubPage(locale) {
         document.documentElement.lang = locale;
         document.documentElement.dir = locale === 'fa' ? 'rtl' : 'ltr';
         localStorage.setItem('locale', locale);
+
+        var savedTheme = localStorage.getItem('theme');
+        var media = typeof window.matchMedia === 'function'
+          ? window.matchMedia('(prefers-color-scheme: dark)')
+          : null;
+        var isDark = savedTheme ? savedTheme === 'dark' : !!(media && media.matches);
+        document.documentElement.classList.toggle('dark', isDark);
       })();
     </script>
     <script type="application/ld+json">${escapeHtml(JSON.stringify(jsonLd))}</script>

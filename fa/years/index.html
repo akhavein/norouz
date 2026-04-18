@@ -27,13 +27,6 @@
     <meta name="twitter:image:alt" content="پوستر فهرست سال‌های نوروز با دسترسی به صفحهٔ سال‌های مختلف و زمان تحویل سال" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="color-scheme" content="light dark" />
-    <script>
-      (function() {
-        var savedTheme = localStorage.getItem('theme');
-        var isDark = savedTheme ? savedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.classList.toggle('dark', isDark);
-      })();
-    </script>
     <style>
       :root {
         color-scheme: light;
@@ -102,6 +95,13 @@
         document.documentElement.lang = locale;
         document.documentElement.dir = locale === 'fa' ? 'rtl' : 'ltr';
         localStorage.setItem('locale', locale);
+
+        var savedTheme = localStorage.getItem('theme');
+        var media = typeof window.matchMedia === 'function'
+          ? window.matchMedia('(prefers-color-scheme: dark)')
+          : null;
+        var isDark = savedTheme ? savedTheme === 'dark' : !!(media && media.matches);
+        document.documentElement.classList.toggle('dark', isDark);
       })();
     </script>
     <script type="application/ld+json">{&quot;@context&quot;:&quot;https://schema.org&quot;,&quot;@graph&quot;:[{&quot;@type&quot;:&quot;WebPage&quot;,&quot;url&quot;:&quot;https://norouz.akhave.in/fa/years/&quot;,&quot;inLanguage&quot;:&quot;fa&quot;,&quot;name&quot;:&quot;همهٔ سال‌های نوروز&quot;,&quot;about&quot;:[&quot;Nowruz&quot;,&quot;Norouz&quot;,&quot;نوروز&quot;,&quot;Persian New Year&quot;,&quot;Spring Equinox&quot;]},{&quot;@type&quot;:&quot;CollectionPage&quot;,&quot;url&quot;:&quot;https://norouz.akhave.in/fa/years/&quot;,&quot;inLanguage&quot;:&quot;fa&quot;,&quot;name&quot;:&quot;مرکز سال‌های نوروز&quot;,&quot;description&quot;:&quot;فهرست همهٔ صفحه‌های نوروز با زمان دقیق تحویل سال برای سال‌های مختلف.&quot;},{&quot;@type&quot;:&quot;BreadcrumbList&quot;,&quot;itemListElement&quot;:[{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:1,&quot;name&quot;:&quot;نوروز&quot;,&quot;item&quot;:&quot;https://norouz.akhave.in/fa/&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:2,&quot;name&quot;:&quot;همهٔ سال‌ها&quot;,&quot;item&quot;:&quot;https://norouz.akhave.in/fa/years/&quot;}]},{&quot;@type&quot;:&quot;ItemList&quot;,&quot;name&quot;:&quot;فهرست سال‌های نوروز&quot;,&quot;numberOfItems&quot;:5,&quot;itemListElement&quot;:[{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:1,&quot;url&quot;:&quot;https://norouz.akhave.in/fa/2026/&quot;,&quot;name&quot;:&quot;نوروز 2026&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:2,&quot;url&quot;:&quot;https://norouz.akhave.in/fa/2027/&quot;,&quot;name&quot;:&quot;نوروز 2027&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:3,&quot;url&quot;:&quot;https://norouz.akhave.in/fa/2028/&quot;,&quot;name&quot;:&quot;نوروز 2028&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:4,&quot;url&quot;:&quot;https://norouz.akhave.in/fa/2029/&quot;,&quot;name&quot;:&quot;نوروز 2029&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:5,&quot;url&quot;:&quot;https://norouz.akhave.in/fa/2030/&quot;,&quot;name&quot;:&quot;نوروز 2030&quot;}]}]}</script>

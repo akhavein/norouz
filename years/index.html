@@ -26,13 +26,64 @@
     <meta name="twitter:image" content="https://norouz.akhave.in/og/fa-years.png" />
     <meta name="twitter:image:alt" content="پوستر فهرست سال‌های نوروز با دسترسی به صفحهٔ سال‌های مختلف و زمان تحویل سال" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (function() {
+        var savedTheme = localStorage.getItem('theme');
+        var isDark = savedTheme ? savedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', isDark);
+      })();
+    </script>
     <style>
-      body { margin: 0; background: #fefdf8; color: #2b2118; font-family: Inter, system-ui, sans-serif; }
+      :root {
+        color-scheme: light;
+        --bg: #fefdf8;
+        --text: #2b2118;
+        --muted: #6e573e;
+        --link: #b08530;
+        --card-bg: rgba(255,250,240,.72);
+        --card-border: rgba(176,133,48,.2);
+        --control-bg: rgba(254,253,248,.86);
+        --control-border: rgba(176,133,48,.24);
+      }
+      html.dark {
+        color-scheme: dark;
+        --bg: #17120d;
+        --text: #f6efe3;
+        --muted: #d3c0a0;
+        --link: #d9af5a;
+        --card-bg: rgba(34,26,20,.9);
+        --card-border: rgba(217,175,90,.24);
+        --control-bg: rgba(34,26,20,.88);
+        --control-border: rgba(217,175,90,.24);
+      }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, system-ui, sans-serif; transition: background-color .2s ease, color .2s ease; }
       .wrap { max-width: 68rem; margin: 0 auto; padding: 3rem 1.25rem 4rem; }
       .fa { font-family: Vazirmatn, Inter, system-ui, sans-serif; }
       .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
       .toplinks { display:flex; flex-wrap:wrap; gap:.75rem; margin:0 0 1.5rem; direction:rtl; }
-      a { color:#b08530; }
+      a { color: var(--link); }
+      .muted { color: var(--muted); }
+      .card { padding: 1rem 1.1rem; border: 1px solid var(--card-border); border-radius: 1rem; background: var(--card-bg); }
+      .card-link { color: var(--text); text-decoration: none; }
+      .card-cta { color: var(--link); text-decoration: none; font-weight: 700; }
+      .controls { position: fixed; top: 1rem; right: 1rem; z-index: 20; display: flex; gap: .5rem; }
+      .theme-toggle {
+        border: 1px solid var(--control-border);
+        background: var(--control-bg);
+        color: var(--link);
+        border-radius: 999px;
+        width: 2.25rem;
+        height: 2.25rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      @media (max-width: 640px) {
+        .wrap { padding-top: 4.5rem; }
+      }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -56,6 +107,9 @@
     <script type="application/ld+json">{&quot;@context&quot;:&quot;https://schema.org&quot;,&quot;@graph&quot;:[{&quot;@type&quot;:&quot;WebPage&quot;,&quot;url&quot;:&quot;https://norouz.akhave.in/years/&quot;,&quot;inLanguage&quot;:&quot;fa&quot;,&quot;name&quot;:&quot;همهٔ سال‌های نوروز&quot;,&quot;about&quot;:[&quot;Nowruz&quot;,&quot;Norouz&quot;,&quot;نوروز&quot;,&quot;Persian New Year&quot;,&quot;Spring Equinox&quot;]},{&quot;@type&quot;:&quot;CollectionPage&quot;,&quot;url&quot;:&quot;https://norouz.akhave.in/years/&quot;,&quot;inLanguage&quot;:&quot;fa&quot;,&quot;name&quot;:&quot;مرکز سال‌های نوروز&quot;,&quot;description&quot;:&quot;فهرست همهٔ صفحه‌های نوروز با زمان دقیق تحویل سال برای سال‌های مختلف.&quot;},{&quot;@type&quot;:&quot;BreadcrumbList&quot;,&quot;itemListElement&quot;:[{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:1,&quot;name&quot;:&quot;نوروز&quot;,&quot;item&quot;:&quot;https://norouz.akhave.in/&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:2,&quot;name&quot;:&quot;همهٔ سال‌ها&quot;,&quot;item&quot;:&quot;https://norouz.akhave.in/years/&quot;}]},{&quot;@type&quot;:&quot;ItemList&quot;,&quot;name&quot;:&quot;فهرست سال‌های نوروز&quot;,&quot;numberOfItems&quot;:5,&quot;itemListElement&quot;:[{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:1,&quot;url&quot;:&quot;https://norouz.akhave.in/2026/&quot;,&quot;name&quot;:&quot;نوروز 2026&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:2,&quot;url&quot;:&quot;https://norouz.akhave.in/2027/&quot;,&quot;name&quot;:&quot;نوروز 2027&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:3,&quot;url&quot;:&quot;https://norouz.akhave.in/2028/&quot;,&quot;name&quot;:&quot;نوروز 2028&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:4,&quot;url&quot;:&quot;https://norouz.akhave.in/2029/&quot;,&quot;name&quot;:&quot;نوروز 2029&quot;},{&quot;@type&quot;:&quot;ListItem&quot;,&quot;position&quot;:5,&quot;url&quot;:&quot;https://norouz.akhave.in/2030/&quot;,&quot;name&quot;:&quot;نوروز 2030&quot;}]}]}</script>
   </head>
   <body>
+    <div class="controls" dir="ltr">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="تغییر به حالت تاریک" title="تغییر به حالت تاریک">◐</button>
+    </div>
     <main class="wrap">
       <div class="toplinks">
         <a href="/" class="fa">صفحهٔ اصلی نوروز</a>
@@ -65,52 +119,89 @@
       <p class="fa" style="font-size:1.05rem;max-width:56rem;margin:0 0 1.5rem;line-height:1.7;">این صفحه همهٔ سال‌های منتشرشدهٔ نوروز را یکجا جمع می‌کند تا بتوانید زمان دقیق تحویل سال را در سال‌های مختلف، هم به وقت تهران و هم به وقت UTC، مرور و مقایسه کنید.</p>
       <section class="grid">
         
-      <article style="padding:1rem 1.1rem;border:1px solid rgba(176,133,48,.2);border-radius:1rem;background:rgba(255,250,240,.72);">
+      <article class="card">
         <h2 class="fa" style="font-size:1.15rem;margin:0 0 .35rem;">
-          <a href="/2026/" style="color:#2b2118;text-decoration:none;">نوروز 2026</a>
+          <a href="/2026/" class="card-link">نوروز 2026</a>
         </h2>
-        <p class="fa" style="margin:0 0 .5rem;color:#6e573e;">سال خورشیدی 1405</p>
+        <p class="fa" class="muted" style="margin:0 0 .5rem;">سال خورشیدی 1405</p>
         <p class="fa" style="margin:0 0 .35rem;">تهران: ۱۴۰۴ اسفند ۲۹, جمعه ساعت ۱۸:۱۵:۵۳ (‎+۳:۳۰ گرینویچ)</p>
         <p class="fa" style="margin:0 0 .8rem;">UTC: ۱۴۰۴ اسفند ۲۹, جمعه ساعت ۱۴:۴۵:۵۳ (UTC)</p>
-        <a href="/2026/" class="fa" style="color:#b08530;text-decoration:none;font-weight:700;">مشاهدهٔ نوروز 2026</a>
+        <a href="/2026/" class="fa card-cta">مشاهدهٔ نوروز 2026</a>
       </article>
-      <article style="padding:1rem 1.1rem;border:1px solid rgba(176,133,48,.2);border-radius:1rem;background:rgba(255,250,240,.72);">
+      <article class="card">
         <h2 class="fa" style="font-size:1.15rem;margin:0 0 .35rem;">
-          <a href="/2027/" style="color:#2b2118;text-decoration:none;">نوروز 2027</a>
+          <a href="/2027/" class="card-link">نوروز 2027</a>
         </h2>
-        <p class="fa" style="margin:0 0 .5rem;color:#6e573e;">سال خورشیدی 1406</p>
+        <p class="fa" class="muted" style="margin:0 0 .5rem;">سال خورشیدی 1406</p>
         <p class="fa" style="margin:0 0 .35rem;">تهران: ۱۴۰۵ اسفند ۲۹, شنبه ساعت ۲۳:۵۴:۱۸ (‎+۳:۳۰ گرینویچ)</p>
         <p class="fa" style="margin:0 0 .8rem;">UTC: ۱۴۰۵ اسفند ۲۹, شنبه ساعت ۲۰:۲۴:۱۸ (UTC)</p>
-        <a href="/2027/" class="fa" style="color:#b08530;text-decoration:none;font-weight:700;">مشاهدهٔ نوروز 2027</a>
+        <a href="/2027/" class="fa card-cta">مشاهدهٔ نوروز 2027</a>
       </article>
-      <article style="padding:1rem 1.1rem;border:1px solid rgba(176,133,48,.2);border-radius:1rem;background:rgba(255,250,240,.72);">
+      <article class="card">
         <h2 class="fa" style="font-size:1.15rem;margin:0 0 .35rem;">
-          <a href="/2028/" style="color:#2b2118;text-decoration:none;">نوروز 2028</a>
+          <a href="/2028/" class="card-link">نوروز 2028</a>
         </h2>
-        <p class="fa" style="margin:0 0 .5rem;color:#6e573e;">سال خورشیدی 1407</p>
+        <p class="fa" class="muted" style="margin:0 0 .5rem;">سال خورشیدی 1407</p>
         <p class="fa" style="margin:0 0 .35rem;">تهران: ۱۴۰۷ فروردین ۱, دوشنبه ساعت ۵:۴۶:۳۲ (‎+۳:۳۰ گرینویچ)</p>
         <p class="fa" style="margin:0 0 .8rem;">UTC: ۱۴۰۷ فروردین ۱, دوشنبه ساعت ۲:۱۶:۳۲ (UTC)</p>
-        <a href="/2028/" class="fa" style="color:#b08530;text-decoration:none;font-weight:700;">مشاهدهٔ نوروز 2028</a>
+        <a href="/2028/" class="fa card-cta">مشاهدهٔ نوروز 2028</a>
       </article>
-      <article style="padding:1rem 1.1rem;border:1px solid rgba(176,133,48,.2);border-radius:1rem;background:rgba(255,250,240,.72);">
+      <article class="card">
         <h2 class="fa" style="font-size:1.15rem;margin:0 0 .35rem;">
-          <a href="/2029/" style="color:#2b2118;text-decoration:none;">نوروز 2029</a>
+          <a href="/2029/" class="card-link">نوروز 2029</a>
         </h2>
-        <p class="fa" style="margin:0 0 .5rem;color:#6e573e;">سال خورشیدی 1408</p>
+        <p class="fa" class="muted" style="margin:0 0 .5rem;">سال خورشیدی 1408</p>
         <p class="fa" style="margin:0 0 .35rem;">تهران: ۱۴۰۸ فروردین ۱, سه‌شنبه ساعت ۱۱:۳۱:۰۳ (‎+۳:۳۰ گرینویچ)</p>
         <p class="fa" style="margin:0 0 .8rem;">UTC: ۱۴۰۸ فروردین ۱, سه‌شنبه ساعت ۸:۰۱:۰۳ (UTC)</p>
-        <a href="/2029/" class="fa" style="color:#b08530;text-decoration:none;font-weight:700;">مشاهدهٔ نوروز 2029</a>
+        <a href="/2029/" class="fa card-cta">مشاهدهٔ نوروز 2029</a>
       </article>
-      <article style="padding:1rem 1.1rem;border:1px solid rgba(176,133,48,.2);border-radius:1rem;background:rgba(255,250,240,.72);">
+      <article class="card">
         <h2 class="fa" style="font-size:1.15rem;margin:0 0 .35rem;">
-          <a href="/2030/" style="color:#2b2118;text-decoration:none;">نوروز 2030</a>
+          <a href="/2030/" class="card-link">نوروز 2030</a>
         </h2>
-        <p class="fa" style="margin:0 0 .5rem;color:#6e573e;">سال خورشیدی 1409</p>
+        <p class="fa" class="muted" style="margin:0 0 .5rem;">سال خورشیدی 1409</p>
         <p class="fa" style="margin:0 0 .35rem;">تهران: ۱۴۰۸ اسفند ۳۰, چهارشنبه ساعت ۱۷:۲۱:۱۵ (‎+۳:۳۰ گرینویچ)</p>
         <p class="fa" style="margin:0 0 .8rem;">UTC: ۱۴۰۸ اسفند ۳۰, چهارشنبه ساعت ۱۳:۵۱:۱۵ (UTC)</p>
-        <a href="/2030/" class="fa" style="color:#b08530;text-decoration:none;font-weight:700;">مشاهدهٔ نوروز 2030</a>
+        <a href="/2030/" class="fa card-cta">مشاهدهٔ نوروز 2030</a>
       </article>
       </section>
     </main>
+    <script>
+      (function() {
+        var locale = document.documentElement.lang === 'en' ? 'en' : 'fa';
+        var labels = locale === 'fa'
+          ? { dark: 'تغییر به حالت تاریک', light: 'تغییر به حالت روشن' }
+          : { dark: 'Switch to dark mode', light: 'Switch to light mode' };
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+        function syncButton() {
+          var isDark = document.documentElement.classList.contains('dark');
+          var label = isDark ? labels.light : labels.dark;
+          button.setAttribute('aria-label', label);
+          button.setAttribute('title', label);
+          button.textContent = isDark ? '☀︎' : '☾';
+        }
+
+        button.addEventListener('click', function() {
+          var next = !document.documentElement.classList.contains('dark');
+          document.documentElement.classList.toggle('dark', next);
+          localStorage.setItem('theme', next ? 'dark' : 'light');
+          syncButton();
+        });
+
+        if (media && !localStorage.getItem('theme')) {
+          var handleChange = function(e) {
+            document.documentElement.classList.toggle('dark', e.matches);
+            syncButton();
+          };
+          if (media.addEventListener) media.addEventListener('change', handleChange);
+          else if (media.addListener) media.addListener(handleChange);
+        }
+
+        syncButton();
+      })();
+    </script>
   </body>
 </html>

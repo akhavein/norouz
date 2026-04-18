@@ -357,14 +357,14 @@ function renderYearsHubPage(locale) {
   const cards = years.map((year) => {
     const timeInfo = getYearTimeInfo(year, fa);
     return `
-      <article style="padding:1rem 1.1rem;border:1px solid rgba(176,133,48,.2);border-radius:1rem;background:rgba(255,250,240,.72);">
+      <article class="card">
         <h2${fa ? ' class="fa"' : ''} style="font-size:1.15rem;margin:0 0 .35rem;">
-          <a href="${buildPath(locale, year)}" style="color:#2b2118;text-decoration:none;">${escapeHtml(fa ? `نوروز ${year}` : `Nowruz ${year}`)}</a>
+          <a href="${buildPath(locale, year)}" class="card-link">${escapeHtml(fa ? `نوروز ${year}` : `Nowruz ${year}`)}</a>
         </h2>
-        <p${fa ? ' class="fa"' : ''} style="margin:0 0 .5rem;color:#6e573e;">${escapeHtml(fa ? `سال خورشیدی ${getShamsiYear(year)}` : `Solar Hijri year ${getShamsiYear(year)}`)}</p>
+        <p${fa ? ' class="fa"' : ''} class="muted" style="margin:0 0 .5rem;">${escapeHtml(fa ? `سال خورشیدی ${getShamsiYear(year)}` : `Solar Hijri year ${getShamsiYear(year)}`)}</p>
         <p${fa ? ' class="fa"' : ''} style="margin:0 0 .35rem;">${escapeHtml(fa ? `تهران: ${timeInfo?.tehran ?? ''}` : `Tehran: ${timeInfo?.tehran ?? ''}`)}</p>
         <p${fa ? ' class="fa"' : ''} style="margin:0 0 .8rem;">${escapeHtml(`UTC: ${timeInfo?.utc ?? ''}`)}</p>
-        <a href="${buildPath(locale, year)}"${fa ? ' class="fa"' : ''} style="color:#b08530;text-decoration:none;font-weight:700;">${escapeHtml(fa ? `مشاهدهٔ نوروز ${year}` : `Open Nowruz ${year}`)}</a>
+        <a href="${buildPath(locale, year)}"${fa ? ' class="fa card-cta"' : ' class="card-cta"'}>${escapeHtml(fa ? `مشاهدهٔ نوروز ${year}` : `Open Nowruz ${year}`)}</a>
       </article>`;
   }).join('');
 
@@ -396,13 +396,64 @@ function renderYearsHubPage(locale) {
     <meta name="twitter:image" content="${ogImage}" />
     <meta name="twitter:image:alt" content="${escapeHtml(ogImageAlt)}" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (function() {
+        var savedTheme = localStorage.getItem('theme');
+        var isDark = savedTheme ? savedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', isDark);
+      })();
+    </script>
     <style>
-      body { margin: 0; background: #fefdf8; color: #2b2118; font-family: Inter, system-ui, sans-serif; }
+      :root {
+        color-scheme: light;
+        --bg: #fefdf8;
+        --text: #2b2118;
+        --muted: #6e573e;
+        --link: #b08530;
+        --card-bg: rgba(255,250,240,.72);
+        --card-border: rgba(176,133,48,.2);
+        --control-bg: rgba(254,253,248,.86);
+        --control-border: rgba(176,133,48,.24);
+      }
+      html.dark {
+        color-scheme: dark;
+        --bg: #17120d;
+        --text: #f6efe3;
+        --muted: #d3c0a0;
+        --link: #d9af5a;
+        --card-bg: rgba(34,26,20,.9);
+        --card-border: rgba(217,175,90,.24);
+        --control-bg: rgba(34,26,20,.88);
+        --control-border: rgba(217,175,90,.24);
+      }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, system-ui, sans-serif; transition: background-color .2s ease, color .2s ease; }
       .wrap { max-width: 68rem; margin: 0 auto; padding: 3rem 1.25rem 4rem; }
       .fa { font-family: Vazirmatn, Inter, system-ui, sans-serif; }
       .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
       .toplinks { display:flex; flex-wrap:wrap; gap:.75rem; margin:0 0 1.5rem; ${fa ? 'direction:rtl;' : ''} }
-      a { color:#b08530; }
+      a { color: var(--link); }
+      .muted { color: var(--muted); }
+      .card { padding: 1rem 1.1rem; border: 1px solid var(--card-border); border-radius: 1rem; background: var(--card-bg); }
+      .card-link { color: var(--text); text-decoration: none; }
+      .card-cta { color: var(--link); text-decoration: none; font-weight: 700; }
+      .controls { position: fixed; top: 1rem; right: 1rem; z-index: 20; display: flex; gap: .5rem; }
+      .theme-toggle {
+        border: 1px solid var(--control-border);
+        background: var(--control-bg);
+        color: var(--link);
+        border-radius: 999px;
+        width: 2.25rem;
+        height: 2.25rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      @media (max-width: 640px) {
+        .wrap { padding-top: 4.5rem; }
+      }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -426,6 +477,9 @@ function renderYearsHubPage(locale) {
     <script type="application/ld+json">${escapeHtml(JSON.stringify(jsonLd))}</script>
   </head>
   <body>
+    <div class="controls" dir="ltr">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="${escapeHtml(fa ? 'تغییر به حالت تاریک' : 'Switch to dark mode')}" title="${escapeHtml(fa ? 'تغییر به حالت تاریک' : 'Switch to dark mode')}">◐</button>
+    </div>
     <main class="wrap">
       <div class="toplinks">
         <a href="${buildPath(locale, null)}"${fa ? ' class="fa"' : ''}>${escapeHtml(fa ? 'صفحهٔ اصلی نوروز' : 'Nowruz homepage')}</a>
@@ -437,6 +491,43 @@ function renderYearsHubPage(locale) {
         ${cards}
       </section>
     </main>
+    <script>
+      (function() {
+        var locale = document.documentElement.lang === 'en' ? 'en' : 'fa';
+        var labels = locale === 'fa'
+          ? { dark: 'تغییر به حالت تاریک', light: 'تغییر به حالت روشن' }
+          : { dark: 'Switch to dark mode', light: 'Switch to light mode' };
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+        function syncButton() {
+          var isDark = document.documentElement.classList.contains('dark');
+          var label = isDark ? labels.light : labels.dark;
+          button.setAttribute('aria-label', label);
+          button.setAttribute('title', label);
+          button.textContent = isDark ? '☀︎' : '☾';
+        }
+
+        button.addEventListener('click', function() {
+          var next = !document.documentElement.classList.contains('dark');
+          document.documentElement.classList.toggle('dark', next);
+          localStorage.setItem('theme', next ? 'dark' : 'light');
+          syncButton();
+        });
+
+        if (media && !localStorage.getItem('theme')) {
+          var handleChange = function(e) {
+            document.documentElement.classList.toggle('dark', e.matches);
+            syncButton();
+          };
+          if (media.addEventListener) media.addEventListener('change', handleChange);
+          else if (media.addListener) media.addListener(handleChange);
+        }
+
+        syncButton();
+      })();
+    </script>
   </body>
 </html>
 `;

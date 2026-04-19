@@ -448,6 +448,8 @@ function App() {
   const schemaTarget = routeInfo.pageKind === 'year' && routeInfo.year && EQUINOX_UTC[routeInfo.year]
     ? new Date(EQUINOX_UTC[routeInfo.year])
     : null;
+  const activeChatYear = phase === 'celebrating' ? year! : year! - 1;
+  const showChat = !isFocusedYearPage || focusedYear === activeChatYear;
 
   if (loading) {
     return (
@@ -571,16 +573,18 @@ function App() {
         <Footer />
       </div>
 
-      {/* Chat widget — always available, lazy-loaded */}
-      <Suspense fallback={null}>
-        <ChatToggle onClick={() => setChatOpen(o => !o)} isOpen={chatOpen} />
-        {chatOpen && (
-          <ChatPanel
-            onClose={() => setChatOpen(false)}
-            norouzYear={phase === 'celebrating' ? year! : year! - 1}
-          />
-        )}
-      </Suspense>
+      {/* Chat widget, only on the homepage or the active chat season's year page */}
+      {showChat && (
+        <Suspense fallback={null}>
+          <ChatToggle onClick={() => setChatOpen(o => !o)} isOpen={chatOpen} />
+          {chatOpen && (
+            <ChatPanel
+              onClose={() => setChatOpen(false)}
+              norouzYear={activeChatYear}
+            />
+          )}
+        </Suspense>
+      )}
     </div>
   );
 }

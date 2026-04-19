@@ -378,24 +378,28 @@ function DormantView({ target, shamsiYear }: { target: Date; shamsiYear: number 
   );
 }
 
-function YearRouteView({ year, shamsiYear, target, days, hours, minutes, seconds, showAudioControl, isAudioPlaying, onToggleAudio }: { year: number; shamsiYear: number; target: Date; days: number; hours: number; minutes: number; seconds: number; showAudioControl: boolean; isAudioPlaying: boolean; onToggleAudio: () => void }) {
+function YearRouteView({ year, shamsiYear, target, days, hours, minutes, seconds, showAudioControl, isAudioPlaying, onToggleAudio, showCelebration, norouzDay }: { year: number; shamsiYear: number; target: Date; days: number; hours: number; minutes: number; seconds: number; showAudioControl: boolean; isAudioPlaying: boolean; onToggleAudio: () => void; showCelebration: boolean; norouzDay: number | null }) {
   const { locale } = useLanguage();
   const isFuture = target.getTime() > nowMs();
 
   return (
     <div className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10 w-full">
-      <div className="text-center space-y-2">
-        <p className={`text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
-          {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
-        </p>
-        {!isFuture && (
-          <p className={`text-sm sm:text-base text-warm-charcoal/65 dark:text-cream/60 ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
-            {locale === 'fa' ? `نوروز ${toPersianNumerals(year)} گذشته است` : `Nowruz ${year} has passed`}
+      {showCelebration ? (
+        <CelebrationView shamsiYear={shamsiYear} norouzDay={norouzDay} />
+      ) : (
+        <div className="text-center space-y-2">
+          <p className={`text-2xl sm:text-3xl font-bold text-persian-gold tracking-wide ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+            {locale === 'fa' ? toPersianNumerals(shamsiYear) : shamsiYear}
           </p>
-        )}
-      </div>
+          {!isFuture && (
+            <p className={`text-sm sm:text-base text-warm-charcoal/65 dark:text-cream/60 ${locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : ''}`}>
+              {locale === 'fa' ? `نوروز ${toPersianNumerals(year)} گذشته است` : `Nowruz ${year} has passed`}
+            </p>
+          )}
+        </div>
+      )}
 
-      {isFuture && (
+      {isFuture && !showCelebration && (
         <Countdown days={days} hours={hours} minutes={minutes} seconds={seconds} />
       )}
 
@@ -499,6 +503,8 @@ function App() {
               showAudioControl={audio.isInAudioWindow && focusedYear === year}
               isAudioPlaying={audio.isPlaying}
               onToggleAudio={audio.toggle}
+              showCelebration={focusedYear === year && phase === 'celebrating'}
+              norouzDay={focusedYear === year && phase === 'celebrating' ? norouzDay : null}
             />
           ) : (
             <>

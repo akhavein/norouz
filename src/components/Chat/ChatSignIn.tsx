@@ -1,23 +1,34 @@
+import { useState } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 
 interface ChatSignInProps {
-  onSignIn: () => void;
+  onSignIn: () => Promise<void>;
   loading: boolean;
 }
 
 export function ChatSignIn({ onSignIn, loading }: ChatSignInProps) {
   const { t, locale } = useLanguage();
   const fontClass = locale === 'fa' ? "font-['Vazirmatn',sans-serif]" : '';
+  const [pending, setPending] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  const handleSignIn = async () => {
+    setFailed(false);
+    setPending(true);
+    try {
+      await onSignIn();
+    } catch {
+      setFailed(true);
+    } finally {
+      setPending(false);
+    }
+  };
 
   return (
     <div className="p-4 border-t border-persian-gold/15">
       <button
-        onClick={() => {
-          // Remember that chat was open so we can reopen it after the auth redirect returns.
-          sessionStorage.setItem('norouz_chat_open', '1');
-          onSignIn();
-        }}
-        disabled={loading}
+        onClick={handleSignIn}
+        disabled={loading || pending}
         className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full border border-persian-gold/30 hover:border-persian-gold/60 bg-cream/80 dark:bg-dark-surface/80 hover:bg-persian-gold/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-persian-gold disabled:opacity-50 ${fontClass}`}
       >
         {/* Google "G" logo */}
@@ -31,6 +42,11 @@ export function ChatSignIn({ onSignIn, loading }: ChatSignInProps) {
           {t('chat_sign_in')}
         </span>
       </button>
+      {failed && (
+        <p className={`text-[10px] text-red-400/80 mt-2 text-center ${fontClass}`}>
+          {t('chat_error')} {t('chat_retry').toLowerCase()}
+        </p>
+      )}
     </div>
   );
 }

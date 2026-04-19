@@ -30,6 +30,7 @@ export async function signInWithGoogle(): Promise<void> {
     const code = (err as { code?: string }).code;
     if (code === 'auth/popup-blocked') {
       sessionStorage.setItem('norouz_auth_redirect', '1');
+      sessionStorage.setItem('norouz_chat_open', '1');
       await signInWithRedirect(auth(), provider);
     } else {
       throw err;

@@ -38,6 +38,7 @@ export function ChatNickname({ onSave }: ChatNicknameProps) {
           value={value}
           onChange={(e) => setValue(e.target.value.replace(/#/g, '').slice(0, 20))}
           placeholder={t('chat_nickname_placeholder')}
+          aria-label={t('chat_nickname_placeholder')}
           autoFocus
           className={`flex-1 min-w-0 px-3 py-1.5 text-sm rounded-full border border-persian-gold/20 focus:border-persian-gold/40 bg-transparent text-warm-charcoal dark:text-cream placeholder:text-warm-charcoal/30 dark:placeholder:text-cream/25 focus:outline-none transition-colors ${fontClass}`}
         />

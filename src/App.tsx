@@ -378,7 +378,7 @@ function DormantView({ target, shamsiYear }: { target: Date; shamsiYear: number 
   );
 }
 
-function YearRouteView({ year, shamsiYear, target, days, hours, minutes, seconds }: { year: number; shamsiYear: number; target: Date; days: number; hours: number; minutes: number; seconds: number }) {
+function YearRouteView({ year, shamsiYear, target, days, hours, minutes, seconds, showAudioControl, isAudioPlaying, onToggleAudio }: { year: number; shamsiYear: number; target: Date; days: number; hours: number; minutes: number; seconds: number; showAudioControl: boolean; isAudioPlaying: boolean; onToggleAudio: () => void }) {
   const { locale } = useLanguage();
   const isFuture = target.getTime() > nowMs();
 
@@ -400,6 +400,10 @@ function YearRouteView({ year, shamsiYear, target, days, hours, minutes, seconds
       )}
 
       <HaftSin />
+
+      {showAudioControl && (
+        <PlayButton isPlaying={isAudioPlaying} onClick={onToggleAudio} />
+      )}
 
       <div className="text-center space-y-1">
         <p className="text-sm text-persian-teal font-medium">
@@ -490,6 +494,9 @@ function App() {
               hours={focusedCountdown.hours}
               minutes={focusedCountdown.minutes}
               seconds={focusedCountdown.seconds}
+              showAudioControl={audio.isInAudioWindow && focusedYear === year}
+              isAudioPlaying={audio.isPlaying}
+              onToggleAudio={audio.toggle}
             />
           ) : (
             <>

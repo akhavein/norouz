@@ -120,12 +120,19 @@ async function main() {
   assertIncludes(enYear, 'Exact time for Nowruz 2028', 'English year exact-time section');
   assertIncludes(enYear, 'rel="prev" href="https://norouz.akhave.in/en/2027/"', 'English prev link');
   assertIncludes(enYear, 'rel="next" href="https://norouz.akhave.in/en/2029/"', 'English next link');
-  assertIncludes(enYear, 'https://norouz.akhave.in/og/en-2028.png', 'English year OG image');
-  assertIncludes(enYear, '&quot;image&quot;:&quot;https://norouz.akhave.in/og/en-2028.png&quot;', 'English year structured-data image');
+  assertIncludes(enYear, '"image":"https://norouz.akhave.in/og/en-2028.png"', 'English year structured-data image');
+  if (enYear.includes('&quot;@context&quot;')) {
+    throw new Error('Found HTML-escaped JSON-LD structured data in English year page');
+  }
+  const ldJsonMatch = enYear.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  if (!ldJsonMatch) {
+    throw new Error('Missing JSON-LD script in English year page');
+  }
+  JSON.parse(ldJsonMatch[1]);
   if (enYear.includes('https://norouz.akhave.in/og-image.png')) {
     throw new Error('Found stale generic og-image.png reference in English year page');
   }
-  checks.push('en year page nav + OG + structured data image');
+  checks.push('en year page nav + OG + valid structured data JSON');
 
   const enYearBootstrap = extractBootstrapScript(enYear, 'localized English year page');
   const localizedYear = runBootstrapScript(enYearBootstrap, { pathname: '/en/2028/', storage: { locale: 'fa' } });

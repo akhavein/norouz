@@ -41,6 +41,10 @@ function escapeHtml(value) {
     .replace(/"/g, '&quot;');
 }
 
+function serializeJsonLd(value) {
+  return JSON.stringify(value).replace(/</g, '\\u003c');
+}
+
 function getShamsiYear(year) {
   return year - 621;
 }
@@ -474,7 +478,7 @@ function renderYearsHubPage(locale) {
         document.documentElement.classList.toggle('dark', isDark);
       })();
     </script>
-    <script type="application/ld+json">${escapeHtml(JSON.stringify(jsonLd))}</script>
+    <script type="application/ld+json">${serializeJsonLd(jsonLd)}</script>
   </head>
   <body>
     <div class="controls" dir="ltr">
@@ -695,7 +699,7 @@ function getStructuredData({ canonical, locale, year, fa }) {
     }
   }
 
-  return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+  return { '@context': 'https://schema.org', '@graph': graph };
 }
 
 function getPageMeta(locale, year, explicitFaPath = false) {
@@ -843,7 +847,7 @@ function renderPage(locale, year) {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet" />
-    <script type="application/ld+json">${escapeHtml(structuredData)}</script>
+    <script type="application/ld+json">${serializeJsonLd(structuredData)}</script>
   </head>
   <body>
     <div id="root">

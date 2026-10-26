@@ -77,6 +77,7 @@ function getYearTimeInfo(year, fa) {
     utc: formatDateTime(date, fa ? 'fa-IR' : 'en-US', 'UTC'),
     tehran: formatDateTime(date, fa ? 'fa-IR' : 'en-US', 'Asia/Tehran'),
     dateOnly: new Intl.DateTimeFormat(fa ? 'fa-IR' : 'en-US', {
+      calendar: 'gregory',
       year: 'numeric',
       month: 'long',
       day: 'numeric',

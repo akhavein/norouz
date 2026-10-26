@@ -149,6 +149,12 @@ async function main() {
   assertEqual(upgradedYear.replaced, '/en/2028/', 'root year English upgrade');
   checks.push('x-default year redirect');
 
+  for (const route of ['2027/index.html', 'fa/2027/index.html']) {
+    const yearPage = await read(route);
+    assertIncludes(yearPage, '<div class="fa" style="font-weight:600;">تاریخ میلادی</div>\n            <div class="fa">۲۰ مارس ۲۰۲۷</div>', `${route} Gregorian date label`);
+  }
+  checks.push('root + fa 2027 Gregorian date labels');
+
   const yearsHub = await read('en/years/index.html');
   assertIncludes(yearsHub, 'CollectionPage', 'years hub CollectionPage schema');
   assertIncludes(yearsHub, 'ItemList', 'years hub ItemList schema');

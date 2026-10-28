@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-28T19:13:26.683Z",
+  "title": "Design System: norouz",
+  "extensions": {
+    "shadows": [],
+    "motion": [
+      {
+        "name": "source-1",
+        "value": "background-color .2s ease, color .2s ease",
+        "purpose": "en/years/index.html:53 body"
+      },
+      {
+        "name": "source-2",
+        "value": "flip-slide-in 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "src/index.css:61 .flip-enter"
+      },
+      {
+        "name": "source-3",
+        "value": "none",
+        "purpose": "src/index.css:73 @media (prefers-reduced-motion: reduce) > .flip-enter"
+      },
+      {
+        "name": "source-4",
+        "value": "phase-fade-in 0.5s ease-out",
+        "purpose": "src/index.css:104 .phase-enter"
+      },
+      {
+        "name": "source-5",
+        "value": "zodiac-leg-stride-front var(--leg-dur, 0.6s) ease-in-out infinite alternate",
+        "purpose": "src/index.css:122 .zodiac-leg-front"
+      },
+      {
+        "name": "source-6",
+        "value": "zodiac-leg-stride-back var(--leg-dur, 0.6s) ease-in-out infinite alternate",
+        "purpose": "src/index.css:127 .zodiac-leg-back"
+      },
+      {
+        "name": "source-7",
+        "value": "zodiac-bob 0.3s ease-in-out infinite alternate",
+        "purpose": "src/index.css:143 .zodiac-roam svg"
+      },
+      {
+        "name": "source-8",
+        "value": "zodiac-eat-nod 0.5s ease-in-out infinite",
+        "purpose": "src/index.css:153 .zodiac-roam.zodiac-eating svg"
+      },
+      {
+        "name": "source-9",
+        "value": "modal-slide-up 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "src/index.css:188 .modal-enter"
+      },
+      {
+        "name": "source-10",
+        "value": "chat-slide-up 0.3s ease-out",
+        "purpose": "src/index.css:211 .chat-enter"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "source-1",
+        "value": "(prefers-color-scheme: dark)",
+        "purpose": "2026/index.html:77 @media"
+      },
+      {
+        "name": "source-2",
+        "value": "(max-width: 640px)",
+        "purpose": "en/years/index.html:77 @media"
+      },
+      {
+        "name": "source-3",
+        "value": "(prefers-reduced-motion: reduce)",
+        "purpose": "src/index.css:71 @media"
+      }
+    ]
+  },
+  "components": [],
+  "narrative": {
+    "overview": "Source capture of the incumbent implementation. Rendered appearance, creative direction and component previews remain unverified.",
+    "keyCharacteristics": [],
+    "rules": [],
+    "dos": [
+      "Preserve existing tokens, selectors, light/dark variants, locale overrides and platform semantics."
+    ],
+    "donts": [
+      "Do not synthesize missing colors, scales, component previews or product claims."
+    ]
+  }
+}

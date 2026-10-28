@@ -23,3 +23,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Impeccable local engine and per-developer state
+.agents/skills/impeccable/scripts/bin/
+.impeccable/config.local.json
+.impeccable/cache/
+.impeccable/hook.cache.json
+.impeccable/hook.pending.json

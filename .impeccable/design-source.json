@@ -1,0 +1,2799 @@
+{
+  "capturedFrom": "64f3d5e87660f667fe2f1861e12b9a089e95217e",
+  "scope": "Tracked current-main source only; no computed-style or device verification.",
+  "sources": [
+    {
+      "path": "2026/index.html",
+      "sha256": "9288acef105a249661b5bca5c208b9e06fe323fde1ad83f56bc3262e38071472"
+    },
+    {
+      "path": "2027/index.html",
+      "sha256": "1ad071342a980e5aca692a5382334e11c2b04b2027138d0d724e2470ec720845"
+    },
+    {
+      "path": "2028/index.html",
+      "sha256": "1ac094affe3e9a659f8f549e0877be048c69bcef37b5c706db7988d076d22fff"
+    },
+    {
+      "path": "2029/index.html",
+      "sha256": "c79e319b5008a26e6af80b82ad2f50009e4454738b05c05687e02d29cb0519ea"
+    },
+    {
+      "path": "2030/index.html",
+      "sha256": "8d93fcad42f48be4cd312b2f0fa98335e4815bd9f70fbafde38c7c62cdacd686"
+    },
+    {
+      "path": "en/2026/index.html",
+      "sha256": "b6dadca6011b0d1480bb328ddecbbbdbe061138de212bfddc31c0f4a85ceb22b"
+    },
+    {
+      "path": "en/2027/index.html",
+      "sha256": "e4eae0fc045347f39bbd2f8cbcd291e7f032c162db37add8ed36938288c7d717"
+    },
+    {
+      "path": "en/2028/index.html",
+      "sha256": "ffad6781e06ca2b83e19a6029b7a98ace009abbe4e6fdb63a4a8c93c2a9335d5"
+    },
+    {
+      "path": "en/2029/index.html",
+      "sha256": "61c5c99c3a07cdeb8ede5d47b9a8d9f311bfdef0f006ae2d251dba012a2586b7"
+    },
+    {
+      "path": "en/2030/index.html",
+      "sha256": "e860326d2d7e9dc63edf050fc4ad82edacb91159824e6477d496af3860da5389"
+    },
+    {
+      "path": "en/index.html",
+      "sha256": "83f2def63e7a214f51754887db948140de84c18534dceef62d6f69ec8aec6187"
+    },
+    {
+      "path": "en/years/index.html",
+      "sha256": "27753cc087dfcd6ae7b59c36bd72016cbbe13a11ed30aa582cc60c5dc186c374"
+    },
+    {
+      "path": "fa/2026/index.html",
+      "sha256": "abbf88e00dd68062724a70b5792582f00714842ee8ad9bfd9fec75fbc1466f45"
+    },
+    {
+      "path": "fa/2027/index.html",
+      "sha256": "147d725dd6890c1df49a87c96b6a519a23c3ceadb90a6241ecfad72086ced91f"
+    },
+    {
+      "path": "fa/2028/index.html",
+      "sha256": "56da79e1fbc5a4d5cd71157762df46d63782fbf961c877c44faf2024a41f5c70"
+    },
+    {
+      "path": "fa/2029/index.html",
+      "sha256": "b8ef3453fa43aa40156b3db5d4e11184fec8a9b69d565b42a73648dcbdc4b73a"
+    },
+    {
+      "path": "fa/2030/index.html",
+      "sha256": "ad463d2b83f35d3ac70899bb2e5fed319323c0c2c5a5c0b6bcaf94f0516b056e"
+    },
+    {
+      "path": "fa/index.html",
+      "sha256": "e962c12b441843dd0f8dafaaf3362ac97947c8a9d2b6b317f489be02e5cc625a"
+    },
+    {
+      "path": "fa/years/index.html",
+      "sha256": "f8518dc7df1dd2a170f8432e6c032e361ee954de028112dafda6865e817929f7"
+    },
+    {
+      "path": "index.html",
+      "sha256": "91d3c530cfabd5d5450388e2bbe06f234d2b95197c6c18a8eb0b1c6c3bd47e24"
+    },
+    {
+      "path": "src/index.css",
+      "sha256": "de559fbd4558a8cc141fd62bdfc25bc2424f15139a69d2d7b745323af9d4ddb9"
+    },
+    {
+      "path": "years/index.html",
+      "sha256": "581e249441946866e376cda099db25ec95dbae865fd771d8a56dad7cebd08d4f"
+    }
+  ],
+  "declarations": [
+    {
+      "file": "2026/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "2026/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "2027/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "2028/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "2029/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "2030/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "en/2026/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "en/2027/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "en/2028/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "en/2029/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "en/2030/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "en/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "en/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "en/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "en/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "en/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "en/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "en/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "en/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "en/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "en/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "en/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 33,
+      "context": ":root",
+      "property": "--bg",
+      "value": "#fefdf8"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 34,
+      "context": ":root",
+      "property": "--text",
+      "value": "#2b2118"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 35,
+      "context": ":root",
+      "property": "--muted",
+      "value": "#6e573e"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 36,
+      "context": ":root",
+      "property": "--link",
+      "value": "#b08530"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 37,
+      "context": ":root",
+      "property": "--card-bg",
+      "value": "rgba(255,250,240,.72)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 38,
+      "context": ":root",
+      "property": "--card-border",
+      "value": "rgba(176,133,48,.2)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 39,
+      "context": ":root",
+      "property": "--control-bg",
+      "value": "rgba(254,253,248,.86)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 40,
+      "context": ":root",
+      "property": "--control-border",
+      "value": "rgba(176,133,48,.24)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 44,
+      "context": "html.dark",
+      "property": "--bg",
+      "value": "#17120d"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 45,
+      "context": "html.dark",
+      "property": "--text",
+      "value": "#f6efe3"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 46,
+      "context": "html.dark",
+      "property": "--muted",
+      "value": "#d3c0a0"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 47,
+      "context": "html.dark",
+      "property": "--link",
+      "value": "#d9af5a"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 48,
+      "context": "html.dark",
+      "property": "--card-bg",
+      "value": "rgba(34,26,20,.9)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 49,
+      "context": "html.dark",
+      "property": "--card-border",
+      "value": "rgba(217,175,90,.24)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 50,
+      "context": "html.dark",
+      "property": "--control-bg",
+      "value": "rgba(34,26,20,.88)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 51,
+      "context": "html.dark",
+      "property": "--control-border",
+      "value": "rgba(217,175,90,.24)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "margin",
+      "value": "0"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "background",
+      "value": "var(--bg)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "color",
+      "value": "var(--text)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "font-family",
+      "value": "Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "transition",
+      "value": "background-color .2s ease, color .2s ease"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 54,
+      "context": ".wrap",
+      "property": "max-width",
+      "value": "68rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 54,
+      "context": ".wrap",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 54,
+      "context": ".wrap",
+      "property": "padding",
+      "value": "3rem 1.25rem 4rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 55,
+      "context": ".fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 56,
+      "context": ".grid",
+      "property": "display",
+      "value": "grid"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 56,
+      "context": ".grid",
+      "property": "grid-template-columns",
+      "value": "repeat(auto-fit, minmax(260px, 1fr))"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 56,
+      "context": ".grid",
+      "property": "gap",
+      "value": "1rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "display",
+      "value": "flex"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "gap",
+      "value": ".75rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "margin",
+      "value": "0 0 1.5rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 58,
+      "context": "a",
+      "property": "color",
+      "value": "var(--link)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 59,
+      "context": ".muted",
+      "property": "color",
+      "value": "var(--muted)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "padding",
+      "value": "1rem 1.1rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "border",
+      "value": "1px solid var(--card-border)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "border-radius",
+      "value": "1rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "background",
+      "value": "var(--card-bg)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 61,
+      "context": ".card-link",
+      "property": "color",
+      "value": "var(--text)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 62,
+      "context": ".card-cta",
+      "property": "color",
+      "value": "var(--link)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 62,
+      "context": ".card-cta",
+      "property": "font-weight",
+      "value": "700"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 63,
+      "context": ".controls",
+      "property": "display",
+      "value": "flex"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 63,
+      "context": ".controls",
+      "property": "gap",
+      "value": ".5rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 65,
+      "context": ".theme-toggle",
+      "property": "border",
+      "value": "1px solid var(--control-border)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 66,
+      "context": ".theme-toggle",
+      "property": "background",
+      "value": "var(--control-bg)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 67,
+      "context": ".theme-toggle",
+      "property": "color",
+      "value": "var(--link)"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 68,
+      "context": ".theme-toggle",
+      "property": "border-radius",
+      "value": "999px"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 69,
+      "context": ".theme-toggle",
+      "property": "width",
+      "value": "2.25rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 71,
+      "context": ".theme-toggle",
+      "property": "display",
+      "value": "inline-flex"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 74,
+      "context": ".theme-toggle",
+      "property": "font-size",
+      "value": "1rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 78,
+      "context": "@media (max-width: 640px) > .wrap",
+      "property": "padding-top",
+      "value": "4.5rem"
+    },
+    {
+      "file": "en/years/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(max-width: 640px)"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "fa/2026/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "fa/2027/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "fa/2028/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "fa/2029/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "fa/2030/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "fa/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 33,
+      "context": ":root",
+      "property": "--bg",
+      "value": "#fefdf8"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 34,
+      "context": ":root",
+      "property": "--text",
+      "value": "#2b2118"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 35,
+      "context": ":root",
+      "property": "--muted",
+      "value": "#6e573e"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 36,
+      "context": ":root",
+      "property": "--link",
+      "value": "#b08530"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 37,
+      "context": ":root",
+      "property": "--card-bg",
+      "value": "rgba(255,250,240,.72)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 38,
+      "context": ":root",
+      "property": "--card-border",
+      "value": "rgba(176,133,48,.2)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 39,
+      "context": ":root",
+      "property": "--control-bg",
+      "value": "rgba(254,253,248,.86)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 40,
+      "context": ":root",
+      "property": "--control-border",
+      "value": "rgba(176,133,48,.24)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 44,
+      "context": "html.dark",
+      "property": "--bg",
+      "value": "#17120d"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 45,
+      "context": "html.dark",
+      "property": "--text",
+      "value": "#f6efe3"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 46,
+      "context": "html.dark",
+      "property": "--muted",
+      "value": "#d3c0a0"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 47,
+      "context": "html.dark",
+      "property": "--link",
+      "value": "#d9af5a"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 48,
+      "context": "html.dark",
+      "property": "--card-bg",
+      "value": "rgba(34,26,20,.9)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 49,
+      "context": "html.dark",
+      "property": "--card-border",
+      "value": "rgba(217,175,90,.24)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 50,
+      "context": "html.dark",
+      "property": "--control-bg",
+      "value": "rgba(34,26,20,.88)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 51,
+      "context": "html.dark",
+      "property": "--control-border",
+      "value": "rgba(217,175,90,.24)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "margin",
+      "value": "0"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "background",
+      "value": "var(--bg)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "color",
+      "value": "var(--text)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "font-family",
+      "value": "Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "transition",
+      "value": "background-color .2s ease, color .2s ease"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 54,
+      "context": ".wrap",
+      "property": "max-width",
+      "value": "68rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 54,
+      "context": ".wrap",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 54,
+      "context": ".wrap",
+      "property": "padding",
+      "value": "3rem 1.25rem 4rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 55,
+      "context": ".fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 56,
+      "context": ".grid",
+      "property": "display",
+      "value": "grid"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 56,
+      "context": ".grid",
+      "property": "grid-template-columns",
+      "value": "repeat(auto-fit, minmax(260px, 1fr))"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 56,
+      "context": ".grid",
+      "property": "gap",
+      "value": "1rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "display",
+      "value": "flex"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "gap",
+      "value": ".75rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "margin",
+      "value": "0 0 1.5rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 58,
+      "context": "a",
+      "property": "color",
+      "value": "var(--link)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 59,
+      "context": ".muted",
+      "property": "color",
+      "value": "var(--muted)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "padding",
+      "value": "1rem 1.1rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "border",
+      "value": "1px solid var(--card-border)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "border-radius",
+      "value": "1rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "background",
+      "value": "var(--card-bg)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 61,
+      "context": ".card-link",
+      "property": "color",
+      "value": "var(--text)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 62,
+      "context": ".card-cta",
+      "property": "color",
+      "value": "var(--link)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 62,
+      "context": ".card-cta",
+      "property": "font-weight",
+      "value": "700"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 63,
+      "context": ".controls",
+      "property": "display",
+      "value": "flex"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 63,
+      "context": ".controls",
+      "property": "gap",
+      "value": ".5rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 65,
+      "context": ".theme-toggle",
+      "property": "border",
+      "value": "1px solid var(--control-border)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 66,
+      "context": ".theme-toggle",
+      "property": "background",
+      "value": "var(--control-bg)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 67,
+      "context": ".theme-toggle",
+      "property": "color",
+      "value": "var(--link)"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 68,
+      "context": ".theme-toggle",
+      "property": "border-radius",
+      "value": "999px"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 69,
+      "context": ".theme-toggle",
+      "property": "width",
+      "value": "2.25rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 71,
+      "context": ".theme-toggle",
+      "property": "display",
+      "value": "inline-flex"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 74,
+      "context": ".theme-toggle",
+      "property": "font-size",
+      "value": "1rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 78,
+      "context": "@media (max-width: 640px) > .wrap",
+      "property": "padding-top",
+      "value": "4.5rem"
+    },
+    {
+      "file": "fa/years/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(max-width: 640px)"
+    },
+    {
+      "file": "index.html",
+      "line": 66,
+      "context": ".seo-fallback",
+      "property": "max-width",
+      "value": "56rem"
+    },
+    {
+      "file": "index.html",
+      "line": 67,
+      "context": ".seo-fallback",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "index.html",
+      "line": 68,
+      "context": ".seo-fallback",
+      "property": "padding",
+      "value": "4rem 1.25rem 2rem"
+    },
+    {
+      "file": "index.html",
+      "line": 69,
+      "context": ".seo-fallback",
+      "property": "color",
+      "value": "#2b2118"
+    },
+    {
+      "file": "index.html",
+      "line": 70,
+      "context": ".seo-fallback",
+      "property": "font-family",
+      "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"
+    },
+    {
+      "file": "index.html",
+      "line": 71,
+      "context": ".seo-fallback",
+      "property": "line-height",
+      "value": "1.65"
+    },
+    {
+      "file": "index.html",
+      "line": 75,
+      "context": ".seo-fallback h1,\n      .seo-fallback h2,\n      .seo-fallback h3",
+      "property": "line-height",
+      "value": "1.25"
+    },
+    {
+      "file": "index.html",
+      "line": 76,
+      "context": ".seo-fallback .fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "color",
+      "value": "#f4ecde"
+    },
+    {
+      "file": "index.html",
+      "line": 78,
+      "context": "@media (prefers-color-scheme: dark) > .seo-fallback",
+      "property": "background",
+      "value": "#1a1612"
+    },
+    {
+      "file": "index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-color-scheme: dark)"
+    },
+    {
+      "file": "src/index.css",
+      "line": 6,
+      "context": "@theme ",
+      "property": "--color-cream",
+      "value": "#fefdf8"
+    },
+    {
+      "file": "src/index.css",
+      "line": 7,
+      "context": "@theme ",
+      "property": "--color-warm-charcoal",
+      "value": "#2c2417"
+    },
+    {
+      "file": "src/index.css",
+      "line": 8,
+      "context": "@theme ",
+      "property": "--color-persian-gold",
+      "value": "#b08530"
+    },
+    {
+      "file": "src/index.css",
+      "line": 9,
+      "context": "@theme ",
+      "property": "--color-sage",
+      "value": "#7dad8a"
+    },
+    {
+      "file": "src/index.css",
+      "line": 10,
+      "context": "@theme ",
+      "property": "--color-blush",
+      "value": "#e8b4b8"
+    },
+    {
+      "file": "src/index.css",
+      "line": 11,
+      "context": "@theme ",
+      "property": "--color-persian-teal",
+      "value": "#3d7a82"
+    },
+    {
+      "file": "src/index.css",
+      "line": 12,
+      "context": "@theme ",
+      "property": "--color-dark-bg",
+      "value": "#1a1612"
+    },
+    {
+      "file": "src/index.css",
+      "line": 13,
+      "context": "@theme ",
+      "property": "--color-dark-surface",
+      "value": "#252017"
+    },
+    {
+      "file": "src/index.css",
+      "line": 18,
+      "context": "body",
+      "property": "background-color",
+      "value": "#fefdf8"
+    },
+    {
+      "file": "src/index.css",
+      "line": 24,
+      "context": ".dark body",
+      "property": "background-color",
+      "value": "#1a1612"
+    },
+    {
+      "file": "src/index.css",
+      "line": 32,
+      "context": ".flip-card",
+      "property": "display",
+      "value": "inline-flex"
+    },
+    {
+      "file": "src/index.css",
+      "line": 36,
+      "context": ".flip-card",
+      "property": "background",
+      "value": "linear-gradient(\n    to bottom,\n    rgba(44, 36, 23, 0.03) 0%,\n    rgba(44, 36, 23, 0.03) calc(50% - 0.5px),\n    rgba(176, 133, 48, 0.15) calc(50% - 0.5px),\n    rgba(176, 133, 48, 0.15) calc(50% + 0.5px),\n    rgba(44, 36, 23, 0.06) calc(50% + 0.5px),\n    rgba(44, 36, 23, 0.06) 100%\n  )"
+    },
+    {
+      "file": "src/index.css",
+      "line": 48,
+      "context": ".dark .flip-card",
+      "property": "background",
+      "value": "linear-gradient(\n    to bottom,\n    rgba(176, 133, 48, 0.05) 0%,\n    rgba(176, 133, 48, 0.05) calc(50% - 0.5px),\n    rgba(176, 133, 48, 0.12) calc(50% - 0.5px),\n    rgba(176, 133, 48, 0.12) calc(50% + 0.5px),\n    rgba(176, 133, 48, 0.08) calc(50% + 0.5px),\n    rgba(176, 133, 48, 0.08) 100%\n  )"
+    },
+    {
+      "file": "src/index.css",
+      "line": 61,
+      "context": ".flip-enter",
+      "property": "animation",
+      "value": "flip-slide-in 0.25s cubic-bezier(0.22, 1, 0.36, 1)"
+    },
+    {
+      "file": "src/index.css",
+      "line": 73,
+      "context": "@media (prefers-reduced-motion: reduce) > .flip-enter",
+      "property": "animation",
+      "value": "none"
+    },
+    {
+      "file": "src/index.css",
+      "line": 104,
+      "context": ".phase-enter",
+      "property": "animation",
+      "value": "phase-fade-in 0.5s ease-out"
+    },
+    {
+      "file": "src/index.css",
+      "line": 109,
+      "context": "@media (prefers-reduced-motion: reduce) > .phase-enter",
+      "property": "animation",
+      "value": "none"
+    },
+    {
+      "file": "src/index.css",
+      "line": 122,
+      "context": ".zodiac-leg-front",
+      "property": "animation",
+      "value": "zodiac-leg-stride-front var(--leg-dur, 0.6s) ease-in-out infinite alternate"
+    },
+    {
+      "file": "src/index.css",
+      "line": 127,
+      "context": ".zodiac-leg-back",
+      "property": "animation",
+      "value": "zodiac-leg-stride-back var(--leg-dur, 0.6s) ease-in-out infinite alternate"
+    },
+    {
+      "file": "src/index.css",
+      "line": 143,
+      "context": ".zodiac-roam svg",
+      "property": "animation",
+      "value": "zodiac-bob 0.3s ease-in-out infinite alternate"
+    },
+    {
+      "file": "src/index.css",
+      "line": 153,
+      "context": ".zodiac-roam.zodiac-eating svg",
+      "property": "animation",
+      "value": "zodiac-eat-nod 0.5s ease-in-out infinite"
+    },
+    {
+      "file": "src/index.css",
+      "line": 167,
+      "context": "@media (prefers-reduced-motion: reduce) > .zodiac-roam,\n  .zodiac-leg-front,\n  .zodiac-leg-back,\n  .zodiac-roam svg,\n  .zodiac-roam.zodiac-eating svg",
+      "property": "animation",
+      "value": "none"
+    },
+    {
+      "file": "src/index.css",
+      "line": 170,
+      "context": "@media (prefers-reduced-motion: reduce) > .zodiac-roam",
+      "property": "display",
+      "value": "none"
+    },
+    {
+      "file": "src/index.css",
+      "line": 188,
+      "context": ".modal-enter",
+      "property": "animation",
+      "value": "modal-slide-up 0.25s cubic-bezier(0.22, 1, 0.36, 1)"
+    },
+    {
+      "file": "src/index.css",
+      "line": 193,
+      "context": "@media (prefers-reduced-motion: reduce) > .modal-enter",
+      "property": "animation",
+      "value": "none"
+    },
+    {
+      "file": "src/index.css",
+      "line": 211,
+      "context": ".chat-enter",
+      "property": "animation",
+      "value": "chat-slide-up 0.3s ease-out"
+    },
+    {
+      "file": "src/index.css",
+      "line": 216,
+      "context": "@media (prefers-reduced-motion: reduce) > .chat-enter",
+      "property": "animation",
+      "value": "none"
+    },
+    {
+      "file": "src/index.css",
+      "line": 71,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-reduced-motion: reduce)"
+    },
+    {
+      "file": "src/index.css",
+      "line": 107,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-reduced-motion: reduce)"
+    },
+    {
+      "file": "src/index.css",
+      "line": 161,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-reduced-motion: reduce)"
+    },
+    {
+      "file": "src/index.css",
+      "line": 191,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-reduced-motion: reduce)"
+    },
+    {
+      "file": "src/index.css",
+      "line": 214,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(prefers-reduced-motion: reduce)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 33,
+      "context": ":root",
+      "property": "--bg",
+      "value": "#fefdf8"
+    },
+    {
+      "file": "years/index.html",
+      "line": 34,
+      "context": ":root",
+      "property": "--text",
+      "value": "#2b2118"
+    },
+    {
+      "file": "years/index.html",
+      "line": 35,
+      "context": ":root",
+      "property": "--muted",
+      "value": "#6e573e"
+    },
+    {
+      "file": "years/index.html",
+      "line": 36,
+      "context": ":root",
+      "property": "--link",
+      "value": "#b08530"
+    },
+    {
+      "file": "years/index.html",
+      "line": 37,
+      "context": ":root",
+      "property": "--card-bg",
+      "value": "rgba(255,250,240,.72)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 38,
+      "context": ":root",
+      "property": "--card-border",
+      "value": "rgba(176,133,48,.2)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 39,
+      "context": ":root",
+      "property": "--control-bg",
+      "value": "rgba(254,253,248,.86)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 40,
+      "context": ":root",
+      "property": "--control-border",
+      "value": "rgba(176,133,48,.24)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 44,
+      "context": "html.dark",
+      "property": "--bg",
+      "value": "#17120d"
+    },
+    {
+      "file": "years/index.html",
+      "line": 45,
+      "context": "html.dark",
+      "property": "--text",
+      "value": "#f6efe3"
+    },
+    {
+      "file": "years/index.html",
+      "line": 46,
+      "context": "html.dark",
+      "property": "--muted",
+      "value": "#d3c0a0"
+    },
+    {
+      "file": "years/index.html",
+      "line": 47,
+      "context": "html.dark",
+      "property": "--link",
+      "value": "#d9af5a"
+    },
+    {
+      "file": "years/index.html",
+      "line": 48,
+      "context": "html.dark",
+      "property": "--card-bg",
+      "value": "rgba(34,26,20,.9)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 49,
+      "context": "html.dark",
+      "property": "--card-border",
+      "value": "rgba(217,175,90,.24)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 50,
+      "context": "html.dark",
+      "property": "--control-bg",
+      "value": "rgba(34,26,20,.88)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 51,
+      "context": "html.dark",
+      "property": "--control-border",
+      "value": "rgba(217,175,90,.24)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "margin",
+      "value": "0"
+    },
+    {
+      "file": "years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "background",
+      "value": "var(--bg)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "color",
+      "value": "var(--text)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "font-family",
+      "value": "Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "years/index.html",
+      "line": 53,
+      "context": "body",
+      "property": "transition",
+      "value": "background-color .2s ease, color .2s ease"
+    },
+    {
+      "file": "years/index.html",
+      "line": 54,
+      "context": ".wrap",
+      "property": "max-width",
+      "value": "68rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 54,
+      "context": ".wrap",
+      "property": "margin",
+      "value": "0 auto"
+    },
+    {
+      "file": "years/index.html",
+      "line": 54,
+      "context": ".wrap",
+      "property": "padding",
+      "value": "3rem 1.25rem 4rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 55,
+      "context": ".fa",
+      "property": "font-family",
+      "value": "Vazirmatn, Inter, system-ui, sans-serif"
+    },
+    {
+      "file": "years/index.html",
+      "line": 56,
+      "context": ".grid",
+      "property": "display",
+      "value": "grid"
+    },
+    {
+      "file": "years/index.html",
+      "line": 56,
+      "context": ".grid",
+      "property": "grid-template-columns",
+      "value": "repeat(auto-fit, minmax(260px, 1fr))"
+    },
+    {
+      "file": "years/index.html",
+      "line": 56,
+      "context": ".grid",
+      "property": "gap",
+      "value": "1rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "display",
+      "value": "flex"
+    },
+    {
+      "file": "years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "file": "years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "gap",
+      "value": ".75rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 57,
+      "context": ".toplinks",
+      "property": "margin",
+      "value": "0 0 1.5rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 58,
+      "context": "a",
+      "property": "color",
+      "value": "var(--link)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 59,
+      "context": ".muted",
+      "property": "color",
+      "value": "var(--muted)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "padding",
+      "value": "1rem 1.1rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "border",
+      "value": "1px solid var(--card-border)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "border-radius",
+      "value": "1rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 60,
+      "context": ".card",
+      "property": "background",
+      "value": "var(--card-bg)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 61,
+      "context": ".card-link",
+      "property": "color",
+      "value": "var(--text)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 62,
+      "context": ".card-cta",
+      "property": "color",
+      "value": "var(--link)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 62,
+      "context": ".card-cta",
+      "property": "font-weight",
+      "value": "700"
+    },
+    {
+      "file": "years/index.html",
+      "line": 63,
+      "context": ".controls",
+      "property": "display",
+      "value": "flex"
+    },
+    {
+      "file": "years/index.html",
+      "line": 63,
+      "context": ".controls",
+      "property": "gap",
+      "value": ".5rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 65,
+      "context": ".theme-toggle",
+      "property": "border",
+      "value": "1px solid var(--control-border)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 66,
+      "context": ".theme-toggle",
+      "property": "background",
+      "value": "var(--control-bg)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 67,
+      "context": ".theme-toggle",
+      "property": "color",
+      "value": "var(--link)"
+    },
+    {
+      "file": "years/index.html",
+      "line": 68,
+      "context": ".theme-toggle",
+      "property": "border-radius",
+      "value": "999px"
+    },
+    {
+      "file": "years/index.html",
+      "line": 69,
+      "context": ".theme-toggle",
+      "property": "width",
+      "value": "2.25rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 71,
+      "context": ".theme-toggle",
+      "property": "display",
+      "value": "inline-flex"
+    },
+    {
+      "file": "years/index.html",
+      "line": 74,
+      "context": ".theme-toggle",
+      "property": "font-size",
+      "value": "1rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 78,
+      "context": "@media (max-width: 640px) > .wrap",
+      "property": "padding-top",
+      "value": "4.5rem"
+    },
+    {
+      "file": "years/index.html",
+      "line": 77,
+      "context": "@media",
+      "property": "media-query",
+      "value": "(max-width: 640px)"
+    }
+  ],
+  "parseErrors": []
+}
